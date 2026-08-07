@@ -1,5 +1,4 @@
 name: Deploy
-
 on:
   push:
     branches:
@@ -8,29 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-
-      - uses: pnpm/setup@v1
-        with:
-          runtime: node@24
-          cache: true
-
-      - uses: actions/cache@v4
-        with:
-          path: .angular/cache
-          key: angular-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.sha }}
-          restore-keys: |
-            angular-${{ hashFiles('pnpm-lock.yaml') }}-
-            angular-
-
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
-      - uses: actions/upload-artifact@v6
-        with:
-          name: dist
-          path: dist/
+    uses: ./.github/workflows/_build.yml
 
   deploy:
     runs-on: ubuntu-latest
@@ -38,7 +15,7 @@ jobs:
     steps:
       - uses: actions/download-artifact@v6
         with:
-          name: dist
+          name: ${{ needs.build.outputs.artifact-name }}
           path: dist/
       - uses: aws-actions/configure-aws-credentials@v6
         with:
