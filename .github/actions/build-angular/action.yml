@@ -1,0 +1,34 @@
+# .github/actions/build-angular/action.yml
+# Composite action: setup pnpm + Node, install with cache, build Angular, upload dist/.
+name: Build Angular
+description: Install dependencies with pnpm cache, build the Angular static site, and upload the dist artifact.
+
+inputs:
+  node-version:
+    description: Node.js version (e.g. `24`) to use for the build.
+    required: false
+    default: '24'
+  artifact-name:
+    description: Name to give the uploaded build artifact.
+    required: false
+    default: dist
+
+runs:
+  using: composite
+  steps:
+    - name: Setup pnpm
+      uses: pnpm/setup@v1
+      with:
+        runtime: node@${{ inputs.node-version }}
+        cache: true
+    - name: Install
+      run: pnpm install --frozen-lockfile
+      shell: bash
+    - name: Build
+      run: pnpm build
+      shell: bash
+    - name: Upload dist
+      uses: actions/upload-artifact@v6
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: dist/
