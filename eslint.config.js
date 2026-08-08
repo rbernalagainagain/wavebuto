@@ -35,6 +35,7 @@ module.exports = tseslint.config(
   },
   {
     files: ['src/app/validation/**/*.ts'],
+    ignores: ['src/app/validation/**/*.spec.ts'],
     plugins: { wavebuto },
     rules: {
       'wavebuto/validation-pure-boundary': 'error',
