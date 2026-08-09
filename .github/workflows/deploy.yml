@@ -20,7 +20,6 @@ jobs:
   deploy:
     environment: production
     permissions:
-      id-token: write
       contents: read
     runs-on: ubuntu-latest
     needs: build
@@ -29,8 +28,8 @@ jobs:
         with:
           name: ${{ needs.build.outputs.artifact-name }}
           path: dist/
-      - uses: aws-actions/configure-aws-credentials@v6
+      - uses: cloudflare/wrangler-action@v3
         with:
-          aws-region: eu-north-1
-          role-to-assume: arn:aws:iam::513002791029:role/wavebuto-cicd
-      - run: aws s3 sync dist/wavebuto/browser/ s3://calmayourdrama-wavebuto/ --delete
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist/wavebuto/browser --project-name=wavebuto
