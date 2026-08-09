@@ -27,6 +27,7 @@ jobs:
     needs: build
     steps:
       - uses: actions/checkout@v6
+      - uses: pnpm/action-setup@v4
       - uses: actions/download-artifact@v6
         with:
           name: ${{ needs.build.outputs.artifact-name }}
