@@ -1,1 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
+/* Base typography and form styling.
+   Everything is served from this repo — no off-origin fonts, stylesheets
+   or icons (CONSTITUTION.md §2.3). The font stack resolves to whatever
+   the operating system already has. */
+
+:root {
+  color-scheme: light;
+  --ink: #1b1b1f;
+  --muted: #55555f;
+  --line: #c9c9d2;
+  --error: #a11026;
+}
+
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  line-height: 1.6;
+  color: var(--ink);
+  background: #fff;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.375rem;
+  margin-block-start: 2.5rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.field {
+  display: grid;
+  gap: 0.25rem;
+  margin-block-end: 1.25rem;
+}
+
+.field label {
+  font-weight: 600;
+}
+
+.field input,
+.field select,
+.field textarea {
+  font: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: inherit;
+}
+
+.field textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+[aria-invalid='true'] {
+  border-color: var(--error);
+}
+
+[role='alert'] {
+  margin: 0;
+  color: var(--error);
+}
+
+button[type='submit'] {
+  font: inherit;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid var(--ink);
+  border-radius: 4px;
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+}
+
+button[type='submit']:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
