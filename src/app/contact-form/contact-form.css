@@ -1,0 +1,60 @@
+/* The five form states of spec.md §9.9. The styling adds no behaviour: every
+   state here is one the component already held before M5. */
+
+:host {
+  display: block;
+}
+
+.field {
+  display: grid;
+  gap: var(--space-1);
+  margin-block-end: var(--space-4);
+}
+
+/* An invalid field is drawn in the error colour in addition to the message
+   below it and aria-invalid on the control. The border is the third signal,
+   never the only one (§9.3, §9.9). */
+[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+/* One treatment for both alerts: a field error, and the failure block above
+   the button — so a failure reads as a failure (§9.9). */
+[role='alert'] {
+  color: var(--color-error);
+  font-weight: 600;
+}
+
+/* Inside a field the grid gap already provides the spacing. */
+.field [role='alert'] {
+  margin-block: 0;
+}
+
+button[type='submit'] {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-bg);
+}
+
+button[type='submit']:disabled {
+  /* Disabled is communicated by the cursor and the "Sending…" label, not by
+     making the text unreadable: this holds 4.91:1 against the page (§9.9). */
+  opacity: var(--opacity-disabled);
+  cursor: not-allowed;
+}
+
+/* The note stating what happens to the submission before it is sent (§5).
+   It is the only direct paragraph child of the form that is not an alert. */
+form > p:not([role='alert']) {
+  margin-block: var(--space-2) 0;
+  color: var(--color-muted);
+  font-size: var(--font-size-small);
+}
+
+/* The success message occupies the form's place and is not styled as an error
+   (§9.9). It is selected by the tabindex it already carries for focus
+   management (§7) — no class exists, and M5 adds no markup. */
+p[tabindex='-1'] {
+  margin-block: 0;
+  font-weight: 600;
+}

@@ -180,3 +180,144 @@ neither reads state.
 - Storing submissions anywhere.
 - A second form, or a form on `/about`.
 - Internationalisation.
+
+## 9. Visual design
+
+Concrete values for the visual layer. The durable rule is
+`CONSTITUTION.md` §2.4: the base stylesheet is the mobile stylesheet.
+Everything here is normative.
+
+### 9.1 Where styles live
+
+- `src/styles.css` — tokens (§9.2) and element defaults only. Nothing
+  component-specific.
+- Component styles live in the component's own `styles` array,
+  alongside its template.
+- No inline `style=` attributes. No utility-class framework.
+- Every colour, size and spacing value in a component references a token
+  from §9.2. A raw hex or px value outside `src/styles.css` is a defect.
+
+### 9.2 Tokens
+
+Declared as custom properties on `:root`. These names are the contract;
+the values may change.
+
+| Token            | Value           | Use                              |
+| ---------------- | --------------- | -------------------------------- |
+| `--color-bg`     | `#fdfdfc`       | page background                  |
+| `--color-fg`     | `#1a1a18`       | body text                        |
+| `--color-muted`  | `#5c5c56`       | secondary text, footer           |
+| `--color-accent` | `#1c4f8a`       | links, focus ring, submit button |
+| `--color-error`  | `#a3221c`       | error text and invalid borders   |
+| `--color-border` | `#d6d6d0`       | control borders, rules           |
+| `--space-1`      | `0.25rem`       |                                  |
+| `--space-2`      | `0.5rem`        |                                  |
+| `--space-3`      | `1rem`          |                                  |
+| `--space-4`      | `1.5rem`        |                                  |
+| `--space-5`      | `2.5rem`        |                                  |
+| `--font-body`    | system UI stack | all text                         |
+| `--measure`      | `65ch`          | maximum line length for prose    |
+| `--radius`       | `4px`           | controls                         |
+
+The font stack is the platform's own (`system-ui`, then generic
+fallbacks). No webfont is loaded — self-hosted or otherwise
+(`CONSTITUTION.md` §2.3). A webfont is a dependency decision, not a
+styling one.
+
+### 9.3 Contrast and colour
+
+- Body text against its background: **at least 7:1**.
+- Secondary text, borders and large text: **at least 4.5:1**.
+- No state is communicated by colour alone (`CONSTITUTION.md` §4). An
+  invalid field carries a text message and `aria-invalid`; the red
+  border is the third signal, never the only one.
+
+### 9.4 Type scale
+
+Fluid between the minimum and maximum viewport widths of §9.6; no
+step changes at a breakpoint.
+
+| Element        | Min        | Max         |
+| -------------- | ---------- | ----------- |
+| `h1`           | `1.75rem`  | `2.5rem`    |
+| `h2`           | `1.375rem` | `1.75rem`   |
+| body, controls | `1rem`     | `1.0625rem` |
+| small, footer  | `0.875rem` | `0.875rem`  |
+
+- Body line height `1.6`; headings `1.2`.
+- Form controls never render below `1rem`: on iOS a smaller control
+  triggers zoom on focus.
+- Prose paragraphs are capped at `--measure`.
+
+### 9.5 Layout
+
+- Single column at every width. The wide layout is the same column,
+  centred, with more breathing room — not a rearrangement.
+- Page content is capped at `--measure` and centred; the header and
+  footer rules span the full width, their contents aligned to the same
+  column.
+- Vertical rhythm uses the `--space-*` scale only.
+
+### 9.6 Viewport range and breakpoints
+
+- **Minimum supported width: 320px.** No horizontal scroll, no clipped
+  content, no scaled-down layout at that width.
+- Exactly one breakpoint: **`min-width: 40rem`**. Adding a second is a
+  spec change, not an implementation detail.
+- Below it: header links stack under the site name; form controls are
+  full width.
+- At and above it: header name and links sit on one row; the column
+  reaches `--measure` and centres; vertical spacing steps up from
+  `--space-3` to `--space-5`.
+- `max-width` media queries are prohibited (`CONSTITUTION.md` §2.4).
+
+### 9.7 Controls and touch targets
+
+- Every interactive element — links in the header included — has a
+  touch target of **at least 44×44px**, achieved with padding rather
+  than by growing the visible box where needed.
+- Adjacent targets are separated by at least `--space-2`.
+- Inputs, the select and the textarea share one border, radius and
+  padding; they do not diverge per field.
+- The textarea is resizable vertically only, minimum 5 rows.
+- No hover-only affordance. Anything hover reveals is also available
+  without a pointer.
+
+### 9.8 Focus
+
+- The focus indicator is **never removed**. `outline: none` without an
+  equivalent replacement is prohibited.
+- Focus renders as a 2px `--color-accent` outline with a 2px offset,
+  and is visible against every background used on the site.
+- Focus styling uses `:focus-visible` for the ring; keyboard and
+  pointer focus need not look identical, but neither may be invisible.
+
+### 9.9 Form states
+
+Visual treatment for the states already defined in §5 and §4. The
+styling adds no behaviour.
+
+| State         | Treatment                                                                                                                   |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Idle          | Default border; submit button in `--color-accent`                                                                           |
+| Invalid field | `--color-error` border, error text below in `--color-error`, in addition to `aria-invalid` and the `role="alert"` container |
+| Submitting    | Button disabled, reduced opacity, label "Sending…"; inputs stay readable, not greyed to illegibility                        |
+| Success       | Success message occupies the form's place; not styled as an error                                                           |
+| Failure       | Error block above the button, `--color-error`, with the same treatment as a field error so failure reads as failure         |
+
+- A disabled control still meets §9.3's 4.5:1 minimum. "Disabled" is
+  communicated by the cursor and the label, not by making the text
+  unreadable.
+
+### 9.10 Motion
+
+- No decorative animation.
+- Any transition is under 200ms and affects opacity or colour only —
+  never layout position.
+- All motion is suppressed under
+  `@media (prefers-reduced-motion: reduce)`.
+
+### 9.11 Print and dark mode
+
+Out of scope for this slice. No print stylesheet, no
+`prefers-color-scheme` handling. The site renders in one palette.

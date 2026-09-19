@@ -52,6 +52,7 @@ function initialFormState(): FormState {
 @Component({
   selector: 'app-contact-form',
   templateUrl: './contact-form.html',
+  styleUrl: './contact-form.css',
 })
 export class ContactForm {
   protected readonly subjectOptions = SUBJECT_OPTIONS;

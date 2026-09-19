@@ -1,0 +1,11 @@
+/* The link back to the home page is a standalone target rather than a link
+   inside prose, so it carries the 44px touch target of §9.7. The negative
+   inline margin keeps its text optically aligned with the paragraphs above
+   while the padding, not the visible box, provides the target. */
+a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-target);
+  padding-inline: var(--space-2);
+  margin-inline-start: calc(-1 * var(--space-2));
+}

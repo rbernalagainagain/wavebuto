@@ -1,94 +1,82 @@
 # CONSTITUTION — wavebuto
 
-> Two pages and a form. The site says what it has to say and asks for
-> exactly what it needs — nothing more.
+> Two pages and a form. The site says what it has to say and asks for exactly what it needs — nothing more.
 
-This document defines the **durable invariants** of the system: the
-principles that must hold across every version and implementation
-choice. It governs _how_ the site may be built. Concrete copy, field
-lists, validation rules and styling live in `spec.md` and are expected
+This document defines the **durable invariants** of the system: the principles that must hold across every version and implementation
+choice. It governs _how_ the site may be built. Concrete copy, field lists, validation rules and styling live in `spec.md` and are expected
 to evolve; the rules here are not.
 
-If an implementation decision ever conflicts with this document, this
-document wins — or the conflict is escalated and resolved here before
+If an implementation decision ever conflicts with this document, this document wins — or the conflict is escalated and resolved here before
 code is written.
 
 ---
 
 ## 1. Mission and stance
 
-The site presents information on two static pages and collects one
-submission through a form. It answers "what is this, and how do I get in
+The site presents information on two static pages and collects one submission through a form. It answers "what is this, and how do I get in
 touch" — nothing more.
 
-- Every page renders from markup committed to the repo. No content is
-  composed at runtime from a remote source.
-- The form collects **only** the fields declared in `spec.md`.
-  Collecting a field because it might be useful later is prohibited.
+- Every page renders from markup committed to the repo. No content is composed at runtime from a remote source.
+- The form collects **only** the fields declared in `spec.md`. Collecting a field because it might be useful later is prohibited.
 - The user is told what happens to their submission before they send it.
-- The site holds no identity: no accounts, no sessions, no recognition
-  of a returning visitor.
+- The site holds no identity: no accounts, no sessions, no recognition of a returning visitor.
 
 ## 2. Structural invariants
 
 ### 2.1 One submission path (the core contract)
 
-Exactly one module — `src/submit/` — performs the submit. It is the only
-place in the codebase that talks to the network.
+Exactly one module — `src/submit/` — performs they submit. It is the only place in the codebase that talks to the network.
 
-- A component that collects input does not send it. It hands the values
-  to the submit module and does nothing else.
-- The submit module knows nothing about markup or styling. Swapping the
-  destination endpoint must not require touching a page, a field, or a
+- A component that collects input does not send it. It hands the values to the submit module and does nothing else.
+- The submit module knows nothing about markup or styling. Swapping the destination endpoint must not require touching a page, a field, or a
   validation rule.
-- No other module may issue a request for any reason. This contract is
-  the reason the site's network surface is auditable at a glance, and it
-  must never be short-circuited by a component reaching for the network
-  directly.
+- No other module may issue a request for any reason. This contract is the reason the site's network surface is auditable at a glance, and it
+  must never be short-circuited by a component reaching for the network directly.
 
 ### 2.2 Hard layer seams
 
-The system is built as three layers with strict boundaries. Data crosses
-a seam in one direction only; no layer reaches around another.
+The system is built as three layers with strict boundaries. Data crosses a seam in one direction only; no layer reaches around another.
 
 markup → validation → submit
 
 - **Markup** renders structure and collects input. It contains no rules.
-- **Validation** decides whether values are acceptable. Pure functions
-  over values; no DOM access, no network.
-- **Submit** sends validated values and reports the outcome. It performs
-  no validation of its own beyond trusting its input contract.
+- **Validation** decides whether values are acceptable. Pure functions over values; no DOM access, no network.
+- **Submit** sends validated values and reports the outcome. It performs no validation of its own beyond trusting its input contract.
 
-A validation rule must be testable in isolation, with no page rendered.
-If it cannot, the rule is entangled with markup and belongs in the
+A validation rule must be testable in isolation, with no page rendered. If it cannot, the rule is entangled with markup and belongs in the
 validation layer first.
 
 ### 2.3 Origin agnosticism
 
-The site depends on nothing it does not serve itself. No off-origin
-script, font, stylesheet, or widget. Adding a dependency is an explicit
+The site depends on nothing it does not serve itself. No off-origin script, font, stylesheet, or widget. Adding a dependency is an explicit
 decision, never a side effect of solving a problem.
+
+### 2.4 Mobile first
+
+The base stylesheet describes the narrowest viewport. Wider layouts are additions to it, never corrections of it.
+
+- Every rule outside a media query is the mobile rule. Media queries may
+  only add: `min-width` only. A `max-width` query that undoes a base rule inverts the direction and is prohibited.
+- With every media query removed, the site remains usable: readable, navigable, and the form completable end to end.
+- This is the test of whether the base layer is a real layout or an afterthought.
+- No horizontal scrolling at the narrowest supported width. Content reflows; it is not scaled down or clipped to fit.
+- Touch is the assumed input. A control sized for a cursor is a defect, not a wide-screen optimisation.
 
 ## 3. Data invariants
 
 ### 3.1 Validate at every boundary
 
-Input is validated before it leaves the client and, wherever a server
-exists, again on arrival.
+Input is validated before it leaves the client and, wherever a server exists, again on arrival.
 
-- Client-side validation is a **convenience for the user**, never the
-  guarantee. It may be bypassed and the system must assume it was.
-- The same rules are expressed once and reused, not restated per
-  boundary. Two divergent copies of a rule is a defect, not redundancy.
+- Client-side validation is a **convenience for the user**, never the guarantee. It may be bypassed and the system must assume it was.
+- The same rules are expressed once and reused, not restated per boundary. Two divergent copies of a rule is a defect, not redundancy.
 
 ### 3.2 No silent failure
 
 A submission either visibly succeeds or visibly fails.
 
-- A failed send is never presented as success, and never disappears
-  without a message.
-- An error a user can act on says what to do next. An error they cannot
-  act on says so plainly rather than blaming them.
+- A failed send is never presented as success, and never disappears without a message.
+- An error a user can act on says what to do next. An error they cannot act on says so plainly rather than blaming them.
 
 ### 3.3 Nothing sensitive crosses the repo boundary
 
@@ -99,11 +87,9 @@ No submitted data is written to logs, storage, or the console.
 
 Accessibility is an invariant, not a polish task deferred to the end.
 
-- Every control has an associated label. Placeholder text is not a
-  label.
+- Every control has an associated label. Placeholder text is not a label.
 - Every interactive element is reachable and operable by keyboard alone.
-- State — error, success, required, disabled — is communicated by more
-  than colour, and announced to assistive technology, not only drawn.
+- State — error, success, required, disabled — is communicated by more han colour, and announced to assistive technology, not only drawn.
 
 ## 5. Quality bars
 
@@ -128,5 +114,4 @@ Accessibility is an invariant, not a polish task deferred to the end.
 - No form field not declared in `spec.md`.
 - No validation logic inline in markup or in an event handler.
 - No dependency added without an explicit decision.
-- No silent degradation: a failed submission is always visible; it is
-  never swallowed or presented as success.
+- No silent degradation: a failed submission is always visible; it is never swallowed or presented as success.

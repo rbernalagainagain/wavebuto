@@ -12,7 +12,11 @@ module.exports = tseslint.config(
   },
   {
     files: ['**/*.ts'],
-    extends: [eslint.configs.recommended, ...tseslint.configs.recommended, ...angular.configs.tsRecommended],
+    extends: [
+      eslint.configs.recommended,
+      ...tseslint.configs.recommended,
+      ...angular.configs.tsRecommended,
+    ],
     processor: angular.processInlineTemplates,
     rules: {
       '@angular-eslint/directive-selector': [
@@ -48,6 +52,7 @@ module.exports = tseslint.config(
     rules: {
       'wavebuto/no-offorigin-template-resource': 'error',
       'wavebuto/control-has-label': 'error',
+      'wavebuto/no-inline-style': 'error',
     },
   },
 );

@@ -1,94 +1,149 @@
-/* Base typography and form styling.
-   Everything is served from this repo — no off-origin fonts, stylesheets
-   or icons (CONSTITUTION.md §2.3). The font stack resolves to whatever
-   the operating system already has. */
+/* Tokens (spec.md §9.2) and element defaults (spec.md §9.1). Nothing
+   component-specific belongs here.
+
+   This is the only file allowed to hold a raw colour or spacing literal;
+   stylelint enforces that everywhere else. Everything is served from this repo
+   — no off-origin fonts, stylesheets or icons (CONSTITUTION.md §2.3). The font
+   stack resolves to whatever the operating system already has.
+
+   This is also the mobile stylesheet. There is not a single media query in this
+   file: the base layer is the narrowest viewport, and the one breakpoint of
+   §9.6 only ever adds to it (CONSTITUTION.md §2.4). */
 
 :root {
   color-scheme: light;
-  --ink: #1b1b1f;
-  --muted: #55555f;
-  --line: #c9c9d2;
-  --error: #a11026;
+
+  --color-bg: #fdfdfc;
+  --color-fg: #1a1a18;
+  --color-muted: #5c5c56;
+  --color-accent: #1c4f8a;
+  --color-error: #a3221c;
+
+  /* §9.2 tabulates #d6d6d0, which measures 1.43:1 against --color-bg and so
+     cannot satisfy §9.3's 4.5:1 floor for borders. §9.2 fixes the token names
+     as the contract and states the values may change, so the value moves and
+     the name does not. Measured: 4.69:1. */
+  --color-border: #73736c;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+
+  --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --measure: 65ch;
+  --radius: 4px;
+
+  /* Literals the spec states in prose rather than in §9.2's table. They live
+     here so that no component has to write one: the 44px touch target of §9.7,
+     the hairline shared by controls and rules, the small step of §9.4's type
+     scale, and the disabled opacity of §9.9 (0.8 is the largest reduction that
+     keeps the disabled submit button above §9.3's 4.5:1 — measured 4.91:1). */
+  --touch-target: 44px;
+  --border-width: 1px;
+  --font-size-small: 0.875rem;
+  --opacity-disabled: 0.8;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Content reflows; it is never scaled down to fit (CONSTITUTION.md §2.4). */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  font-family:
-    system-ui,
-    -apple-system,
-    'Segoe UI',
-    Roboto,
-    Helvetica,
-    Arial,
-    sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-body);
+  /* Fluid across §9.6's range — 320px to the 40rem breakpoint — so the scale
+     never steps at the breakpoint (§9.4). Controls inherit this and so never
+     render below 1rem, which is what stops iOS zooming on focus. */
+  font-size: clamp(1rem, 0.9375rem + 0.3125vw, 1.0625rem);
   line-height: 1.6;
-  color: var(--ink);
-  background: #fff;
+  /* A long unbroken string (an email address in an error) must wrap rather
+     than push the page sideways at 320px. */
+  overflow-wrap: break-word;
 }
 
-h1 {
-  font-size: 2rem;
+h1,
+h2,
+h3 {
   line-height: 1.2;
 }
 
-h2 {
-  font-size: 1.375rem;
-  margin-block-start: 2.5rem;
+h1 {
+  margin-block: 0 var(--space-3);
+  font-size: clamp(1.75rem, 1rem + 3.75vw, 2.5rem);
 }
 
+h2 {
+  margin-block: var(--space-5) var(--space-3);
+  font-size: clamp(1.375rem, 1rem + 1.875vw, 1.75rem);
+}
+
+p {
+  /* Prose is capped at the measure; vertical rhythm comes from the space scale
+     only, never from the user agent's em-based defaults (§9.4, §9.5). */
+  max-width: var(--measure);
+  margin-block: 0 var(--space-3);
+}
+
+small {
+  font-size: var(--font-size-small);
+}
+
+a {
+  color: var(--color-accent);
+}
+
+/* The focus indicator is never removed (§9.8). Rendered against --color-bg it
+   measures 8.14:1; the 2px offset keeps it on the page background even where
+   it surrounds the accent-filled submit button. */
 :focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--color-accent);
   outline-offset: 2px;
 }
 
-.field {
-  display: grid;
-  gap: 0.25rem;
-  margin-block-end: 1.25rem;
-}
-
-.field label {
+label {
   font-weight: 600;
 }
 
-.field input,
-.field select,
-.field textarea {
+/* One border, radius and padding for every control — they do not diverge per
+   field (§9.7). */
+input,
+select,
+textarea {
   font: inherit;
   width: 100%;
-  box-sizing: border-box;
-  padding: 0.5rem;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  background: #fff;
-  color: inherit;
+  min-height: var(--touch-target);
+  padding: var(--space-2);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius);
+  background-color: var(--color-bg);
+  color: var(--color-fg);
 }
 
-.field textarea {
-  min-height: 8rem;
+textarea {
+  /* Five rows (§9.7): five lines of leading, plus the control's own padding
+     and border, measured in the control's own font. */
+  min-height: calc(5 * 1.6em + 2 * var(--space-2) + 2 * var(--border-width));
+  line-height: 1.6;
   resize: vertical;
 }
 
-[aria-invalid='true'] {
-  border-color: var(--error);
-}
-
-[role='alert'] {
-  margin: 0;
-  color: var(--error);
-}
-
-button[type='submit'] {
+button {
   font: inherit;
-  padding: 0.55rem 1.1rem;
-  border: 1px solid var(--ink);
-  border-radius: 4px;
-  background: var(--ink);
-  color: #fff;
+  min-height: var(--touch-target);
+  min-width: var(--touch-target);
+  padding: var(--space-2) var(--space-4);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius);
   cursor: pointer;
-}
-
-button[type='submit']:disabled {
-  opacity: 0.6;
-  cursor: default;
 }

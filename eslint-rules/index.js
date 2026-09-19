@@ -6,5 +6,6 @@ module.exports = {
     'validation-pure-boundary': require('./validation-pure-boundary'),
     'no-offorigin-template-resource': require('./no-offorigin-template-resource'),
     'control-has-label': require('./control-has-label'),
+    'no-inline-style': require('./no-inline-style'),
   },
 };
