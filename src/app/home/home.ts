@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, input} from '@angular/core';
 import { ContactForm } from '../contact-form/contact-form';
 
 @Component({
@@ -6,4 +6,5 @@ import { ContactForm } from '../contact-form/contact-form';
   imports: [ContactForm],
   templateUrl: './home.html',
 })
-export class Home {}
+export class Home {
+}

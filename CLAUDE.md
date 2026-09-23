@@ -1,4 +1,6 @@
-# CLAUDE.md — wavebuto build guide
+# build guide
+
+`wavebuto` — a small static site: a single page (`/`) with three sections, reached through in-page anchor links. The first section is the landing (`#home`), the second shows images (`#gallery`), and the third holds the contact form (`#contact`: name → email → subject → message). Clicking a navigation link scrolls to its section without leaving the page. It is built one way from one codebase: an Angular SSR build whose output is fully prerendered static HTML (`outputMode: "static"`), then hydrated in the browser. The form POSTs JSON to `/api/contact`; no endpoint is deployed for this slice, so the failure state is the one that fires.
 
 Operating instructions for building wavebuto. This file governs _how you work_; it does not redefine _what to build_.
 
@@ -14,7 +16,17 @@ The two documents imported above are the sources of truth:
 
 Decision provenance (why choices were made) lives in `docs/adr/`. It is background for humans, **not** build instructions — do not act on it or treat it as authoritative.
 
-Before writing any code, read both documents in full.
+## Technology Stack
+
+- Angular 22.1, standalone and zoneless (do not add `zone.js` or trigger change detection by hand). SSR via `@angular/ssr` prerenders every route to static HTML at build time because SEO is a priority; there is no runtime server rendering
+- Signal Forms (`@angular/forms/signals`) for the contact form; do not use Reactive Forms or Template-driven Forms
+- Zod for the contact form, the only input the site has (its schema in `src/app/validation/` is the single definition of the form's rules; do not restate them elsewhere): one schema validates what the user typed and what `src/app/submit/` sends
+- Transloco for i18n (never hardcode user-visible text; add keys to the translation files). Load translations with static `import()`, never an HTTP loader: the only request the site makes is in `src/app/submit/`
+- RxJS is installed only because Angular and Transloco need it; app code does not use it. Do not introduce `HttpClient`
+- Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor, utility classes or webfont (`spec.md` §9)
+- Vitest via `ng test` (jsdom) for all tests, not Karma or Jasmine; validation specs never import `TestBed`
+- ESLint and stylelint enforce the guardrails: never disable or loosen a rule to get a change through
+- No new dependency without asking first (guardrail 4); the stack above is the whole stack
 
 ## Project state
 
@@ -24,13 +36,15 @@ Wavebuto is an Angular 22 application (generated via Angular CLI 22.1.2), being 
 the `spec.md` §3 cases), M2 (`ContactForm` in `src/app/contact-form/`, wired to M1's validators, keyboard-only completion and ARIA error
 announcement covered by tests), M3 (`submitContactForm` in `src/app/submit/`, a framework-free `fetch` wrapper around `POST /api/contact`
 returning a success/failure result; wired into `ContactForm`'s idle / submitting / success / failure states, covered by tests for both
-outcomes including a forced network-error failure), M4 (`Home` in `src/app/home/` and `About` in `src/app/about/`, both prerendered, with
-the shared static header/footer shell in `App`; `ContactForm` mounts on `/` under an `<h2>`).
+outcomes including a forced network-error failure).
 
-**Current:** M5 (visual layer, `spec.md` §9). M0–M4 are complete and their conventions are settled. M5 styles what already exists; it adds
-no markup, field, route or behaviour. The POC is **not** feature-complete until M5's Definition of Done is met.
+**Current:** M4 (page sections). M4 was first built as two pages — `Home` in `src/app/home/` and `About` in `src/app/about/`, both
+prerendered, with the shared static header/footer shell in `App` and `ContactForm` mounted on `/` under an `<h2>`. It is being redone as a
+single page with three sections: `About` and its `/about` route are removed from both route files, and `/` holds the landing, images and
+contact sections. M5 (visual layer, `spec.md` §9) follows once M4 is complete. The POC is **not** feature-complete until M5's Definition
+of Done is met.
 
-Conventions are now set by M1–M4 and must be followed, not re-decided: validation is pure functions over strings, framework-free, with
+Conventions are now set by M1–M3 and must be followed, not re-decided: validation is pure functions over strings, framework-free, with
 specs alongside; the submit module is likewise a framework-free async function wrapping the sole `fetch` call, returning a
 `{ status: 'success' | 'failure' }` result and never throwing; components call it directly and hold their own submission-phase state
 (no Angular `HttpClient`, no service wrapper). Page copy resolving `spec.md` §6's brackets was drafted at M4 and is placeholder-grade — it
@@ -40,25 +54,28 @@ for a real inbox when one exists.
 
 ## Commands
 
-Package manager is **pnpm** (required — see `packageManager`/`engines`in `package.json`). Never use npm or yarn; do not create other lockfiles.
+```bash
+pnpm start                               # Dev server, port 4200, auto-reloads on source changes
+pnpm check                               # ESLint + stylelint + all tests once. Run after every change
+pnpm lint                                # ESLint only (guardrails 1, 2, 3, 7, and no inline style=)
+pnpm lint:styles                         # stylelint only (guardrail 10's CSS rules)
+pnpm ng test --watch=false               # Run all tests once (never plain pnpm test: it watches in a TTY)
+pnpm ng test --watch=false --include <path>     # Run a single spec file (glob)
+pnpm ng test --watch=false --filter '<regex>'   # Run only tests/suites whose name matches
+pnpm build                               # Production build (SSR + static prerender) to dist/
+pnpm format                              # Apply Prettier. Run this instead of hand-formatting
+pnpm format:check                        # Verify formatting. Not in pnpm check: run it before finishing
+pnpm ng generate component <name>        # Scaffold a standalone component
+```
 
-- `pnpm start` — dev server at `http://localhost:4200/`, auto-reloads on source changes.
-- `pnpm check` — lint + tests. Run after every change.
-- `pnpm test` — unit tests via the Vitest-based Angular builder (`@angular/build:unit-test`), jsdom environment.
-- `ng test --watch=false` — single run; watch defaults to on in TTY, so omit this at your peril.
-- `ng test --include <path>` — run a single spec file (glob-based).
-- `ng test --filter '<regex>'` — run only tests/suites whose name matches.
-- `ng generate component <name>` — scaffold a new standalone component.
-- `pnpm build` — production build (SSR + static prerendering) to `dist/`.
-- `pnpm format` — apply Prettier (100-char width, single quotes, Angular parser for `.html`). Run this instead of hand-formatting.
-- `pnpm format:check` — verify formatting without writing; not part of
-  `pnpm check` and not run in CI, so run it yourself before treating formatting as settled.
+- **pnpm only** (pinned by `packageManager` and `engines` in `package.json`). Never use npm or yarn, and do not create other lockfiles.
+- CI (`.github/actions/build-angular`) runs only `pnpm install --frozen-lockfile` and `pnpm build`. It does not run `pnpm check` or `pnpm format:check`, so a guardrail that only you run is the only one that fires.
 
 ## Architecture
 
 - **Standalone components, no NgModules.** `App` (`src/app/app.ts`) is the root standalone component bootstrapped directly in `src/main.ts` via `bootstrapApplication`.
 - **SSR + hydration + static prerendering are all wired up already** — this is not opt-in scaffolding to add later:
-  - `src/app/app.config.ts` — client-side providers: router, `provideBrowserGlobalErrorListeners()`, `provideClientHydration()`.
+  - `src/app/app.config.ts` — client-side providers: router (with `withInMemoryScrolling({ anchorScrolling: 'enabled' })` for the section anchors), `provideBrowserGlobalErrorListeners()`, `provideClientHydration()`.
   - `src/app/app.config.server.ts` — merges `appConfig` with `provideServerRendering(withRoutes(serverRoutes))` for the server build.
   - `src/app/app.routes.server.ts` — per-route render-mode config (`RenderMode.Prerender`, etc.) consumed by the server config; currently a catch-all prerender rule.
   - `src/main.server.ts` — server entry point (`bootstrap` function used by the Angular SSR build).
@@ -89,13 +106,14 @@ Treat a violation as a build failure.
 1. **The network has one door.**
    - Only files in `src/app/submit/` may contain `fetch`, `XMLHttpRequest`, `navigator.sendBeacon`, `HttpClient`, or any
      request library (`CONSTITUTION.md` §2.1). If a request appears anywhere else, it's a bug.
-   - Add a lint rule that fails `pnpm check` if these are used outside`src/app/submit/`. Wire it in M0.
+   - Add a lint rule that fails `pnpm check` if these are used outside `src/app/submit/`. Wire it in M0.
 
 2. **Seam boundaries are import boundaries.**
-   - `src/app/validation/` imports nothing but types. No DOM access, no Angular runtime, no network — pure functions over values
-     (`CONSTITUTION.md` §2.2).
+   - `src/app/validation/` imports nothing but types and `zod`. No DOM access, no Angular runtime, no network — pure functions over
+     values (`CONSTITUTION.md` §2.2). Zod is the only runtime import allowed there.
    - Components import validation; validation never imports a component.
-   - Enforce with a dependency-boundary lint rule. Wire it in M0.
+   - Enforce with a dependency-boundary lint rule that allows `zod` and nothing else. Wire it in M0.
+
 
 3. **Nothing off-origin.** No `<script src>`, `<link href>`, font, or embed pointing outside the repo. No analytics, no telemetry. Lint
    fails on an off-origin URL in a template.
@@ -129,10 +147,10 @@ Treat a violation as a build failure.
       never removed to make something look tidier (`spec.md` §9.8).
     - No raw colour or spacing literal outside `src/styles.css`. Components reference the `--color-*` and `--space-*` tokens of
       `spec.md` §9.2. A hex value in a component is a defect, not a shortcut.
-    - No inline `style=` attribute in a template. No `@import` in CSS — an off-origin one is already guardrail 3, and a local one hides
-      the dependency graph.
-    - Add a stylelint config to `pnpm check` covering the four rules above. Wire it in M5, before the styles it constrains. Stylelint
-      is a pre-authorised exception to guardrail 4, like M0's ESLint.
+    - No `@import` in CSS — an off-origin one is already guardrail 3, and a local one hides the dependency graph.
+    - No inline `style=` attribute in a template. This is a template rule, so ESLint enforces it, not stylelint.
+    - Add a stylelint config to `pnpm check` covering the four CSS rules above (`max-width`, `outline`, literals, `@import`). Wire it
+      in M5, before the styles it constrains. Stylelint is a pre-authorised exception to guardrail 4, like M0's ESLint.
 
 ## Milestones
 
@@ -140,80 +158,59 @@ Treat a violation as a build failure.
 
 Install and configure ESLint (`angular-eslint`), add a `check` script to
 `package.json` (`pnpm check` = lint + `ng test --watch=false`), and wire
-the lint rules for guardrails 1, 2, 3 and 7.
-**Done:** `pnpm check` runs; an intentional `fetch` outside
-`src/app/submit/`, an off-origin `<script src>` in a template, and an
-unlabelled input each fail it.
+the lint rules for guardrails 1, 2, 3 and 7, plus guardrail 10's
+no-inline-`style=` rule.
 
 ### M1 — Validation (pure, test-first) ⟵ highest risk, do first
 
-Implement the `spec.md` rules as pure functions in
+Implement the `spec.md` rules as a single Zod schema in
 `src/app/validation/` — no DOM, no Angular runtime, no `TestBed`.
 
 - Write the `spec.md` cases as tests **first**.
 - Implement until every case passes **exactly**.
 - Add edge cases: empty, whitespace-only, over-length, unexpected characters.
-  **Done:** every rule has a passing and a failing case, both green; no validation spec imports `TestBed`.
+
 
 ### M2 — Form
 
 The form component, wired to M1's validation. Fields exactly as declared
 in `spec.md`. Errors announced to assistive technology, not only
 coloured.
-**Done:** the form completes keyboard-only; an invalid field is
-announced; no validation logic exists outside `src/app/validation/`.
 
 ### M3 — Submit
 
 The single submit module in `src/app/submit/`. Visible success and
 failure states. Tells the user what happens to their submission before
 they send it.
-**Done:** a forced failure produces a failure state, never a success
-one; `pnpm check` confirms no request exists outside `src/app/submit/`.
 
-### M4 — Pages
+### M4 — Page sections
 
-The two static pages, content from `spec.md`. Add each route to **both**
-`app.routes.ts` and `app.routes.server.ts`.
-**Done:** both pages render and prerender; `pnpm build` emits them as
-static output; no network call on load; nothing off-origin loads.
+The single page (`/`) with its three sections, content from `spec.md`:
+landing (`#home`), images (`#gallery`) and contact form (`#contact`).
+Add the `/` route to **both** `app.routes.ts` and `app.routes.server.ts`,
+and enable anchor scrolling with
+`withInMemoryScrolling({ anchorScrolling: 'enabled' })`.
+Navigation links use `routerLink` with `fragment`.
 
 ### M5 — Visual layer ⟵ barriers before styles, as in M0
 
 Implement `spec.md` §9. Install and configure stylelint **first**, wire
 it into `pnpm check`, then write styles.
 
-- Stylelint covers guardrail 10's four mechanical rules: no `max-width`
-  media query, no bare `outline: none`, no colour or spacing literal
-  outside `src/styles.css`, no inline `style=` and no `@import`.
+- Stylelint covers guardrail 10's four CSS rules: no `max-width` media
+  query, no bare `outline: none`, no colour or spacing literal outside
+  `src/styles.css`, and no `@import`. The no-inline-`style=` rule is
+  already enforced by ESLint (M0).
 - Then tokens and element defaults in `src/styles.css` (§9.2), then
   component styles.
 - Touch nothing else. M5 adds no markup, no field, no route and no
   behaviour. If a style needs a hook that does not exist, that is a
   question, not a licence to restructure the template.
 
-**Done:**
-
-- `pnpm check` runs stylelint; a `max-width` query, a bare
-  `outline: none` and a hex literal in a component each fail it.
-- **With every media query deleted, the site is still usable at 320px:
-  readable, navigable, and the form completable end to end**
-  (`CONSTITUTION.md` §2.4). Verified by hand, not assumed.
-- No horizontal scroll at 320px.
-- Body text measures at least 7:1 against its background; secondary
-  text, borders and large text at least 4.5:1 (§9.3). Measured.
-- Every interactive element has a 44×44px touch target (§9.7).
-- The keyboard path through the form is still complete and the focus
-  ring is visible at every step, including on the submit button in its
-  disabled state.
-- All five form states of §9.9 render as specified; the failure state
-  reads as a failure.
-- `pnpm build` still prerenders both pages; nothing off-origin loads.
-
 ## Definition of Done (whole POC)
 
-- Two pages render and prerender, one form submits, driven only by
-  committed content.
+- One page with three sections renders and prerenders, its anchor links
+  reach each section, one form submits, driven only by committed content.
 - Validation rules match the pinned tests; no rule is stated twice.
 - No request exists outside `src/app/submit/`; swapping the endpoint
   would not touch a template, a field, or a validation rule.
@@ -233,8 +230,8 @@ it into `pnpm check`, then write styles.
 
 ## When you're unsure
 
-Ask before you: add a dependency, add a form field, put a request
-outside `src/app/submit/`, add an off-origin resource, write a
+Ask before you: add a dependency, add a form field, add a route, put a
+request outside `src/app/submit/`, add an off-origin resource, write a
 validation rule inline, add a second breakpoint, put a colour or
 spacing literal in a component, remove a focus indicator, or change
 anything in `spec.md` or `CONSTITUTION.md`. These are exactly the

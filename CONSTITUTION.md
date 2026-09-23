@@ -1,6 +1,6 @@
 # CONSTITUTION — wavebuto
 
-> Two pages and a form. The site says what it has to say and asks for exactly what it needs — nothing more.
+> One page and a form. The site says what it has to say and asks for exactly what it needs — nothing more.
 
 This document defines the **durable invariants** of the system: the principles that must hold across every version and implementation
 choice. It governs _how_ the site may be built. Concrete copy, field lists, validation rules and styling live in `spec.md` and are expected
@@ -13,10 +13,10 @@ code is written.
 
 ## 1. Mission and stance
 
-The site presents information on two static pages and collects one submission through a form. It answers "what is this, and how do I get in
-touch" — nothing more.
+The site presents information on a single static page and collects one submission through a form. It answers "what is this, and how do I get
+in touch" — nothing more.
 
-- Every page renders from markup committed to the repo. No content is composed at runtime from a remote source.
+- The page renders from markup committed to the repo. No content is composed at runtime from a remote source.
 - The form collects **only** the fields declared in `spec.md`. Collecting a field because it might be useful later is prohibited.
 - The user is told what happens to their submission before they send it.
 - The site holds no identity: no accounts, no sessions, no recognition of a returning visitor.
@@ -25,11 +25,11 @@ touch" — nothing more.
 
 ### 2.1 One submission path (the core contract)
 
-Exactly one module — `src/submit/` — performs they submit. It is the only place in the codebase that talks to the network.
+Exactly one module — `src/app/submit/` — performs the submit. It is the only place in the codebase that talks to the network.
 
 - A component that collects input does not send it. It hands the values to the submit module and does nothing else.
-- The submit module knows nothing about markup or styling. Swapping the destination endpoint must not require touching a page, a field, or a
-  validation rule.
+- The submit module knows nothing about markup or styling. Swapping the destination endpoint must not require touching a section, a field,
+  or a validation rule.
 - No other module may issue a request for any reason. This contract is the reason the site's network surface is auditable at a glance, and it
   must never be short-circuited by a component reaching for the network directly.
 
@@ -48,17 +48,17 @@ validation layer first.
 
 ### 2.3 Origin agnosticism
 
-The site depends on nothing it does not serve itself. No off-origin script, font, stylesheet, or widget. Adding a dependency is an explicit
-decision, never a side effect of solving a problem.
+The site depends on nothing it does not serve itself. No off-origin script, font, stylesheet, image, or widget. Adding a dependency is an
+explicit decision, never a side effect of solving a problem.
 
 ### 2.4 Mobile first
 
 The base stylesheet describes the narrowest viewport. Wider layouts are additions to it, never corrections of it.
 
-- Every rule outside a media query is the mobile rule. Media queries may
-  only add: `min-width` only. A `max-width` query that undoes a base rule inverts the direction and is prohibited.
-- With every media query removed, the site remains usable: readable, navigable, and the form completable end to end.
-- This is the test of whether the base layer is a real layout or an afterthought.
+- Every rule outside a media query is the mobile rule. Media queries may only add, using `min-width` only. A `max-width` query that undoes a
+  base rule inverts the direction and is prohibited.
+- With every media query removed, the site remains usable: readable, navigable, and the form completable end to end. This is the test of
+  whether the base layer is a real layout or an afterthought.
 - No horizontal scrolling at the narrowest supported width. Content reflows; it is not scaled down or clipped to fit.
 - Touch is the assumed input. A control sized for a cursor is a defect, not a wide-screen optimisation.
 
@@ -89,7 +89,7 @@ Accessibility is an invariant, not a polish task deferred to the end.
 
 - Every control has an associated label. Placeholder text is not a label.
 - Every interactive element is reachable and operable by keyboard alone.
-- State — error, success, required, disabled — is communicated by more han colour, and announced to assistive technology, not only drawn.
+- State — error, success, required, disabled — is communicated by more than colour, and announced to assistive technology, not only drawn.
 
 ## 5. Quality bars
 
@@ -109,7 +109,7 @@ Accessibility is an invariant, not a polish task deferred to the end.
 - No authentication, accounts, sessions, or database.
 - No analytics, tracking, or telemetry of any kind.
 - No third-party scripts, embeds, or off-origin resources.
-- No routes beyond the two declared pages.
+- No routes beyond the single declared page.
 - No network request outside the submit module.
 - No form field not declared in `spec.md`.
 - No validation logic inline in markup or in an event handler.

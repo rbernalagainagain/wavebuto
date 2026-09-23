@@ -9,14 +9,21 @@ Everything here is normative. If the implementation disagrees with this document
 
 ## 1. Scope
 
-Two pages and one contact form.
+One page with three sections and one contact form.
 
-| Route    | Page  | Render mode |
-| -------- | ----- | ----------- |
-| `/`      | Home  | Prerender   |
-| `/about` | About | Prerender   |
+| Route | Page | Render mode |
+| ----- | ---- | ----------- |
+| `/`   | Home | Prerender   |
 
-The form lives on `/` , below the page content. There is no `/contact` route.
+The page is divided into three sections, reached through in-page anchor links:
+
+| Section | Anchor     | Content                     |
+| ------- | ---------- | --------------------------- |
+| Landing | `#home`    | Introduction to the site    |
+| Gallery | `#gallery` | Images                      |
+| Contact | `#contact` | The contact form            |
+
+There are no other routes. There is no `/about` and no `/contact` route.
 
 ## 2. Form fields
 
@@ -35,7 +42,10 @@ No option is preselected; the control starts on an empty prompt option.
 
 ## 3. Validation rules
 
-All rules trim leading and trailing whitespace before evaluating. All rules are pure functions over a string value.
+All rules are defined once, as a single Zod schema in `src/app/validation/`. The same schema validates what the user types and the
+payload sent in §5; no rule is restated elsewhere. All rules trim leading and trailing whitespace before evaluating, and each rule is a
+pure function over a string value.
+
 
 ### 3.1 `name`
 
@@ -102,7 +112,7 @@ This is deliberately permissive. The rule rejects obvious mistakes; it does not 
 ## 4. Error messages
 
 One message per field, shown below the control. Say what to do, not what
-went wrong (`constitution.md` §3.2).
+went wrong (`CONSTITUTION.md` §3.2).
 
 | Field     | Message                                              |
 | --------- | ---------------------------------------------------- |
@@ -119,7 +129,7 @@ message clears as soon as the input becomes valid.
 **Destination:** `POST` to `/api/contact`. No endpoint is deployed for
 this slice, so the success path is untestable end-to-end and the failure
 path is the one that will fire. This is deliberate: it exercises the
-failure state required by M3's Definition of Done.
+failure state required by M3.
 
 **Payload:** JSON, the four trimmed field values, nothing else. No
 timestamp, no user agent, no identifier.
@@ -139,28 +149,35 @@ else."
 
 **Failure message:** "That didn't send. Try again, or email us at
 [address]." Never blame the user for a transport failure
-(`constitution.md` §3.2).
+(`CONSTITUTION.md` §3.2).
 
 A non-2xx response is a failure. A network error is a failure. There is
 no retry and no timeout beyond the browser default.
 
 ## 6. Page content
 
-### `/` — Home
+### `#home` — Landing
 
 - `<h1>`: [one line]
 - Two short paragraphs: [content]
-- The form, under an `<h2>`: "Get in touch"
 
-### `/about` — About
+### `#gallery` — Images
 
-- `<h1>`: [one line]
-- Three short paragraphs: [content]
-- A link back to `/`
+- `<h2>`: [one line]
+- [n] images served from `public/`, each with descriptive `alt` text
+  and explicit `width` and `height` attributes.
 
-Both pages share a header with the site name and links to both routes,
-and a footer with the site name and year. Header and footer are static;
-neither reads state.
+### `#contact` — Contact
+
+- `<h2>`: "Get in touch"
+- The form.
+
+Each section is a `<section>` carrying its anchor as `id` and labelled
+by its heading.
+
+The page has a header with the site name and links to the three
+sections, and a footer with the site name and year. Header and footer
+are static; neither reads state.
 
 ## 7. Accessibility specifics
 
@@ -178,7 +195,7 @@ neither reads state.
 - Spam protection of any kind (captcha, honeypot, rate limit).
 - Sending a copy to the user.
 - Storing submissions anywhere.
-- A second form, or a form on `/about`.
+- A second form.
 - Internationalisation.
 
 ## 9. Visual design
@@ -256,6 +273,7 @@ step changes at a breakpoint.
 - Page content is capped at `--measure` and centred; the header and
   footer rules span the full width, their contents aligned to the same
   column.
+- Images scale down to the column width and never exceed it.
 - Vertical rhythm uses the `--space-*` scale only.
 
 ### 9.6 Viewport range and breakpoints
