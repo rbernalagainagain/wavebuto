@@ -31,7 +31,9 @@ module.exports = tseslint.config(
   },
   {
     files: ['src/**/*.ts'],
-    ignores: ['src/app/submit/**'],
+    // The two network doors of CONSTITUTION.md §2.1: the submission, and the
+    // translation files the site reads from its own origin.
+    ignores: ['src/app/submit/**', 'src/app/i18n/translation-http-loader.ts'],
     plugins: { wavebuto },
     rules: {
       'wavebuto/no-network-outside-submit': 'error',

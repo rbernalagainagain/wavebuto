@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 640 400">
+  <rect width="640" height="400" fill="#fdfdfc"/>
+  <path d="M0 230 Q80 200 160 230 T320 230 T480 230 T640 230 V400 H0Z" fill="#d6d6d0"/>
+  <path d="M0 280 Q80 250 160 280 T320 280 T480 280 T640 280 V400 H0Z" fill="#5c5c56"/>
+  <path d="M0 330 Q80 300 160 330 T320 330 T480 330 T640 330 V400 H0Z" fill="#1c4f8a"/>
+</svg>

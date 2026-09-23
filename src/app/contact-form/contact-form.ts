@@ -1,74 +1,41 @@
 import { Component, ElementRef, afterRenderEffect, signal, viewChild } from '@angular/core';
+import { FormField, form, submit, validateStandardSchema } from '@angular/forms/signals';
+import { TranslocoPipe } from '@jsverse/transloco';
 import {
   SUBJECT_OPTIONS,
-  validateEmail,
-  validateMessage,
-  validateName,
-  validateSubject,
-  type ContactFormValues,
-  type SubjectValue,
+  contactFormSchema,
+  type ContactFormInput,
+  type FieldName,
 } from '../validation';
 import { submitContactForm } from '../submit';
 
-export type FieldName = keyof ContactFormValues;
-
-interface FieldState {
-  value: string;
-  error: string | null;
-  touched: boolean;
-}
-
-type FormState = Record<FieldName, FieldState>;
 type SubmitPhase = 'idle' | 'submitting' | 'success' | 'failure';
 
 const FIELD_ORDER: readonly FieldName[] = ['name', 'email', 'subject', 'message'];
 
-const VALIDATORS: Record<FieldName, (value: string) => string | null> = {
-  name: validateName,
-  email: validateEmail,
-  subject: validateSubject,
-  message: validateMessage,
-};
-
-const SUBJECT_LABELS: Record<SubjectValue, string> = {
-  general: 'General enquiry',
-  support: 'Support',
-  other: 'Something else',
-};
-
-function emptyFieldState(): FieldState {
-  return { value: '', error: null, touched: false };
-}
-
-function initialFormState(): FormState {
-  return {
-    name: emptyFieldState(),
-    email: emptyFieldState(),
-    subject: emptyFieldState(),
-    message: emptyFieldState(),
-  };
-}
-
 @Component({
   selector: 'app-contact-form',
+  imports: [FormField, TranslocoPipe],
   templateUrl: './contact-form.html',
   styleUrl: './contact-form.css',
 })
 export class ContactForm {
   protected readonly subjectOptions = SUBJECT_OPTIONS;
-  protected readonly subjectLabels = SUBJECT_LABELS;
 
-  // Placeholder pending real site content at M4 (spec.md §5 leaves the address as [address]).
-  protected readonly failureMessage =
-    "That didn't send. Try again, or email us at hello@wavebuto.example.";
+  private readonly model = signal<ContactFormInput>({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
 
-  protected readonly state = signal<FormState>(initialFormState());
+  // Every rule comes from the one Zod schema (spec.md §3); the form restates none of them.
+  protected readonly contactForm = form(this.model, (path) => {
+    validateStandardSchema(path, contactFormSchema);
+  });
+
   protected readonly submitPhase = signal<SubmitPhase>('idle');
 
-  private readonly nameInput = viewChild<ElementRef<HTMLInputElement>>('nameInput');
-  private readonly emailInput = viewChild<ElementRef<HTMLInputElement>>('emailInput');
-  private readonly subjectSelect = viewChild<ElementRef<HTMLSelectElement>>('subjectSelect');
-  private readonly messageTextarea = viewChild<ElementRef<HTMLTextAreaElement>>('messageTextarea');
   private readonly successMessage = viewChild<ElementRef<HTMLElement>>('successMessage');
 
   constructor() {
@@ -79,79 +46,49 @@ export class ContactForm {
     });
   }
 
-  protected onInput(field: FieldName, value: string): void {
-    this.state.update((current) => {
-      const fieldState = current[field];
-      const nextError = fieldState.touched ? VALIDATORS[field](value) : fieldState.error;
-      return { ...current, [field]: { ...fieldState, value, error: nextError } };
-    });
-  }
-
-  protected onBlur(field: FieldName): void {
-    this.state.update((current) => {
-      const fieldState = current[field];
-      return {
-        ...current,
-        [field]: { ...fieldState, touched: true, error: VALIDATORS[field](fieldState.value) },
-      };
-    });
-  }
-
+  // Errors appear once a field is touched (on blur, or on submit) and then track the value as the
+  // user types, so a message clears as soon as the input becomes valid (spec.md §4).
   protected showError(field: FieldName): boolean {
-    const fieldState = this.state()[field];
-    return fieldState.touched && fieldState.error !== null;
+    const state = this.contactForm[field]();
+    return state.touched() && state.invalid();
+  }
+
+  protected errorKey(field: FieldName): string {
+    return this.contactForm[field]().errors()[0]?.message ?? '';
   }
 
   protected errorId(field: FieldName): string {
     return `${field}-error`;
   }
 
-  protected async onSubmit(event: Event): Promise<void> {
-    event.preventDefault();
+  protected onSubjectChange(value: string): void {
+    // Browsers fire `input` on a select as well, but `change` is the event a select is defined by.
+    this.contactForm.subject().value.set(value);
+  }
 
+  protected onSubmit(event: Event): void {
+    event.preventDefault();
     if (this.submitPhase() === 'submitting') {
       return;
     }
 
-    const current = this.state();
-    const next: FormState = { ...current };
-    let firstInvalid: FieldName | null = null;
-
-    for (const field of FIELD_ORDER) {
-      const error = VALIDATORS[field](current[field].value);
-      next[field] = { ...current[field], touched: true, error };
-      if (error !== null && firstInvalid === null) {
-        firstInvalid = field;
-      }
-    }
-
-    this.state.set(next);
-
-    if (firstInvalid !== null) {
-      this.focusField(firstInvalid);
-      return;
-    }
-
-    this.submitPhase.set('submitting');
-
-    const values: ContactFormValues = {
-      name: current.name.value.trim(),
-      email: current.email.value.trim(),
-      subject: current.subject.value.trim(),
-      message: current.message.value.trim(),
-    };
-
-    const result = await submitContactForm(values);
-    this.submitPhase.set(result.status);
+    void submit(this.contactForm, {
+      action: async () => {
+        // The schema's output is the payload: the four trimmed values, nothing else (spec.md §5).
+        const values = contactFormSchema.parse(this.model());
+        this.submitPhase.set('submitting');
+        const result = await submitContactForm(values);
+        this.submitPhase.set(result.status);
+        return undefined;
+      },
+      onInvalid: () => this.focusFirstInvalid(),
+    });
   }
 
-  private focusField(field: FieldName): void {
-    const controls: Record<FieldName, ElementRef<HTMLElement> | undefined> = {
-      name: this.nameInput(),
-      email: this.emailInput(),
-      subject: this.subjectSelect(),
-      message: this.messageTextarea(),
-    };
-    controls[field]?.nativeElement.focus();
+  private focusFirstInvalid(): void {
+    const first = FIELD_ORDER.find((field) => this.contactForm[field]().invalid());
+    if (first) {
+      this.contactForm[first]().focusBoundControl();
+    }
   }
 }

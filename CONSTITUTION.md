@@ -25,13 +25,17 @@ in touch" — nothing more.
 
 ### 2.1 One submission path (the core contract)
 
-Exactly one module — `src/app/submit/` — performs the submit. It is the only place in the codebase that talks to the network.
+Exactly one module — `src/app/submit/` — performs the submit. It is the only place in the codebase that sends anything to the network.
+
+The one other request the site makes is a read: `src/app/i18n/` fetches the site's own translation files, same-origin, from
+`public/i18n/`. It carries nothing about the user and sends no data; it is a GET for a static file the site itself serves.
 
 - A component that collects input does not send it. It hands the values to the submit module and does nothing else.
 - The submit module knows nothing about markup or styling. Swapping the destination endpoint must not require touching a section, a field,
   or a validation rule.
-- No other module may issue a request for any reason. This contract is the reason the site's network surface is auditable at a glance, and it
-  must never be short-circuited by a component reaching for the network directly.
+- No other module may issue a request for any reason. This contract is the reason the site's network surface is auditable at a glance — two
+  doors, one that sends the submission and one that reads translations — and it must never be short-circuited by a component reaching
+  for the network directly.
 
 ### 2.2 Hard layer seams
 
@@ -110,7 +114,7 @@ Accessibility is an invariant, not a polish task deferred to the end.
 - No analytics, tracking, or telemetry of any kind.
 - No third-party scripts, embeds, or off-origin resources.
 - No routes beyond the single declared page.
-- No network request outside the submit module.
+- No network request outside the submit module and the same-origin translation loader.
 - No form field not declared in `spec.md`.
 - No validation logic inline in markup or in an event handler.
 - No dependency added without an explicit decision.

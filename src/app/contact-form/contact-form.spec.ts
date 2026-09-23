@@ -1,5 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ContactForm } from './contact-form';
+import { provideAppTransloco } from '../i18n/transloco';
+import { provideBundledTranslations } from '../i18n/bundled-translations';
 
 function setValue(el: HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement, value: string) {
   el.value = value;
@@ -11,7 +13,10 @@ function blur(el: HTMLElement) {
 }
 
 async function createForm() {
-  await TestBed.configureTestingModule({ imports: [ContactForm] }).compileComponents();
+  await TestBed.configureTestingModule({
+    imports: [ContactForm],
+    providers: [provideAppTransloco(), provideBundledTranslations()],
+  }).compileComponents();
   const fixture = TestBed.createComponent(ContactForm);
   fixture.detectChanges();
   const root = fixture.nativeElement as HTMLElement;

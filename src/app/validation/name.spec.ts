@@ -34,6 +34,6 @@ describe('validateName', () => {
   });
 
   it('passes for names containing unexpected characters, since only length is constrained', () => {
-    expect(validateName('Ada 👩‍💻 Ö\'Brien-Smith')).toBeNull();
+    expect(validateName("Ada 👩‍💻 Ö'Brien-Smith")).toBeNull();
   });
 });

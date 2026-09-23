@@ -1,89 +1,75 @@
 @if (submitPhase() === 'success') {
-  <p #successMessage tabindex="-1">Thanks — we'll get back to you.</p>
+  <p #successMessage tabindex="-1">{{ 'contact.success' | transloco }}</p>
 } @else {
   <form (submit)="onSubmit($event)" novalidate>
     <div class="field">
-      <label for="name">Your name</label>
+      <label for="name">{{ 'contact.labels.name' | transloco }}</label>
       <input
         id="name"
-        name="name"
         type="text"
-        #nameInput
-        [value]="state().name.value"
-        (input)="onInput('name', nameInput.value)"
-        (blur)="onBlur('name')"
+        [formField]="contactForm.name"
         [attr.aria-invalid]="showError('name') ? 'true' : null"
         [attr.aria-describedby]="showError('name') ? errorId('name') : null"
       />
       @if (showError('name')) {
-        <p [id]="errorId('name')" role="alert">{{ state().name.error }}</p>
+        <p [id]="errorId('name')" role="alert">{{ errorKey('name') | transloco }}</p>
       }
     </div>
 
     <div class="field">
-      <label for="email">Email address</label>
+      <label for="email">{{ 'contact.labels.email' | transloco }}</label>
       <input
         id="email"
-        name="email"
         type="email"
-        #emailInput
-        [value]="state().email.value"
-        (input)="onInput('email', emailInput.value)"
-        (blur)="onBlur('email')"
+        [formField]="contactForm.email"
         [attr.aria-invalid]="showError('email') ? 'true' : null"
         [attr.aria-describedby]="showError('email') ? errorId('email') : null"
       />
       @if (showError('email')) {
-        <p [id]="errorId('email')" role="alert">{{ state().email.error }}</p>
+        <p [id]="errorId('email')" role="alert">{{ errorKey('email') | transloco }}</p>
       }
     </div>
 
     <div class="field">
-      <label for="subject">What's this about?</label>
+      <label for="subject">{{ 'contact.labels.subject' | transloco }}</label>
       <select
         id="subject"
-        name="subject"
         #subjectSelect
-        [value]="state().subject.value"
-        (change)="onInput('subject', subjectSelect.value)"
-        (blur)="onBlur('subject')"
+        [formField]="contactForm.subject"
+        (change)="onSubjectChange(subjectSelect.value)"
         [attr.aria-invalid]="showError('subject') ? 'true' : null"
         [attr.aria-describedby]="showError('subject') ? errorId('subject') : null"
       >
-        <option value="">Choose one</option>
+        <option value="">{{ 'contact.subjectPrompt' | transloco }}</option>
         @for (option of subjectOptions; track option) {
-          <option [value]="option">{{ subjectLabels[option] }}</option>
+          <option [value]="option">{{ 'contact.subjects.' + option | transloco }}</option>
         }
       </select>
       @if (showError('subject')) {
-        <p [id]="errorId('subject')" role="alert">{{ state().subject.error }}</p>
+        <p [id]="errorId('subject')" role="alert">{{ errorKey('subject') | transloco }}</p>
       }
     </div>
 
     <div class="field">
-      <label for="message">Message</label>
+      <label for="message">{{ 'contact.labels.message' | transloco }}</label>
       <textarea
         id="message"
-        name="message"
-        #messageTextarea
-        [value]="state().message.value"
-        (input)="onInput('message', messageTextarea.value)"
-        (blur)="onBlur('message')"
+        [formField]="contactForm.message"
         [attr.aria-invalid]="showError('message') ? 'true' : null"
         [attr.aria-describedby]="showError('message') ? errorId('message') : null"
       ></textarea>
       @if (showError('message')) {
-        <p [id]="errorId('message')" role="alert">{{ state().message.error }}</p>
+        <p [id]="errorId('message')" role="alert">{{ errorKey('message') | transloco }}</p>
       }
     </div>
 
     @if (submitPhase() === 'failure') {
-      <p role="alert">{{ failureMessage }}</p>
+      <p role="alert">{{ 'contact.failure' | transloco }}</p>
     }
 
     <button type="submit" [disabled]="submitPhase() === 'submitting'">
-      {{ submitPhase() === 'submitting' ? 'Sending…' : 'Send' }}
+      {{ (submitPhase() === 'submitting' ? 'contact.sending' : 'contact.send') | transloco }}
     </button>
-    <p>We'll use your message to reply to you. We don't store it for anything else.</p>
+    <p>{{ 'contact.notice' | transloco }}</p>
   </form>
 }

@@ -1,0 +1,71 @@
+/* The three sections of spec.md §6 stacked in the single column of §9.5. */
+
+/* The shell's header sticks to the top of the screen, so the visible screen a
+   section has is the screen below it. --header-size is the header's designed
+   block size, set by the shell (app.css) and inherited here.
+
+   Each section fills at least that visible screen (§9.5). min-height, never
+   height, so a taller section grows to fit its content instead of clipping or
+   scrolling it internally. dvh tracks the screen as mobile browser bars show and
+   hide; vh is the fallback where dvh is unsupported.
+
+   scroll-margin-top stops the browser's own fragment scrolling (opening or
+   reloading /#gallery, before the router takes over) short of the header, as
+   the router's offset does for clicked links. The same margin places each
+   section's snap point just below the header. */
+section {
+  min-height: calc(100vh - var(--header-size));
+  min-height: calc(100dvh - var(--header-size));
+  scroll-margin-top: var(--header-size);
+  scroll-snap-align: start;
+}
+
+section + section {
+  margin-block-start: var(--space-5);
+}
+
+/* The gallery is a plain list of images, one per row: the same column at every width. */
+ul {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Contact slide (§9.10): #contact's contents slide up and fade in as the section
+   scrolls into view, finishing once it is fully in view below the header (the
+   timeline's top inset is the header). The motion is driven by the scroll
+   position, not by time.
+   - The section itself never moves: the router scrolls to #contact by measuring
+     its (transformed) box, so only its children are translated.
+   - Progressive: a browser without scroll-driven animations skips this block
+     and shows the section in place. The keyframes only define the starting
+     state, so the resting state is the section's own, never hidden.
+   - Opt-in to motion: under prefers-reduced-motion the section appears in place. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    #contact {
+      view-timeline: --contact-view block;
+      view-timeline-inset: var(--header-size) 0;
+    }
+
+    #contact > * {
+      animation-name: contact-slide;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+      animation-timeline: --contact-view;
+      animation-range: entry 0% entry 100%;
+    }
+
+    /* Declared inside the same at-rules as its use: Angular scopes a top-level
+       @keyframes name but does not rewrite references nested in @media/@supports,
+       which would leave the animation pointing at a name that does not exist. */
+    @keyframes contact-slide {
+      from {
+        opacity: 0;
+        transform: translateY(var(--space-5));
+      }
+    }
+  }
+}

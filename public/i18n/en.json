@@ -1,0 +1,50 @@
+{
+  "app": {
+    "siteName": "Wavebuto",
+    "navLabel": "Sections",
+    "nav": {
+      "home": "Home",
+      "gallery": "Gallery",
+      "contact": "Contact"
+    }
+  },
+  "home": {
+    "title": "Wavebuto",
+    "intro": "Wavebuto is a small site with a small job: say what it is, and give you one way to get in touch. There is nothing here to sign up for and nothing to dismiss.",
+    "outro": "If you have a question, send it through the form further down. We read what arrives and reply by email. That is the whole of it."
+  },
+  "gallery": {
+    "title": "A few pictures",
+    "images": {
+      "dawn": "Abstract placeholder: a pale sky over three blue wave bands.",
+      "noon": "Abstract placeholder: a single deep-blue wave crest on a light background.",
+      "dusk": "Abstract placeholder: dark water under a muted grey sky with a thin light horizon."
+    }
+  },
+  "contact": {
+    "title": "Get in touch",
+    "labels": {
+      "name": "Your name",
+      "email": "Email address",
+      "subject": "What's this about?",
+      "message": "Message"
+    },
+    "subjectPrompt": "Choose one",
+    "subjects": {
+      "general": "General enquiry",
+      "support": "Support",
+      "other": "Something else"
+    },
+    "errors": {
+      "name": "Enter your name (2–80 characters).",
+      "email": "Enter a valid email address, like ada@example.com.",
+      "subject": "Choose what this is about.",
+      "message": "Enter a message (at least 10 characters)."
+    },
+    "send": "Send",
+    "sending": "Sending…",
+    "notice": "We'll use your message to reply to you. We don't store it for anything else.",
+    "success": "Thanks — we'll get back to you.",
+    "failure": "That didn't send. Try again, or email us at hello@wavebuto.example."
+  }
+}

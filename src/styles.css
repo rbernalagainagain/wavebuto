@@ -6,9 +6,10 @@
    — no off-origin fonts, stylesheets or icons (CONSTITUTION.md §2.3). The font
    stack resolves to whatever the operating system already has.
 
-   This is also the mobile stylesheet. There is not a single media query in this
+   This is also the mobile stylesheet. There is not a single width query in this
    file: the base layer is the narrowest viewport, and the one breakpoint of
-   §9.6 only ever adds to it (CONSTITUTION.md §2.4). */
+   §9.6 only ever adds to it (CONSTITUTION.md §2.4). The one media query here is
+   the motion opt-in of §9.10. */
 
 :root {
   color-scheme: light;
@@ -57,6 +58,18 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Section scrolling (§9.10): anchor links glide to their section, and a scroll
+   released near the start of a section settles on it. Proximity, not mandatory:
+   inside a section taller than the screen the scroll stays free. The snap
+   points are declared where the snap areas live (the shell and the sections).
+   Opt-in, so under prefers-reduced-motion links jump directly and nothing snaps. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+    scroll-snap-type: y proximity;
+  }
+}
+
 body {
   margin: 0;
   background-color: var(--color-bg);
@@ -76,6 +89,14 @@ h1,
 h2,
 h3 {
   line-height: 1.2;
+}
+
+/* Images scale down to the column and never exceed it (§9.5); height follows
+   the declared width/height ratio instead of stretching. */
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
 }
 
 h1 {

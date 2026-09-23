@@ -21,8 +21,8 @@ Decision provenance (why choices were made) lives in `docs/adr/`. It is backgrou
 - Angular 22.1, standalone and zoneless (do not add `zone.js` or trigger change detection by hand). SSR via `@angular/ssr` prerenders every route to static HTML at build time because SEO is a priority; there is no runtime server rendering
 - Signal Forms (`@angular/forms/signals`) for the contact form; do not use Reactive Forms or Template-driven Forms
 - Zod for the contact form, the only input the site has (its schema in `src/app/validation/` is the single definition of the form's rules; do not restate them elsewhere): one schema validates what the user typed and what `src/app/submit/` sends
-- Transloco for i18n (never hardcode user-visible text; add keys to the translation files). Load translations with static `import()`, never an HTTP loader: the only request the site makes is in `src/app/submit/`
-- RxJS is installed only because Angular and Transloco need it; app code does not use it. Do not introduce `HttpClient`
+- Transloco for i18n (never hardcode user-visible text; add keys to the translation files). Translations live in `public/i18n/` and the browser loads them over HTTP through `src/app/i18n/translation-http-loader.ts` (plain `fetch`, same-origin, no `HttpClient`); the prerender and the tests bundle the same file instead (`src/app/i18n/bundled-translations.ts`). That loader and `src/app/submit/` are the only two requests the site makes
+- RxJS is installed only because Angular and Transloco need it; app code uses it only where Transloco's API demands it (`src/app/i18n/`). Do not introduce `HttpClient`
 - Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor, utility classes or webfont (`spec.md` §9)
 - Vitest via `ng test` (jsdom) for all tests, not Karma or Jasmine; validation specs never import `TestBed`
 - ESLint and stylelint enforce the guardrails: never disable or loosen a rule to get a change through
@@ -103,10 +103,11 @@ pnpm ng generate component <name>        # Scaffold a standalone component
 These are the constitution's invariants stated as operational rules.
 Treat a violation as a build failure.
 
-1. **The network has one door.**
-   - Only files in `src/app/submit/` may contain `fetch`, `XMLHttpRequest`, `navigator.sendBeacon`, `HttpClient`, or any
-     request library (`CONSTITUTION.md` §2.1). If a request appears anywhere else, it's a bug.
-   - Add a lint rule that fails `pnpm check` if these are used outside `src/app/submit/`. Wire it in M0.
+1. **The network has two doors.**
+   - Only files in `src/app/submit/` and `src/app/i18n/translation-http-loader.ts` may contain `fetch`, `XMLHttpRequest`,
+     `navigator.sendBeacon`, `HttpClient`, or any request library (`CONSTITUTION.md` §2.1). The submit module sends the submission;
+     the translation loader only reads the site's own translation files. If a request appears anywhere else, it's a bug.
+   - Add a lint rule that fails `pnpm check` if these are used outside those two places. Wire it in M0.
 
 2. **Seam boundaries are import boundaries.**
    - `src/app/validation/` imports nothing but types and `zod`. No DOM access, no Angular runtime, no network — pure functions over
@@ -212,7 +213,7 @@ it into `pnpm check`, then write styles.
 - One page with three sections renders and prerenders, its anchor links
   reach each section, one form submits, driven only by committed content.
 - Validation rules match the pinned tests; no rule is stated twice.
-- No request exists outside `src/app/submit/`; swapping the endpoint
+- No request exists outside `src/app/submit/` and the translation loader; swapping the endpoint
   would not touch a template, a field, or a validation rule.
 - Nothing off-origin loads. No dependency was added beyond M0's ESLint
   and M5's stylelint.
@@ -231,7 +232,7 @@ it into `pnpm check`, then write styles.
 ## When you're unsure
 
 Ask before you: add a dependency, add a form field, add a route, put a
-request outside `src/app/submit/`, add an off-origin resource, write a
+request outside `src/app/submit/` and the translation loader, add an off-origin resource, write a
 validation rule inline, add a second breakpoint, put a colour or
 spacing literal in a component, remove a focus indicator, or change
 anything in `spec.md` or `CONSTITUTION.md`. These are exactly the

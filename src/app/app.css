@@ -5,6 +5,17 @@
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
+  /* A snap point at the very top, so the opening screen (header centred) is a
+     resting place too and snapping never pulls a fresh page down to #home.
+     Inert unless the root scroller snaps (styles.css). */
+  scroll-snap-align: start;
+
+  /* The header's designed block size: padding, the site name and the link row
+     each one touch target tall, the gap between them, and the bottom rule.
+     Centring the header (below) needs its size up front, without measuring. */
+  --header-size: calc(
+    2 * var(--space-3) + 2 * var(--touch-target) + var(--space-2) + var(--border-width)
+  );
 }
 
 /* Single column at every width (§9.5). The header and footer rules span the
@@ -18,16 +29,34 @@ footer {
   padding-inline: max(var(--space-3), calc((100% - var(--measure)) / 2));
 }
 
-/* Below the breakpoint the links stack under the site name (§9.6). */
+/* Below the breakpoint the links stack under the site name (§9.6).
+
+   The header rests in the vertical centre of the first screen, over the
+   landing section, and sticks to the top of the screen once scrolling brings
+   it there. The switch is pure position: sticky, so it follows the scroll
+   instantly and never animates (§9.10). min-block-size, not block-size: if
+   the links wrap or text is enlarged the header grows (slightly off-centre)
+   rather than clipping. dvh with a vh fallback, as for the sections. */
 header {
+  position: sticky;
+  top: 0;
+  /* Above the gallery images and the sliding contact content scrolling beneath. */
+  z-index: 1;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  min-block-size: var(--header-size);
+  margin-block-start: calc((100vh - var(--header-size)) / 2);
+  margin-block-start: calc((100dvh - var(--header-size)) / 2);
   padding-block: var(--space-3);
   border-block-end: var(--border-width) solid var(--color-border);
+  background-color: var(--color-bg);
 }
 
 .site-name {
+  display: flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
   font-weight: 700;
 }
 
@@ -68,6 +97,11 @@ footer {
    adds and never corrects: delete this block and the base layer below is still
    a complete, usable layout at 320px (CONSTITUTION.md §2.4). */
 @media (min-width: 40rem) {
+  :host {
+    /* Name and links share one row. */
+    --header-size: calc(2 * var(--space-4) + var(--touch-target) + var(--border-width));
+  }
+
   header {
     flex-direction: row;
     align-items: center;

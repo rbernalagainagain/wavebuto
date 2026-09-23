@@ -25,6 +25,12 @@ The page is divided into three sections, reached through in-page anchor links:
 
 There are no other routes. There is no `/about` and no `/contact` route.
 
+The address bar always reads `/`. Following a section link scrolls to
+the section without adding its anchor to the URL. A URL that arrives
+with an anchor (for example `/#gallery`) opens on that section, then
+drops the anchor from the address bar. A refresh opens at the top of
+the page, not at the last position scrolled to.
+
 ## 2. Form fields
 
 Exactly these four. No others (`CLAUDE.md` guardrail 6).
@@ -179,6 +185,12 @@ The page has a header with the site name and links to the three
 sections, and a footer with the site name and year. Header and footer
 are static; neither reads state.
 
+The header rests in the vertical centre of the first screen, above the
+landing content, and sticks to the top of the screen once scrolling
+brings it there; from then on it stays at the top. It never covers a
+section's heading: a section reached by a link, by opening the page on
+its anchor, or by snapping (§9.10) begins just below the header.
+
 ## 7. Accessibility specifics
 
 - Each error message is associated with its control via
@@ -196,7 +208,9 @@ are static; neither reads state.
 - Sending a copy to the user.
 - Storing submissions anywhere.
 - A second form.
-- Internationalisation.
+- Languages other than English. All user-visible copy lives in translation
+  files so that another language can be added later, but only English
+  ships, and there is no language switcher.
 
 ## 9. Visual design
 
@@ -270,11 +284,15 @@ step changes at a breakpoint.
 
 - Single column at every width. The wide layout is the same column,
   centred, with more breathing room — not a rearrangement.
+- Each section fills at least the visible screen below the header
+  (§6). When its content is taller than that, the section grows to fit
+  it; its content is never clipped or scrolled internally.
 - Page content is capped at `--measure` and centred; the header and
   footer rules span the full width, their contents aligned to the same
   column.
 - Images scale down to the column width and never exceed it.
 - Vertical rhythm uses the `--space-*` scale only.
+
 
 ### 9.6 Viewport range and breakpoints
 
@@ -329,13 +347,47 @@ styling adds no behaviour.
 
 ### 9.10 Motion
 
-- No decorative animation.
-- Any transition is under 200ms and affects opacity or colour only —
-  never layout position.
-- All motion is suppressed under
-  `@media (prefers-reduced-motion: reduce)`.
+Three motions are specified. Nothing else moves.
+
+**Section scrolling**
+
+- Clicking an anchor link scrolls smoothly to its section instead of
+  jumping.
+
+**Section snapping**
+
+- A scroll released near the start of a section settles on it, just below
+  the header; the opening screen (header centred) is a resting place too.
+- Snapping is by proximity, never mandatory: inside a section taller than
+  the screen, scrolling stays free.
+
+**Contact slide**
+
+- The `#contact` section slides up into place as it comes into view,
+  fading in as it moves.
+- The slide follows the scroll: it completes by the time the section
+  is fully in view.
+- Where the browser cannot perform the slide, the section simply
+  appears in place. The section is never hidden in its resting state.
+- Only `#contact` slides. The other sections do not animate.
+
+**Everything else**
+
+- No other decorative animation.
+- Any other transition is under 200ms and affects opacity or colour
+  only — never layout position.
+- The header's change from the centre of the landing section to the
+  top of the screen does not animate.
+
+**Reduced motion**
+
+- When the user prefers reduced motion, nothing moves: anchor links
+  jump directly, nothing snaps, and `#contact` appears in place.
+
 
 ### 9.11 Print and dark mode
 
 Out of scope for this slice. No print stylesheet, no
 `prefers-color-scheme` handling. The site renders in one palette.
+
+
