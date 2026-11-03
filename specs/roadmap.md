@@ -11,7 +11,9 @@ behaviour work.
 
 1. **Two languages.** Set up Angular's built-in i18n with `/en/` and `/es/` prerendered as separate pages, and `/` redirecting to
    the visitor's language (English by default). Remove Transloco.
-2. **Form fields.** Agree the exact v1 fields with the artist: contact details, the tattoo they want, availability, and other notes.
+2. **Form fields.** Take the v1 fields from the [Figma design](https://www.figma.com/design/6T0g1ib2lMXa5mTP9sOY0o/wavebuto), page
+   "Web — v4" (`150:2`), and confirm them with the artist: contact details, the tattoo they want, availability, and other notes. The
+   agreed list is written to `specs/form.md`, which from then on is the source of truth for the fields.
 3. **Validation.** One Zod schema with the rules for those fields, with tests written first.
 4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
    anchor `#contact` so a link can open the page directly on it. Unstyled.
@@ -19,7 +21,8 @@ behaviour work.
 6. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 7. **Introduction.** The introduction section above the form.
 8. **Video.** The video of the artist's work, between the introduction and the form.
-9. **Visual design.** Apply the Figma design to the whole page.
+9. **Visual design.** Apply the Figma design to the whole page, following page "Web — v4" (`150:2`): frames "Landing — Desktop
+   1440" (`150:9`) and "Landing — Mobile 390" (`210:61`). The other `Web — v*` pages are not the reference.
 10. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
 11. **Launch.** Publish v1.
 
