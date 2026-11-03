@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="2.0" xmlns="urn:oasis:names:tc:xliff:document:2.0" srcLang="en" trgLang="es">
+  <file id="ngi18n" original="ng.template">
+    <unit id="route.home.title">
+      <segment>
+        <source>Wavebuto</source>
+        <target>Wavebuto</target>
+      </segment>
+    </unit>
+    <unit id="home.title">
+      <segment>
+        <source>Wavebuto</source>
+        <target>Wavebuto</target>
+      </segment>
+    </unit>
+    <unit id="home.sentence">
+      <segment>
+        <source>Wavebuto is a tattoo artist&apos;s website.</source>
+        <target>Wavebuto es una web de tatuajes.</target>
+      </segment>
+    </unit>
+  </file>
+</xliff>
