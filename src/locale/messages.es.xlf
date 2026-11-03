@@ -97,6 +97,42 @@
         <target>03 — Disponibilidad</target>
       </segment>
     </unit>
+    <unit id="contact.dates.label">
+      <segment>
+        <source>Preferred date / dates</source>
+        <target>Fecha o fechas preferidas</target>
+      </segment>
+    </unit>
+    <unit id="contact.dates.from">
+      <segment>
+        <source>From</source>
+        <target>Desde</target>
+      </segment>
+    </unit>
+    <unit id="contact.dates.to">
+      <segment>
+        <source>To</source>
+        <target>Hasta</target>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.label">
+      <segment>
+        <source>Are you flexible with dates?</source>
+        <target>¿Tienes flexibilidad de fechas?</target>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.yes">
+      <segment>
+        <source>Yes</source>
+        <target>Sí</target>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.no">
+      <segment>
+        <source>No</source>
+        <target>No</target>
+      </segment>
+    </unit>
     <unit id="contact.group.additional">
       <segment>
         <source>04 — Additional information</source>
