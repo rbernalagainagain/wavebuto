@@ -22,7 +22,7 @@ artist, and write the agreed list to `specs/form.md`, which from then on is the 
 - Rewriting `specs/form.md`: the form's groups, each field's key, control, whether it is required, its options, and every label and
   option in English and Spanish.
 - A section in `form.md` listing every difference from the design and why.
-- The artist's confirmation of the field list.
+- Answering the design's open questions, provisionally if the artist is not available.
 - Marking phase 2 done in `specs/roadmap.md`.
 
 ### Out
@@ -31,6 +31,8 @@ artist, and write the agreed list to `specs/form.md`, which from then on is the 
 - Error messages (phases 3 and 4) and the sent and failed messages (phase 6).
 - Any code: no component, schema or template changes in this phase.
 - Reference images (phase 12).
+- The artist's confirmation of the field list and of the provisional answers. It moves to launch (phase 11), so the phase does not
+  wait for the artist.
 
 ## Decisions
 
@@ -55,7 +57,9 @@ artist, and write the agreed list to `specs/form.md`, which from then on is the 
    to close this phase (see `validation.md`), only before launch (phase 11).
 7. **Placeholder privacy notice.** The notice under the consent checkbox is invented for development, marked as a placeholder, and
    uses `hello@wavebuto.example`. Phase 11 replaces it with the artist's real one.
-8. **One commit per task group** in `plan.md`, each with `pnpm format:check` green.
+8. **Provisional answers.** While the artist is not available, the developer answers the open questions with the option that
+   changes least. The answers are marked as provisional in `form.md` until the artist confirms them in phase 11.
+9. **One commit per task group** in `plan.md`, each with `pnpm format:check` green.
 
 ## Consequences
 

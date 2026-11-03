@@ -25,8 +25,8 @@ documentation only. Each group ends with `pnpm format:check` green and one commi
 2. Apply the artist's answers to `specs/form.md` and record each change in its differences section.
 3. If the answers change anything already decided in `specs/roadmap.md` phase 2, stop and update the roadmap first: `specs/` is the
    higher authority.
-4. If the artist does not answer, write the open questions to `QUESTIONS.md` and stop. The phase does not close without the field
-   list confirmed.
+4. If the artist is not available, the developer answers the open questions provisionally, with the option that changes least,
+   and `form.md` marks them as provisional. The artist confirms them in phase 11; the phase does not wait for that.
 5. `pnpm format:check`, then commit.
 
 ## 3. Close the phase
