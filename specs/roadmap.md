@@ -31,6 +31,7 @@ phase 9 adds the look, not the responsiveness.
    **Done** 2026-11-03 (`specs/2026-11-03-validation/`).
 4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
    anchor `#contact` so a link can open the page directly on it. Unstyled.
+   **Done** 2026-11-03 (`specs/2026-11-03-form/`).
 5. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
    This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
    ones outside `src/app/validation/`.
