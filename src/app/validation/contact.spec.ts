@@ -199,10 +199,10 @@ describe('email', () => {
 });
 
 // validation.md, "Radio groups": each group's values, from specs/form.md.
-// tattooHistory joins them in group 5.
 const RADIO_GROUPS: Record<string, { values: string[]; otherGroupValue: string }> = {
   symmetry: { values: ['symmetrical', 'asymmetrical', 'not-sure'], otherGroupValue: 'yes' },
   flexibleDates: { values: ['yes', 'no'], otherGroupValue: 'symmetrical' },
+  tattooHistory: { values: ['first', 'same-area', 'other-areas'], otherGroupValue: 'not-sure' },
 };
 
 describe.each(Object.entries(RADIO_GROUPS))('%s', (field, { values, otherGroupValue }) => {
@@ -286,5 +286,104 @@ describe('dates', () => {
     const request = withDates({ from: '2026-11-04', to: '' });
     expect(createContactSchema('2026-11-04').safeParse(request).success).toBe(true);
     expect(createContactSchema('2026-11-05').safeParse(request).success).toBe(false);
+  });
+});
+
+// validation.md, "notes".
+describe('notes', () => {
+  it.each([[MISSING], [''], ['  '], [' \n\t ']])('treats %j as absent', (value) => {
+    expect(validated(requestWith('notes', value))['notes']).toBeUndefined();
+  });
+
+  it.each([
+    ['Fine line.\nNo colour.', 'Fine line.\nNo colour.'],
+    ['Col 1\tCol 2', 'Col 1\tCol 2'],
+    ['a'.repeat(2000), 'a'.repeat(2000)],
+    // Edge cases beyond validation.md.
+    ['Line 1\r\nLine 2', 'Line 1\r\nLine 2'], // Windows line breaks
+    [`  ${'a'.repeat(2000)}\n`, 'a'.repeat(2000)], // the limit counts the trimmed text
+    ['Línea fina, 李小龍 🙂', 'Línea fina, 李小龍 🙂'],
+  ])('accepts %j as %j', (value, expected) => {
+    expect(validated(requestWith('notes', value))['notes']).toBe(expected);
+  });
+
+  it.each([
+    ['a'.repeat(2001), 'too-long'],
+    ['Hi\u0000', 'characters'],
+    // Edge cases beyond validation.md.
+    ['Hi\u0007 there', 'characters'],
+    ['Hi\u007f', 'characters'],
+    [`${'a'.repeat(2001)}\u0000`, 'too-long'], // one code: the first rule broken
+    [42, 'characters'],
+  ])('rejects %j with %s', (value, code) => {
+    expect(errorsAt(requestWith('notes', value), 'notes')).toEqual([code]);
+  });
+});
+
+// validation.md, "consent".
+describe('consent', () => {
+  it('accepts true', () => {
+    expect(validated(requestWith('consent', true))['consent']).toBe(true);
+  });
+
+  it.each([
+    [false],
+    [MISSING],
+    // Edge cases beyond validation.md: only the boolean true counts.
+    ['true'],
+    ['on'],
+    [1],
+    [null],
+  ])('rejects %j with consent', (value) => {
+    expect(errorsAt(requestWith('consent', value), 'consent')).toEqual(['consent']);
+  });
+});
+
+// validation.md, "Whole request".
+describe('the whole request', () => {
+  it('accepts the full request, with instagram without its @', () => {
+    expect(validated({ ...VALID_REQUEST })).toEqual({ ...VALID_REQUEST, instagram: 'ana.lopez_' });
+  });
+
+  it('accepts only the required fields and consent', () => {
+    const request = {
+      name: 'Ana López',
+      instagram: 'ana.lopez_',
+      email: 'ana@example.com',
+      location: 'Madrid / España',
+      placement: 'Left forearm',
+      dates: { from: '2026-11-10' },
+      consent: true,
+    };
+    expect(validated(request)).toEqual(request);
+  });
+
+  it('drops a key that is not in specs/form.md', () => {
+    const data = validated({ ...VALID_REQUEST, subject: 'Hello' });
+    expect(Object.keys(data)).not.toContain('subject');
+  });
+
+  it('drops a key that is not in specs/form.md inside dates', () => {
+    const data = validated({
+      ...VALID_REQUEST,
+      dates: { from: '2026-11-10', until: '2026-12-01' },
+    });
+    expect(data['dates']).toEqual({ from: '2026-11-10' });
+  });
+
+  it('reports every required field of an empty request, and nothing else', () => {
+    expect(allErrors({})).toEqual([
+      'name: required',
+      'instagram: required',
+      'email: required',
+      'location: required',
+      'placement: required',
+      'dates.from: required',
+      'consent: consent',
+    ]);
+  });
+
+  it('rejects a request that is not an object', () => {
+    expect(createContactSchema(TODAY).safeParse('name=Ana').success).toBe(false);
   });
 });

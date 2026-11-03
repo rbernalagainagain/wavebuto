@@ -23,12 +23,15 @@ export type ContactErrorCode = (typeof CONTACT_ERROR_CODES)[number];
 
 // Any control character (Unicode category Cc), line breaks and tabs included.
 const CONTROL_CHARACTER = /\p{Cc}/u;
+// A control character other than a tab or a line break (\t, \n, \r).
+const CONTROL_CHARACTER_IN_NOTES = /[^\P{Cc}\t\n\r]/u;
 // An optional @, then an Instagram username: 1–30 letters, digits, . or _.
 const INSTAGRAM_FORMAT = /^@?[A-Za-z0-9._]{1,30}$/;
 
 // The longest single-line text and email address (requirements.md, decision 5).
 const SINGLE_LINE_MAX = 100;
 const EMAIL_MAX = 254;
+const NOTES_MAX = 2000;
 
 // A field reports one code: the first rule it breaks, in the order
 // required → too-long → format. Zod already skips a refine or a pipe once the
@@ -120,6 +123,25 @@ function dateRange(today: string) {
   );
 }
 
+/**
+ * "Anything else I should know?": optional, multi-line, at most `NOTES_MAX`
+ * characters. Empty or blank is absent.
+ */
+function notes() {
+  return z.preprocess(
+    (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+    z
+      .string({ error: 'characters' })
+      .trim()
+      .max(NOTES_MAX, { error: 'too-long', ...STOP })
+      .refine((value) => !CONTROL_CHARACTER_IN_NOTES.test(value), {
+        error: 'characters',
+        ...STOP,
+      })
+      .optional(),
+  );
+}
+
 /** A required email address, at most `EMAIL_MAX` characters. */
 function email() {
   return requiredText(EMAIL_MAX).pipe(z.email({ error: 'email' }));
@@ -147,6 +169,11 @@ export function createContactSchema(today: string) {
     // 03 — Availability
     dates: dateRange(today),
     flexibleDates: optionalRadio(['yes', 'no']),
+    // 04 — Additional information
+    tattooHistory: optionalRadio(['first', 'same-area', 'other-areas']),
+    notes: notes(),
+    // Sending: only the boolean true counts as consent.
+    consent: z.literal(true, { error: 'consent' }),
   });
 }
 
