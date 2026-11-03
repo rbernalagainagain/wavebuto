@@ -199,6 +199,13 @@ function itIsAnOptionalRadioGroup(radio: RadioGroupCase): void {
     expect(group.getAttribute('aria-invalid')).toBe('true');
     expect(error?.id).toBeTruthy();
     expect(group.getAttribute('aria-describedby')).toBe(error?.id);
+
+    group.querySelector<HTMLInputElement>('input')?.click();
+    await settle();
+
+    expect(group.hasAttribute('aria-invalid')).toBe(false);
+    expect(group.hasAttribute('aria-describedby')).toBe(false);
+    expect(text(root)).not.toContain('Choose one of the options.');
   });
 }
 
@@ -235,6 +242,32 @@ describe('ContactForm', () => {
         'P',
         'BUTTON',
         'P',
+      ]);
+    });
+
+    it('holds exactly the controls of specs/form.md, in its order, and nothing else', async () => {
+      const root = await createContactForm();
+      const controls = [...root.querySelectorAll('input, textarea, select, button')];
+
+      expect(controls.map((control) => control.id || control.tagName)).toEqual([
+        'contact-name',
+        'contact-instagram',
+        'contact-email',
+        'contact-location',
+        'contact-placement',
+        'contact-symmetry-symmetrical',
+        'contact-symmetry-asymmetrical',
+        'contact-symmetry-not-sure',
+        'contact-dates-from',
+        'contact-dates-to',
+        'contact-flexibleDates-yes',
+        'contact-flexibleDates-no',
+        'contact-tattooHistory-first',
+        'contact-tattooHistory-same-area',
+        'contact-tattooHistory-other-areas',
+        'contact-notes',
+        'contact-consent',
+        'BUTTON',
       ]);
     });
 
@@ -461,6 +494,13 @@ describe('ContactForm', () => {
         expect(to.getAttribute('aria-invalid')).toBe('true');
         expect(to.getAttribute('aria-describedby')).toBe(error?.id);
         expect(from.hasAttribute('aria-invalid')).toBe(false);
+
+        type(to, '2026-11-10');
+        await settle();
+
+        expect(to.hasAttribute('aria-invalid')).toBe(false);
+        expect(to.hasAttribute('aria-describedby')).toBe(false);
+        expect(text(root)).not.toContain('"To" can\'t be before "From".');
       });
 
       it('takes a single day, with To left empty, and a range', async () => {
