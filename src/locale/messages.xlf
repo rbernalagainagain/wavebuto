@@ -179,15 +179,63 @@
     </unit>
     <unit id="contact.group.additional">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:222,225</note>
+        <note category="location">src/app/contact-form/contact-form.html:222,223</note>
       </notes>
       <segment>
         <source>04 — Additional information</source>
       </segment>
     </unit>
+    <unit id="contact.tattooHistory.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:230,233</note>
+      </notes>
+      <segment>
+        <source> Is this your first tattoo, or do you already have tattoos in this area? </source>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.first">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:240,243</note>
+      </notes>
+      <segment>
+        <source>First tattoo</source>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.same-area">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:251,255</note>
+      </notes>
+      <segment>
+        <source>I already have tattoos in this area</source>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.other-areas">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:262,266</note>
+      </notes>
+      <segment>
+        <source>I have tattoos, but not in this area</source>
+      </segment>
+    </unit>
+    <unit id="contact.notes.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:270,271</note>
+      </notes>
+      <segment>
+        <source>Anything else I should know?</source>
+      </segment>
+    </unit>
+    <unit id="contact.consent.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:296,298</note>
+      </notes>
+      <segment>
+        <source> I agree that my details are used to answer this request. </source>
+      </segment>
+    </unit>
     <unit id="contact.privacy">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:226,230</note>
+        <note category="location">src/app/contact-form/contact-form.html:306,310</note>
       </notes>
       <segment>
         <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
@@ -195,7 +243,7 @@
     </unit>
     <unit id="contact.send">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:230,232</note>
+        <note category="location">src/app/contact-form/contact-form.html:310,312</note>
       </notes>
       <segment>
         <source>Send request</source>
@@ -203,7 +251,7 @@
     </unit>
     <unit id="contact.notice">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:233,237</note>
+        <note category="location">src/app/contact-form/contact-form.html:313,317</note>
       </notes>
       <segment>
         <source> Submitting this form does not guarantee an appointment. I will review your request and contact you personally. </source>

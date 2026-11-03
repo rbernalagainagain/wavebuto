@@ -222,7 +222,7 @@ describe('ContactForm', () => {
       expect(root.querySelector('form')?.hasAttribute('novalidate')).toBe(true);
     });
 
-    it('holds the four groups, the privacy notice, the button and the notice, in that order', async () => {
+    it('holds the four groups, the consent, the privacy notice, the button and the notice, in that order', async () => {
       const root = await createContactForm();
       const form = root.querySelector('form');
 
@@ -231,6 +231,7 @@ describe('ContactForm', () => {
         'FIELDSET',
         'FIELDSET',
         'FIELDSET',
+        'DIV',
         'P',
         'BUTTON',
         'P',
@@ -489,6 +490,122 @@ describe('ContactForm', () => {
         ],
         outside: 'Yes',
       });
+    });
+  });
+
+  describe('04 — Additional information', () => {
+    it('holds the tattoo history question, then Anything else', async () => {
+      const root = await createContactForm();
+      const group = root.querySelector('form > fieldset:nth-of-type(4)');
+
+      expect(text(group?.querySelector(':scope > fieldset > legend'))).toBe(
+        'Is this your first tattoo, or do you already have tattoos in this area?',
+      );
+      expect(text(group?.querySelector(':scope > div > label'))).toBe(
+        'Anything else I should know?',
+      );
+      expect([...(group?.children ?? [])].map((child) => child.tagName)).toEqual([
+        'LEGEND',
+        'FIELDSET',
+        'DIV',
+      ]);
+    });
+
+    describe('Is this your first tattoo, or do you already have tattoos in this area?', () => {
+      itIsAnOptionalRadioGroup({
+        key: 'tattooHistory',
+        legend: 'Is this your first tattoo, or do you already have tattoos in this area?',
+        options: [
+          ['first', 'First tattoo'],
+          ['same-area', 'I already have tattoos in this area'],
+          ['other-areas', 'I have tattoos, but not in this area'],
+        ],
+        outside: 'First',
+      });
+    });
+
+    describe('Anything else I should know?', () => {
+      const LABEL = 'Anything else I should know?';
+
+      it('is an optional multi-line field tied to its label, with no native rule', async () => {
+        const root = await createContactForm();
+        const notes = controlLabelled(root, LABEL);
+
+        expect(notes.tagName).toBe('TEXTAREA');
+        expect(text(notes.labels?.[0])).toBe(LABEL);
+        expect(notes.hasAttribute('aria-required')).toBe(false);
+        expect(NATIVE_CONSTRAINTS.filter((name) => notes.hasAttribute(name))).toEqual([]);
+      });
+
+      it('takes several lines, or nothing, with no error', async () => {
+        const { root, settle } = await renderContactForm();
+        const notes = controlLabelled(root, LABEL);
+
+        leave(notes);
+        await settle();
+        expect(notes.hasAttribute('aria-invalid')).toBe(false);
+
+        type(notes, 'Fine line.\nNo colour.');
+        await settle();
+        expect(notes.hasAttribute('aria-invalid')).toBe(false);
+      });
+
+      it('shows "too long" right after it once the person leaves it', async () => {
+        const { root, settle } = await renderContactForm();
+        const notes = controlLabelled(root, LABEL);
+
+        type(notes, 'x'.repeat(2001));
+        leave(notes);
+        await settle();
+
+        const error = notes.nextElementSibling;
+        expect(text(error)).toBe('This text is too long.');
+        expect(notes.getAttribute('aria-invalid')).toBe('true');
+        expect(notes.getAttribute('aria-describedby')).toBe(error?.id);
+
+        type(notes, 'x'.repeat(2000));
+        await settle();
+        expect(notes.hasAttribute('aria-invalid')).toBe(false);
+        expect(text(root)).not.toContain('This text is too long.');
+      });
+    });
+  });
+
+  describe('consent', () => {
+    const LABEL = 'I agree that my details are used to answer this request.';
+
+    it('is a checkbox tied to its label, required, unticked, and comes before the privacy notice', async () => {
+      const root = await createContactForm();
+      const consent = controlLabelled(root, LABEL);
+
+      expect(consent.type).toBe('checkbox');
+      expect(consent.checked).toBe(false);
+      expect(text(consent.labels?.[0])).toBe(`${LABEL} *`);
+      expect(consent.getAttribute('aria-required')).toBe('true');
+      expect(NATIVE_CONSTRAINTS.filter((name) => consent.hasAttribute(name))).toEqual([]);
+      expect(consent.closest('form > div')?.nextElementSibling).toBe(
+        root.querySelector('form > p'),
+      );
+    });
+
+    it('shows its error after its label once the person leaves it unticked, until it is ticked', async () => {
+      const { root, settle } = await renderContactForm();
+      const consent = controlLabelled(root, LABEL);
+
+      consent.click();
+      consent.click();
+      leave(consent);
+      await settle();
+
+      const error = consent.labels?.[0].nextElementSibling;
+      expect(text(error)).toBe('Tick the box to send your request.');
+      expect(consent.getAttribute('aria-invalid')).toBe('true');
+      expect(consent.getAttribute('aria-describedby')).toBe(error?.id);
+
+      consent.click();
+      await settle();
+      expect(consent.hasAttribute('aria-invalid')).toBe(false);
+      expect(text(root)).not.toContain('Tick the box to send your request.');
     });
   });
 

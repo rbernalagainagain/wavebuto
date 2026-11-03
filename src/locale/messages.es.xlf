@@ -139,6 +139,42 @@
         <target>04 — Información adicional</target>
       </segment>
     </unit>
+    <unit id="contact.tattooHistory.label">
+      <segment>
+        <source> Is this your first tattoo, or do you already have tattoos in this area? </source>
+        <target>¿Es tu primer tatuaje o ya tienes tatuajes en esta zona?</target>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.first">
+      <segment>
+        <source>First tattoo</source>
+        <target>Primer tatuaje</target>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.same-area">
+      <segment>
+        <source>I already have tattoos in this area</source>
+        <target>Ya tengo tatuajes en esta zona</target>
+      </segment>
+    </unit>
+    <unit id="contact.tattooHistory.other-areas">
+      <segment>
+        <source>I have tattoos, but not in this area</source>
+        <target>Tengo tatuajes, pero no en esta zona</target>
+      </segment>
+    </unit>
+    <unit id="contact.notes.label">
+      <segment>
+        <source>Anything else I should know?</source>
+        <target>¿Algo más que deba saber?</target>
+      </segment>
+    </unit>
+    <unit id="contact.consent.label">
+      <segment>
+        <source> I agree that my details are used to answer this request. </source>
+        <target>Acepto que mis datos se usen para responder a esta solicitud.</target>
+      </segment>
+    </unit>
     <unit id="contact.privacy">
       <segment>
         <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
