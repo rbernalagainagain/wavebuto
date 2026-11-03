@@ -1,4 +1,4 @@
-# SPEC — wavebuto 
+# SPEC — wavebuto
 
 The concrete slice to build now. This document holds decisions that are expected to change; the durable invariants live in `CONSTITUTION.md` and win on any conflict.
 
@@ -42,30 +42,30 @@ the group title.
 
 ### 2.1 Personal information
 
-| Field          | Name       | Type  | Required | Label            |
-| -------------- | ---------- | ----- | -------- | ---------------- |
-| Name           | `name`     | text  | yes      | "Name"           |
+| Field          | Name        | Type  | Required | Label            |
+| -------------- | ----------- | ----- | -------- | ---------------- |
+| Name           | `name`      | text  | yes      | "Name"           |
 | Instagram      | `instagram` | text  | yes      | "Instagram"      |
-| Email          | `email`    | email | yes      | "Email"          |
-| City / Country | `location` | text  | yes      | "City / Country" |
+| Email          | `email`     | email | yes      | "Email"          |
+| City / Country | `location`  | text  | yes      | "City / Country" |
 
 ### 2.2 Tattoo
 
-| Field          | Name            | Type  | Required | Label                           |
-| -------------- | --------------- | ----- | -------- | ------------------------------- |
-| Body placement | `bodyPlacement` | text  | yes      | "Body placement"                |
-| Symmetry       | `symmetry`      | radio | yes      | "Symmetrical or asymmetrical?"  |
+| Field          | Name            | Type  | Required | Label                          |
+| -------------- | --------------- | ----- | -------- | ------------------------------ |
+| Body placement | `bodyPlacement` | text  | yes      | "Body placement"               |
+| Symmetry       | `symmetry`      | radio | yes      | "Symmetrical or asymmetrical?" |
 
 `symmetry` options, in order: `symmetrical`, `asymmetrical`, `not-sure`.
 Displayed as: "Symmetrical", "Asymmetrical", "Not sure".
 
 ### 2.3 References
 
-| Field                  | Name                   | Type                  | Required | Label                     |
-| ---------------------- | ---------------------- | --------------------- | -------- | ------------------------- |
-| Reference from my work | `workReference`        | image file (one)      | no       | "Reference from my work"  |
-| Additional references  | `additionalReferences` | image files (several) | no       | "Additional references"   |
-| Body photo             | `bodyPhoto`            | image file (one)      | no       | "Body photo"              |
+| Field                  | Name                   | Type                  | Required | Label                    |
+| ---------------------- | ---------------------- | --------------------- | -------- | ------------------------ |
+| Reference from my work | `workReference`        | image file (one)      | no       | "Reference from my work" |
+| Additional references  | `additionalReferences` | image files (several) | no       | "Additional references"  |
+| Body photo             | `bodyPhoto`            | image file (one)      | no       | "Body photo"             |
 
 Help text, shown below the control and associated with it via
 `aria-describedby`:
@@ -86,10 +86,10 @@ Displayed as: "Yes", "No".
 
 ### 2.5 Additional information
 
-| Field          | Name            | Type     | Required | Label                                                                 |
-| -------------- | --------------- | -------- | -------- | --------------------------------------------------------------------- |
+| Field          | Name            | Type     | Required | Label                                                                     |
+| -------------- | --------------- | -------- | -------- | ------------------------------------------------------------------------- |
 | Tattoo history | `tattooHistory` | radio    | yes      | "Is this your first tattoo, or do you already have tattoos in this area?" |
-| Anything else  | `notes`         | textarea | no       | "Anything else I should know?"                                        |
+| Anything else  | `notes`         | textarea | no       | "Anything else I should know?"                                            |
 
 `tattooHistory` options, in order: `first-tattoo`, `tattoos-in-area`,
 `tattoos-elsewhere`. Displayed as: "First tattoo", "I already have
@@ -139,18 +139,18 @@ An optional text field that is empty or whitespace-only passes. An optional imag
 This is deliberately permissive. It accepts anything shaped like a
 username; it does not check that the account exists.
 
-| Input               | Result | Reason                           |
-| ------------------- | ------ | -------------------------------- |
-| `"ada.lovelace"`    | pass   |                                  |
-| `"@ada_lovelace"`   | pass   | leading `@` allowed, then dropped |
-| `"  @ada  "`        | pass   | trimmed to `"@ada"`              |
-| `""`                | fail   | required                         |
-| `"@"`               | fail   | nothing after `@`                |
-| `"ada lovelace"`    | fail   | space inside                     |
-| `"ada!"`            | fail   | character not allowed            |
-| `"instagram.com/ada"` | fail | a link, not a username           |
-| 30 × `"a"`          | pass   | exactly at the maximum           |
-| 31 × `"a"`          | fail   | over maximum                     |
+| Input                 | Result | Reason                            |
+| --------------------- | ------ | --------------------------------- |
+| `"ada.lovelace"`      | pass   |                                   |
+| `"@ada_lovelace"`     | pass   | leading `@` allowed, then dropped |
+| `"  @ada  "`          | pass   | trimmed to `"@ada"`               |
+| `""`                  | fail   | required                          |
+| `"@"`                 | fail   | nothing after `@`                 |
+| `"ada lovelace"`      | fail   | space inside                      |
+| `"ada!"`              | fail   | character not allowed             |
+| `"instagram.com/ada"` | fail   | a link, not a username            |
+| 30 × `"a"`            | pass   | exactly at the maximum            |
+| 31 × `"a"`            | fail   | over maximum                      |
 
 ### 3.3 `email`
 
@@ -179,15 +179,15 @@ This is deliberately permissive. The rule rejects obvious mistakes; it does not 
 - Minimum 2 characters after trimming.
 - Maximum 100 characters after trimming.
 
-| Input                  | Result | Reason                   |
-| ---------------------- | ------ | ------------------------ |
-| `"Madrid, Spain"`      | pass   |                          |
-| `"UK"`                 | pass   | exactly at the minimum   |
-| `"M"`                  | fail   | below minimum            |
-| `""`                   | fail   | required                 |
-| `"   "`                | fail   | whitespace-only is empty |
-| 100 × `"a"`            | pass   | exactly at the maximum   |
-| 101 × `"a"`            | fail   | over maximum             |
+| Input             | Result | Reason                   |
+| ----------------- | ------ | ------------------------ |
+| `"Madrid, Spain"` | pass   |                          |
+| `"UK"`            | pass   | exactly at the minimum   |
+| `"M"`             | fail   | below minimum            |
+| `""`              | fail   | required                 |
+| `"   "`           | fail   | whitespace-only is empty |
+| 100 × `"a"`       | pass   | exactly at the maximum   |
+| 101 × `"a"`       | fail   | over maximum             |
 
 ### 3.5 `bodyPlacement`
 
@@ -195,25 +195,25 @@ This is deliberately permissive. The rule rejects obvious mistakes; it does not 
 - Minimum 2 characters after trimming.
 - Maximum 100 characters after trimming.
 
-| Input               | Result | Reason                   |
-| ------------------- | ------ | ------------------------ |
-| `"Left forearm"`    | pass   |                          |
-| `"Ar"`              | pass   | exactly at the minimum   |
-| `"A"`               | fail   | below minimum            |
-| `""`                | fail   | required                 |
-| `"   "`             | fail   | whitespace-only is empty |
-| 100 × `"a"`         | pass   | exactly at the maximum   |
-| 101 × `"a"`         | fail   | over maximum             |
+| Input            | Result | Reason                   |
+| ---------------- | ------ | ------------------------ |
+| `"Left forearm"` | pass   |                          |
+| `"Ar"`           | pass   | exactly at the minimum   |
+| `"A"`            | fail   | below minimum            |
+| `""`             | fail   | required                 |
+| `"   "`          | fail   | whitespace-only is empty |
+| 100 × `"a"`      | pass   | exactly at the maximum   |
+| 101 × `"a"`      | fail   | over maximum             |
 
 ### 3.6 `symmetry`
 
 - Required. Must be one of `symmetrical`, `asymmetrical`, `not-sure`.
 
-| Input            | Result | Reason                 |
-| ---------------- | ------ | ---------------------- |
-| `"not-sure"`     | pass   |                        |
-| `""`             | fail   | nothing chosen         |
-| `"round"`        | fail   | not in the allowed set |
+| Input        | Result | Reason                 |
+| ------------ | ------ | ---------------------- |
+| `"not-sure"` | pass   |                        |
+| `""`         | fail   | nothing chosen         |
+| `"round"`    | fail   | not in the allowed set |
 
 ### 3.7 Images: `workReference`, `additionalReferences`, `bodyPhoto`
 
@@ -227,18 +227,18 @@ All three are optional. Every file, in any of the three fields, must:
 `additionalReferences` holds at most 5 files, and fails as a whole if any
 one of them fails.
 
-| Field                  | Input                                   | Result | Reason                     |
-| ---------------------- | --------------------------------------- | ------ | -------------------------- |
-| `workReference`        | no file                                 | pass   | optional                   |
-| `workReference`        | `image/jpeg`, 2 000 000 bytes           | pass   |                            |
-| `bodyPhoto`            | `image/heic`, 10 485 760 bytes          | pass   | exactly at the maximum     |
-| `bodyPhoto`            | `image/png`, 10 485 761 bytes           | fail   | over maximum size          |
-| `workReference`        | `application/pdf`, 100 000 bytes        | fail   | not an allowed image type  |
-| `workReference`        | `""` (type unknown), 100 000 bytes      | fail   | not an allowed image type  |
-| `additionalReferences` | no files                                | pass   | optional                   |
-| `additionalReferences` | 5 × `image/webp`, 1 000 000 bytes each  | pass   | exactly at the maximum count |
-| `additionalReferences` | 6 × `image/webp`, 1 000 000 bytes each  | fail   | over maximum count         |
-| `additionalReferences` | 2 × `image/png` + 1 × `image/gif`       | fail   | one file not allowed       |
+| Field                  | Input                                  | Result | Reason                       |
+| ---------------------- | -------------------------------------- | ------ | ---------------------------- |
+| `workReference`        | no file                                | pass   | optional                     |
+| `workReference`        | `image/jpeg`, 2 000 000 bytes          | pass   |                              |
+| `bodyPhoto`            | `image/heic`, 10 485 760 bytes         | pass   | exactly at the maximum       |
+| `bodyPhoto`            | `image/png`, 10 485 761 bytes          | fail   | over maximum size            |
+| `workReference`        | `application/pdf`, 100 000 bytes       | fail   | not an allowed image type    |
+| `workReference`        | `""` (type unknown), 100 000 bytes     | fail   | not an allowed image type    |
+| `additionalReferences` | no files                               | pass   | optional                     |
+| `additionalReferences` | 5 × `image/webp`, 1 000 000 bytes each | pass   | exactly at the maximum count |
+| `additionalReferences` | 6 × `image/webp`, 1 000 000 bytes each | fail   | over maximum count           |
+| `additionalReferences` | 2 × `image/png` + 1 × `image/gif`      | fail   | one file not allowed         |
 
 ### 3.8 `preferredDates`
 
@@ -249,16 +249,16 @@ one of them fails.
 Free text: the rule does not parse dates. "Any weekend in May" is as
 valid as "12/05".
 
-| Input                    | Result | Reason                   |
-| ------------------------ | ------ | ------------------------ |
-| `"Any weekend in May"`   | pass   |                          |
-| `"12/05"`                | pass   | not parsed as a date     |
-| `"Ma"`                   | pass   | exactly at the minimum   |
-| `"M"`                    | fail   | below minimum            |
-| `""`                     | fail   | required                 |
-| `"   "`                  | fail   | whitespace-only is empty |
-| 200 × `"a"`              | pass   | exactly at the maximum   |
-| 201 × `"a"`              | fail   | over maximum             |
+| Input                  | Result | Reason                   |
+| ---------------------- | ------ | ------------------------ |
+| `"Any weekend in May"` | pass   |                          |
+| `"12/05"`              | pass   | not parsed as a date     |
+| `"Ma"`                 | pass   | exactly at the minimum   |
+| `"M"`                  | fail   | below minimum            |
+| `""`                   | fail   | required                 |
+| `"   "`                | fail   | whitespace-only is empty |
+| 200 × `"a"`            | pass   | exactly at the maximum   |
+| 201 × `"a"`            | fail   | over maximum             |
 
 ### 3.9 `flexibleDates`
 
@@ -286,13 +286,13 @@ valid as "12/05".
 - Optional. Empty or whitespace-only passes and is sent as `""`.
 - Maximum 2000 characters after trimming.
 
-| Input                         | Result | Reason                     |
-| ----------------------------- | ------ | -------------------------- |
-| `""`                          | pass   | optional                   |
-| `"   "`                       | pass   | whitespace-only is empty   |
-| `"I'm allergic to latex"`     | pass   |                            |
-| 2000 × `"a"`                  | pass   | exactly at the maximum     |
-| 2001 × `"a"`                  | fail   | over maximum               |
+| Input                     | Result | Reason                   |
+| ------------------------- | ------ | ------------------------ |
+| `""`                      | pass   | optional                 |
+| `"   "`                   | pass   | whitespace-only is empty |
+| `"I'm allergic to latex"` | pass   |                          |
+| 2000 × `"a"`              | pass   | exactly at the maximum   |
+| 2001 × `"a"`              | fail   | over maximum             |
 
 ## 4. Error messages
 
@@ -472,7 +472,6 @@ step changes at a breakpoint.
 - Images scale down to the column width and never exceed it.
 - Vertical rhythm uses the `--space-*` scale only.
 
-
 ### 9.6 Viewport range and breakpoints
 
 - **Minimum supported width: 320px.** No horizontal scroll, no clipped
@@ -563,10 +562,7 @@ Three motions are specified. Nothing else moves.
 - When the user prefers reduced motion, nothing moves: anchor links
   jump directly, nothing snaps, and `#contact` appears in place.
 
-
 ### 9.11 Print and dark mode
 
 Out of scope for this slice. No print stylesheet, no
 `prefers-color-scheme` handling. The site renders in one palette.
-
-

@@ -55,6 +55,7 @@ Each step of the sale flow lives in `src/app/feature/<feature>/`; cross-step cap
 - Routed component at the feature root; sub-components in `ui/`.
 
 HTTP repository pipeline (follow it exactly for new endpoints):
+
 1. Request with `http.get<unknown>()`: the raw response is untrusted.
 2. Validate the raw response with the DTO schema (`dtoSchema.parse`). On `ZodError`, throw `XxxContractError`: the backend broke the contract.
 3. Map the DTO with `toDomain(dto)`, which returns `unknown` so the mapping cannot claim validity by itself.
@@ -88,13 +89,12 @@ Rules:
 - Technical, non-business checks go in `e2e/tests/*.e2e.ts`, not in Gherkin.
 - Testing Library's `screen` cannot see inside shadow roots: use the `within(shadowRoot(...))` helper pattern from `sale-stepper.testing.ts`. Required jsdom polyfills live in `src/test-setup.ts`.
 
-
 ## Key Conventions
 
 - Strict TypeScript: index-signature access needs brackets (`process.env['CI']`).
 - Each rule override in `eslint.config.js` has a written justification: read it before touching a rule, and never disable or change lint rules without asking.
 - Selector prefixes: `app` for components/directives, `mfe` inside `src/app/mfe/`.
-- No comments, except to explain *why* a non-obvious decision was made. Exception: document component inputs and outputs (`input()`, `output()`) with a brief JSDoc.
+- No comments, except to explain _why_ a non-obvious decision was made. Exception: document component inputs and outputs (`input()`, `output()`) with a brief JSDoc.
 - Never run `git commit`, `git push` or any `gh` command. Leave all changes uncommitted for review.
 
 ## Backend

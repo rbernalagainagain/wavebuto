@@ -32,7 +32,7 @@ Decision provenance (why choices were made) lives in `docs/adr/`. It is backgrou
 - Angular 22.1, standalone and zoneless (do not add `zone.js` or trigger change detection by hand). SSR via `@angular/ssr` prerenders every route to static HTML at build time because SEO is a priority; there is no runtime server rendering
 - Signal Forms (`@angular/forms/signals`) for the contact form; do not use Reactive Forms or Template-driven Forms
 - Zod for the contact form, the only input the site has (its schema in `src/app/validation/` is the single definition of the form's rules; do not restate them elsewhere): one schema validates what the user typed and what `src/app/submit/` sends
-- Transloco for i18n (never hardcode user-visible text; add keys to the translation files). Translations live in `public/i18n/` and the browser loads them over HTTP through `src/app/i18n/translation-http-loader.ts` (plain `fetch`, same-origin, no `HttpClient`); the prerender and the tests bundle the same file instead (`src/app/i18n/bundled-translations.ts`). That loader and `src/app/submit/` are the only two requests the site makes
+- Angular's built-in i18n (`@angular/localize`) for English and Spanish. Templates are written in English and every user-visible text is marked with `i18n` and a stable custom ID (`@@area.key`; `$localize` in code). The Spanish translation lives in `src/locale/messages.es.xlf` (XLIFF 2.0: `pnpm ng extract-i18n --format xlf2 --output-path src/locale`, then translate the new units). The build prerenders `/en/` and `/es/` as separate pages, and the Worker (`src/index.js`) redirects `/` to one of them. Translations are compiled into each page, so they cost no request
 - Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor, utility classes or webfont (`spec.md` §9)
 - Vitest via `ng test` (jsdom) for all tests, not Karma or Jasmine; validation specs never import `TestBed`
 - ESLint and stylelint enforce the guardrails: never disable or loosen a rule to get a change through
@@ -64,6 +64,7 @@ pnpm ng test --watch=false               # Run all tests once (never plain pnpm 
 pnpm ng test --watch=false --include <path>     # Run a single spec file (glob)
 pnpm ng test --watch=false --filter '<regex>'   # Run only tests/suites whose name matches
 pnpm build                               # Production build (SSR + static prerender) to dist/
+pnpm preview                             # Build, then serve the site and the Worker with wrangler dev on port 8787
 pnpm format                              # Apply Prettier. Run this instead of hand-formatting
 pnpm format:check                        # Verify formatting. Not in pnpm check: run it before finishing
 pnpm ng generate component <name>        # Scaffold a standalone component
@@ -104,18 +105,17 @@ pnpm ng generate component <name>        # Scaffold a standalone component
 These are the constitution's invariants stated as operational rules.
 Treat a violation as a build failure.
 
-1. **The network has two doors.**
-   - Only files in `src/app/submit/` and `src/app/i18n/translation-http-loader.ts` may contain `fetch`, `XMLHttpRequest`,
-     `navigator.sendBeacon`, `HttpClient`, or any request library (`CONSTITUTION.md` §2.1). The submit module sends the submission;
-     the translation loader only reads the site's own translation files. If a request appears anywhere else, it's a bug.
-   - Add a lint rule that fails `pnpm check` if these are used outside those two places. Wire it in M0.
+1. **The network has one door.**
+   - Only files in `src/app/submit/` may contain `fetch`, `XMLHttpRequest`, `navigator.sendBeacon`, `HttpClient`, or any
+     request library (`CONSTITUTION.md` §2.1). The submit module sends the submission. If a request appears anywhere else, it's a
+     bug.
+   - Add a lint rule that fails `pnpm check` if these are used outside that place. Wire it in M0.
 
 2. **Seam boundaries are import boundaries.**
    - `src/app/validation/` imports nothing but types and `zod`. No DOM access, no Angular runtime, no network — pure functions over
      values (`CONSTITUTION.md` §2.2). Zod is the only runtime import allowed there.
    - Components import validation; validation never imports a component.
    - Enforce with a dependency-boundary lint rule that allows `zod` and nothing else. Wire it in M0.
-
 
 3. **Nothing off-origin.** No `<script src>`, `<link href>`, font, or embed pointing outside the repo. No analytics, no telemetry. Lint
    fails on an off-origin URL in a template.
@@ -172,7 +172,6 @@ Implement the `spec.md` rules as a single Zod schema in
 - Implement until every case passes **exactly**.
 - Add edge cases: empty, whitespace-only, over-length, unexpected characters.
 
-
 ### M2 — Form
 
 The form component, wired to M1's validation. Fields exactly as declared
@@ -216,7 +215,7 @@ it into `pnpm check`, then write styles.
   `#contact` link reaches the form, one form submits, driven only by
   committed content.
 - Validation rules match the pinned tests; no rule is stated twice.
-- No request exists outside `src/app/submit/` and the translation loader; swapping the endpoint
+- No request exists outside `src/app/submit/`; swapping the endpoint
   would not touch a template, a field, or a validation rule.
 - Nothing off-origin loads. No dependency was added beyond M0's ESLint
   and M5's stylelint.
@@ -235,7 +234,7 @@ it into `pnpm check`, then write styles.
 ## When you're unsure
 
 Ask before you: add a dependency, add a form field, add a route, put a
-request outside `src/app/submit/` and the translation loader, add an off-origin resource, write a
+request outside `src/app/submit/`, add an off-origin resource, write a
 validation rule inline, add a second breakpoint, put a colour or
 spacing literal in a component, remove a focus indicator, or change
 anything in `spec.md` or `CONSTITUTION.md`. These are exactly the

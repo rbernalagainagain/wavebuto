@@ -1,11 +1,10 @@
 'use strict';
 
 /**
- * Guardrail 1 (CLAUDE.md) / CONSTITUTION.md §2.1: exactly two places may
- * talk to the network -- src/app/submit/ (the submission) and
- * src/app/i18n/translation-http-loader.ts (the site's own translation files).
- * This rule is applied to every .ts file except those two, so any request
- * surface found here is a boundary violation, not a style nit.
+ * Guardrail 1 (CLAUDE.md) / CONSTITUTION.md §2.1: exactly one place may
+ * talk to the network -- src/app/submit/ (the submission). This rule is
+ * applied to every .ts file outside it, so any request surface found here is
+ * a boundary violation, not a style nit.
  */
 
 const REQUEST_LIBRARY_MODULES = new Set([
@@ -18,7 +17,7 @@ const REQUEST_LIBRARY_MODULES = new Set([
 ]);
 
 const MESSAGE =
-  'Network access is only allowed in src/app/submit/ and the translation loader (CONSTITUTION.md §2.1). Move this call behind the submit module.';
+  'Network access is only allowed in src/app/submit/ (CONSTITUTION.md §2.1). Move this call behind the submit module.';
 
 module.exports = {
   meta: {
