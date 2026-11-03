@@ -21,9 +21,6 @@ export const CONTACT_ERROR_CODES = [
 
 export type ContactErrorCode = (typeof CONTACT_ERROR_CODES)[number];
 
-// The shape of `today`: the caller's current date, `YYYY-MM-DD`.
-const TODAY_FORMAT = /^\d{4}-\d{2}-\d{2}$/;
-
 // Any control character (Unicode category Cc), line breaks and tabs included.
 const CONTROL_CHARACTER = /\p{Cc}/u;
 // An optional @, then an Instagram username: 1–30 letters, digits, . or _.
@@ -78,6 +75,51 @@ function optionalRadio<const Values extends readonly [string, ...string[]]>(valu
   );
 }
 
+/**
+ * The first day that suits the person: a real `YYYY-MM-DD` date, `today` or
+ * later. Dates in that format compare correctly as text.
+ */
+function dateFrom(today: string) {
+  return z
+    .string({ error: 'required' })
+    .trim()
+    .min(1, { error: 'required', ...STOP })
+    .pipe(z.iso.date({ error: 'date', ...STOP }))
+    .refine((from) => from >= today, { error: 'date-past', ...STOP });
+}
+
+/** The last day, optional: empty or blank means a single day, so it is absent. */
+function dateTo() {
+  return z.preprocess(
+    (value) => (typeof value === 'string' && value.trim() === '' ? undefined : value),
+    z
+      .string({ error: 'date' })
+      .trim()
+      .pipe(z.iso.date({ error: 'date', ...STOP }))
+      .optional(),
+  );
+}
+
+/**
+ * The preferred dates: `from`, and `to` not before it. A missing `dates` is
+ * an empty range, so the error lands on `from`, the field the person fills
+ * in. `to` is compared with `from` only when both are valid dates.
+ */
+function dateRange(today: string) {
+  return z.preprocess(
+    (value) => (value === undefined ? {} : value),
+    z
+      .object({ from: dateFrom(today), to: dateTo() }, { error: 'required' })
+      .refine(({ from, to }) => to === undefined || to >= from, {
+        error: 'date-order',
+        path: ['to'],
+        // Only when from and to are both valid: otherwise the range has an
+        // error already, on the field that caused it.
+        when: (payload) => payload.issues.length === 0,
+      }),
+  );
+}
+
 /** A required email address, at most `EMAIL_MAX` characters. */
 function email() {
   return requiredText(EMAIL_MAX).pipe(z.email({ error: 'email' }));
@@ -90,7 +132,7 @@ function email() {
  * throws instead of producing a schema that would misjudge every date.
  */
 export function createContactSchema(today: string) {
-  if (!TODAY_FORMAT.test(today)) {
+  if (!z.iso.date().safeParse(today).success) {
     throw new TypeError(`today must be a YYYY-MM-DD date, got ${JSON.stringify(today)}`);
   }
   return z.object({
@@ -102,6 +144,9 @@ export function createContactSchema(today: string) {
     // 02 — Tattoo
     placement: singleLineText(),
     symmetry: optionalRadio(['symmetrical', 'asymmetrical', 'not-sure']),
+    // 03 — Availability
+    dates: dateRange(today),
+    flexibleDates: optionalRadio(['yes', 'no']),
   });
 }
 
