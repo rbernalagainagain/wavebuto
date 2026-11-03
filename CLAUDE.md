@@ -1,18 +1,29 @@
 # build guide
 
-`wavebuto` — a small static site: a single page (`/`) with three sections, reached through in-page anchor links. The first section is the landing (`#home`), the second shows images (`#gallery`), and the third holds the contact form (`#contact`: name → email → subject → message). Clicking a navigation link scrolls to its section without leaving the page. It is built one way from one codebase: an Angular SSR build whose output is fully prerendered static HTML (`outputMode: "static"`), then hydrated in the browser. The form POSTs JSON to `/api/contact`; no endpoint is deployed for this slice, so the failure state is the one that fires.
+`wavebuto` — a small static site: a single page (`/`) that reads top to bottom: a landing, then a video, and at the very end the contact form. Only the contact form is a declared section with an anchor (`#contact`); the landing and the video have none. The page therefore has exactly two addresses, `/` and `/#contact`. Clicking the contact link scrolls to the form without leaving the page. It is built one way from one codebase: an Angular SSR build whose output is fully prerendered static HTML (`outputMode: "static"`), then hydrated in the browser. The form POSTs JSON to `/api/contact`; no endpoint is deployed for this slice, so the failure state is the one that fires.
 
 Operating instructions for building wavebuto. This file governs _how you work_; it does not redefine _what to build_.
 
-@CONSTITUTION.md
-@spec.md
+**Sources of truth are being redefined.** `README.md` holds the stakeholder's input, written by the artist in their own words.
+From it, a new constitution is being written in `specs/`:
 
-The two documents imported above are the sources of truth:
+- **`specs/mission.md`** — what the site is for and for whom.
+- **`specs/tech-stack.md`** — the technology choices.
+- **`specs/roadmap.md`** — the implementation order, in very small phases of work.
 
-- **`CONSTITUTION.md`** — durable invariants. Never violate these.
-- **`spec.md`** — the concrete first slice: acceptance tests.
+Until those files exist, there is no normative spec: ask before building anything.
 
-**Authority order when anything conflicts:** `CONSTITUTION.md` > `spec.md` > this file > your own judgement.
+The previous `CONSTITUTION.md` and `spec.md` are archived in `docs/archive/`. Like `docs/adr/`, they are background, **not** build
+instructions — do not act on them or treat them as authoritative. References to them elsewhere in this file are pending revision.
+
+**Authority order when anything conflicts:** `specs/` > `README.md` > this file > your own judgement.
+
+**Design source:** the visual design lives in Figma — start there for anything about how the page looks:
+<https://www.figma.com/design/6T0g1ib2lMXa5mTP9sOY0o/wavebuto> (file key `6T0g1ib2lMXa5mTP9sOY0o`, readable through the Figma MCP).
+The reference version is the page **"Web — v4"** (`150:2`): frames "Landing — Desktop 1440" (`150:9`) and "Landing — Mobile 390"
+(`210:61`). The other `Web — v*` pages (v5, v6, v7) are not the reference; do not build from them.
+It is a reference, not a source of truth: if the design and `specs/` disagree, `specs/` wins — point out the difference and ask
+rather than following either silently.
 
 Decision provenance (why choices were made) lives in `docs/adr/`. It is background for humans, **not** build instructions — do not act on it or treat it as authoritative.
 
@@ -22,7 +33,6 @@ Decision provenance (why choices were made) lives in `docs/adr/`. It is backgrou
 - Signal Forms (`@angular/forms/signals`) for the contact form; do not use Reactive Forms or Template-driven Forms
 - Zod for the contact form, the only input the site has (its schema in `src/app/validation/` is the single definition of the form's rules; do not restate them elsewhere): one schema validates what the user typed and what `src/app/submit/` sends
 - Transloco for i18n (never hardcode user-visible text; add keys to the translation files). Translations live in `public/i18n/` and the browser loads them over HTTP through `src/app/i18n/translation-http-loader.ts` (plain `fetch`, same-origin, no `HttpClient`); the prerender and the tests bundle the same file instead (`src/app/i18n/bundled-translations.ts`). That loader and `src/app/submit/` are the only two requests the site makes
-- RxJS is installed only because Angular and Transloco need it; app code uses it only where Transloco's API demands it (`src/app/i18n/`). Do not introduce `HttpClient`
 - Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor, utility classes or webfont (`spec.md` §9)
 - Vitest via `ng test` (jsdom) for all tests, not Karma or Jasmine; validation specs never import `TestBed`
 - ESLint and stylelint enforce the guardrails: never disable or loosen a rule to get a change through
@@ -32,25 +42,16 @@ Decision provenance (why choices were made) lives in `docs/adr/`. It is backgrou
 
 Wavebuto is an Angular 22 application (generated via Angular CLI 22.1.2), being built milestone by milestone per the plan below.
 
-**Done:** M0 (ESLint + boundary rules + `pnpm check`), M1 (validation rules as pure functions in `src/app/validation/`, test-first, covered by
-the `spec.md` §3 cases), M2 (`ContactForm` in `src/app/contact-form/`, wired to M1's validators, keyboard-only completion and ARIA error
-announcement covered by tests), M3 (`submitContactForm` in `src/app/submit/`, a framework-free `fetch` wrapper around `POST /api/contact`
-returning a success/failure result; wired into `ContactForm`'s idle / submitting / success / failure states, covered by tests for both
-outcomes including a forced network-error failure).
+**Current:** M0 (scaffold the barriers). Milestones M0–M5 follow in order; the POC is **not** feature-complete until M5's Definition of
+Done is met.
 
-**Current:** M4 (page sections). M4 was first built as two pages — `Home` in `src/app/home/` and `About` in `src/app/about/`, both
-prerendered, with the shared static header/footer shell in `App` and `ContactForm` mounted on `/` under an `<h2>`. It is being redone as a
-single page with three sections: `About` and its `/about` route are removed from both route files, and `/` holds the landing, images and
-contact sections. M5 (visual layer, `spec.md` §9) follows once M4 is complete. The POC is **not** feature-complete until M5's Definition
-of Done is met.
-
-Conventions are now set by M1–M3 and must be followed, not re-decided: validation is pure functions over strings, framework-free, with
-specs alongside; the submit module is likewise a framework-free async function wrapping the sole `fetch` call, returning a
+Conventions to follow as the milestones land, not to re-decide: validation is pure functions over strings, framework-free, with specs
+alongside; the submit module is likewise a framework-free async function wrapping the sole `fetch` call, returning a
 `{ status: 'success' | 'failure' }` result and never throwing; components call it directly and hold their own submission-phase state
-(no Angular `HttpClient`, no service wrapper). Page copy resolving `spec.md` §6's brackets was drafted at M4 and is placeholder-grade — it
-invents no facts about the site, so it is safe to replace wholesale with real copy. The failure message's contact address stays
-`hello@wavebuto.example`: the `.example` TLD is reserved and cannot resolve, so it can never silently misdirect a user's email. Swap it
-for a real inbox when one exists.
+(no Angular `HttpClient`, no service wrapper). Page copy resolving `spec.md` §6's brackets is placeholder-grade — it must invent no facts
+about the site, so it is safe to replace wholesale with real copy. The failure message's contact address is `hello@wavebuto.example`:
+the `.example` TLD is reserved and cannot resolve, so it can never silently misdirect a user's email. Swap it for a real inbox when one
+exists.
 
 ## Commands
 
@@ -75,7 +76,7 @@ pnpm ng generate component <name>        # Scaffold a standalone component
 
 - **Standalone components, no NgModules.** `App` (`src/app/app.ts`) is the root standalone component bootstrapped directly in `src/main.ts` via `bootstrapApplication`.
 - **SSR + hydration + static prerendering are all wired up already** — this is not opt-in scaffolding to add later:
-  - `src/app/app.config.ts` — client-side providers: router (with `withInMemoryScrolling({ anchorScrolling: 'enabled' })` for the section anchors), `provideBrowserGlobalErrorListeners()`, `provideClientHydration()`.
+  - `src/app/app.config.ts` — client-side providers: router (with `withInMemoryScrolling({ anchorScrolling: 'enabled' })` for the `#contact` anchor), `provideBrowserGlobalErrorListeners()`, `provideClientHydration()`.
   - `src/app/app.config.server.ts` — merges `appConfig` with `provideServerRendering(withRoutes(serverRoutes))` for the server build.
   - `src/app/app.routes.server.ts` — per-route render-mode config (`RenderMode.Prerender`, etc.) consumed by the server config; currently a catch-all prerender rule.
   - `src/main.server.ts` — server entry point (`bootstrap` function used by the Angular SSR build).
@@ -186,12 +187,13 @@ they send it.
 
 ### M4 — Page sections
 
-The single page (`/`) with its three sections, content from `spec.md`:
-landing (`#home`), images (`#gallery`) and contact form (`#contact`).
-Add the `/` route to **both** `app.routes.ts` and `app.routes.server.ts`,
-and enable anchor scrolling with
+The single page (`/`), content from `spec.md`, in this order: the
+landing, then a video, then the contact form. The contact form is the
+only declared section (`#contact`); the landing and the video have no
+anchor. Add the `/` route to **both** `app.routes.ts` and
+`app.routes.server.ts`, and enable anchor scrolling with
 `withInMemoryScrolling({ anchorScrolling: 'enabled' })`.
-Navigation links use `routerLink` with `fragment`.
+The contact link uses `routerLink` with `fragment="contact"`.
 
 ### M5 — Visual layer ⟵ barriers before styles, as in M0
 
@@ -210,8 +212,9 @@ it into `pnpm check`, then write styles.
 
 ## Definition of Done (whole POC)
 
-- One page with three sections renders and prerenders, its anchor links
-  reach each section, one form submits, driven only by committed content.
+- One page (landing, video, contact) renders and prerenders, its
+  `#contact` link reaches the form, one form submits, driven only by
+  committed content.
 - Validation rules match the pinned tests; no rule is stated twice.
 - No request exists outside `src/app/submit/` and the translation loader; swapping the endpoint
   would not touch a template, a field, or a validation rule.
