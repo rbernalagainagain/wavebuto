@@ -5,7 +5,11 @@ async function renderContactForm() {
   await TestBed.configureTestingModule({ imports: [ContactForm] }).compileComponents();
   const fixture = TestBed.createComponent(ContactForm);
   await fixture.whenStable();
-  return { root: fixture.nativeElement as HTMLElement, settle: () => fixture.whenStable() };
+  return {
+    fixture,
+    root: fixture.nativeElement as HTMLElement,
+    settle: () => fixture.whenStable(),
+  };
 }
 
 async function createContactForm() {
@@ -53,6 +57,71 @@ const NATIVE_CONSTRAINTS = [
   'pattern',
   'placeholder',
 ];
+
+interface TextFieldCase {
+  label: string;
+  type: string;
+  autocomplete: string | null;
+  invalid: string;
+  error: string;
+  valid: string;
+}
+
+/** The behaviour every required single-line text field shares (decisions 5, 6 and 8). */
+function itIsARequiredTextField(field: TextFieldCase): void {
+  it(`is an input of type ${field.type} tied to its label, required and with no native rule`, async () => {
+    const root = await createContactForm();
+    const control = controlLabelled(root, field.label);
+
+    expect(control.tagName).toBe('INPUT');
+    expect(control.getAttribute('type')).toBe(field.type);
+    expect(control.getAttribute('aria-required')).toBe('true');
+    expect(control.getAttribute('autocomplete')).toBe(field.autocomplete);
+    expect(NATIVE_CONSTRAINTS.filter((name) => control.hasAttribute(name))).toEqual([]);
+  });
+
+  it('shows no error while the person is still in the field', async () => {
+    const { root, settle } = await renderContactForm();
+    const control = controlLabelled(root, field.label);
+
+    type(control, field.invalid);
+    await settle();
+
+    expect(control.hasAttribute('aria-invalid')).toBe(false);
+    expect(control.hasAttribute('aria-describedby')).toBe(false);
+    expect(text(root)).not.toContain(field.error);
+  });
+
+  it('shows its error right after it once the person leaves it', async () => {
+    const { root, settle } = await renderContactForm();
+    const control = controlLabelled(root, field.label);
+
+    type(control, field.invalid);
+    leave(control);
+    await settle();
+
+    const error = control.nextElementSibling;
+    expect(text(error)).toBe(field.error);
+    expect(control.getAttribute('aria-invalid')).toBe('true');
+    expect(error?.id).toBeTruthy();
+    expect(control.getAttribute('aria-describedby')).toBe(error?.id);
+  });
+
+  it('removes the error as soon as the value is valid', async () => {
+    const { root, settle } = await renderContactForm();
+    const control = controlLabelled(root, field.label);
+
+    type(control, field.invalid);
+    leave(control);
+    await settle();
+    type(control, field.valid);
+    await settle();
+
+    expect(control.hasAttribute('aria-invalid')).toBe(false);
+    expect(control.hasAttribute('aria-describedby')).toBe(false);
+    expect(text(root)).not.toContain(field.error);
+  });
+}
 
 describe('ContactForm', () => {
   describe('header (specs/form.md, "Header")', () => {
@@ -127,7 +196,7 @@ describe('ContactForm', () => {
   });
 
   describe('01 — Personal information', () => {
-    const FIELDS = [
+    const FIELDS: TextFieldCase[] = [
       {
         label: 'Name',
         type: 'text',
@@ -169,60 +238,7 @@ describe('ContactForm', () => {
       expect(labels).toEqual(['Name *', 'Instagram *', 'Email *', 'City / Country *']);
     });
 
-    describe.each(FIELDS)('$label', (field) => {
-      it(`is an input of type ${field.type} tied to its label, required and with no native rule`, async () => {
-        const root = await createContactForm();
-        const control = controlLabelled(root, field.label);
-
-        expect(control.tagName).toBe('INPUT');
-        expect(control.getAttribute('type')).toBe(field.type);
-        expect(control.getAttribute('aria-required')).toBe('true');
-        expect(control.getAttribute('autocomplete')).toBe(field.autocomplete);
-        expect(NATIVE_CONSTRAINTS.filter((name) => control.hasAttribute(name))).toEqual([]);
-      });
-
-      it('shows no error while the person is still in the field', async () => {
-        const { root, settle } = await renderContactForm();
-        const control = controlLabelled(root, field.label);
-
-        type(control, field.invalid);
-        await settle();
-
-        expect(control.hasAttribute('aria-invalid')).toBe(false);
-        expect(control.hasAttribute('aria-describedby')).toBe(false);
-        expect(text(root)).not.toContain(field.error);
-      });
-
-      it('shows its error right after it once the person leaves it', async () => {
-        const { root, settle } = await renderContactForm();
-        const control = controlLabelled(root, field.label);
-
-        type(control, field.invalid);
-        leave(control);
-        await settle();
-
-        const error = control.nextElementSibling;
-        expect(text(error)).toBe(field.error);
-        expect(control.getAttribute('aria-invalid')).toBe('true');
-        expect(error?.id).toBeTruthy();
-        expect(control.getAttribute('aria-describedby')).toBe(error?.id);
-      });
-
-      it('removes the error as soon as the value is valid', async () => {
-        const { root, settle } = await renderContactForm();
-        const control = controlLabelled(root, field.label);
-
-        type(control, field.invalid);
-        leave(control);
-        await settle();
-        type(control, field.valid);
-        await settle();
-
-        expect(control.hasAttribute('aria-invalid')).toBe(false);
-        expect(control.hasAttribute('aria-describedby')).toBe(false);
-        expect(text(root)).not.toContain(field.error);
-      });
-    });
+    describe.each(FIELDS)('$label', itIsARequiredTextField);
 
     it('shows "required" on a field left empty', async () => {
       const { root, settle } = await renderContactForm();
@@ -232,6 +248,104 @@ describe('ContactForm', () => {
       await settle();
 
       expect(text(control.nextElementSibling)).toBe('This field is required.');
+    });
+  });
+
+  describe('02 — Tattoo', () => {
+    it('holds Body placement, then the symmetry question', async () => {
+      const root = await createContactForm();
+      const group = root.querySelector('form > fieldset:nth-of-type(2)');
+
+      expect(text(group?.querySelector(':scope > div > label'))).toBe('Body placement *');
+      expect(text(group?.querySelector(':scope > fieldset > legend'))).toBe(
+        'Symmetrical or asymmetrical?',
+      );
+      expect([...(group?.children ?? [])].map((child) => child.tagName)).toEqual([
+        'LEGEND',
+        'DIV',
+        'FIELDSET',
+      ]);
+    });
+
+    describe('Body placement', () => {
+      itIsARequiredTextField({
+        label: 'Body placement',
+        type: 'text',
+        autocomplete: null,
+        invalid: 'Left\tforearm',
+        error: 'This text contains characters that are not allowed.',
+        valid: 'Left forearm',
+      });
+    });
+
+    describe('Symmetrical or asymmetrical?', () => {
+      function symmetryGroup(root: HTMLElement): HTMLFieldSetElement {
+        const group = root.querySelector('form > fieldset:nth-of-type(2) > fieldset');
+        if (!(group instanceof HTMLFieldSetElement)) {
+          throw new Error('No symmetry fieldset');
+        }
+        return group;
+      }
+
+      it('is a radio group named by its legend, with one labelled radio per option, none chosen', async () => {
+        const root = await createContactForm();
+        const group = symmetryGroup(root);
+        const radios = [...group.querySelectorAll('input')];
+
+        expect(group.getAttribute('role')).toBe('radiogroup');
+        expect(
+          radios.map((radio) => [radio.type, radio.value, labelText(radio.labels?.[0] as Element)]),
+        ).toEqual([
+          ['radio', 'symmetrical', 'Symmetrical'],
+          ['radio', 'asymmetrical', 'Asymmetrical'],
+          ['radio', 'not-sure', 'Not sure'],
+        ]);
+        expect(radios.some((radio) => radio.checked)).toBe(false);
+        expect(new Set(radios.map((radio) => radio.name)).size).toBe(1);
+        expect(radios[0].name).not.toBe('');
+      });
+
+      it('is optional: nothing marks it required', async () => {
+        const root = await createContactForm();
+        const group = symmetryGroup(root);
+
+        expect(text(group.querySelector('legend'))).not.toContain('*');
+        expect(group.querySelectorAll('[aria-required], [required]').length).toBe(0);
+        expect(group.hasAttribute('aria-required')).toBe(false);
+      });
+
+      it('takes the chosen option and shows no error', async () => {
+        const { root, settle } = await renderContactForm();
+        const group = symmetryGroup(root);
+        const notSure = group.querySelector<HTMLInputElement>('input[value="not-sure"]');
+
+        notSure?.click();
+        leave(notSure as HTMLInputElement);
+        await settle();
+
+        expect(notSure?.checked).toBe(true);
+        expect(group.hasAttribute('aria-invalid')).toBe(false);
+        expect(group.nextElementSibling).toBeNull();
+      });
+
+      it('shows its error right after the group, tied to the group', async () => {
+        const { fixture, root, settle } = await renderContactForm();
+        // No radio can choose a value outside the options, so the model is
+        // set directly, as a tampered page would.
+        fixture.componentInstance['model'].update((model) => ({
+          ...model,
+          symmetry: 'Symmetrical',
+        }));
+        fixture.componentInstance['contactForm'].symmetry().markAsTouched();
+        await settle();
+
+        const group = symmetryGroup(root);
+        const error = group.nextElementSibling;
+        expect(text(error)).toBe('Choose one of the options.');
+        expect(group.getAttribute('aria-invalid')).toBe('true');
+        expect(error?.id).toBeTruthy();
+        expect(group.getAttribute('aria-describedby')).toBe(error?.id);
+      });
     });
   });
 

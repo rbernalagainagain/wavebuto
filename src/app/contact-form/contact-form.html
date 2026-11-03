@@ -85,6 +85,66 @@
 
   <fieldset>
     <legend i18n="@@contact.group.tattoo">02 — Tattoo</legend>
+    <div>
+      <label for="contact-placement">
+        <span i18n="@@contact.placement.label">Body placement</span>
+        <span aria-hidden="true"> *</span>
+      </label>
+      @let placementError = errorOf(contactForm.placement);
+      <input
+        id="contact-placement"
+        type="text"
+        aria-required="true"
+        [formField]="contactForm.placement"
+        [attr.aria-invalid]="placementError ? 'true' : null"
+        [attr.aria-describedby]="placementError ? 'contact-placement-error' : null"
+      />
+      @if (placementError) {
+        <p id="contact-placement-error">{{ placementError }}</p>
+      }
+    </div>
+    @let symmetryError = errorOf(contactForm.symmetry);
+    <fieldset
+      role="radiogroup"
+      [attr.aria-invalid]="symmetryError ? 'true' : null"
+      [attr.aria-describedby]="symmetryError ? 'contact-symmetry-error' : null"
+    >
+      <legend i18n="@@contact.symmetry.label">Symmetrical or asymmetrical?</legend>
+      <div>
+        <input
+          id="contact-symmetry-symmetrical"
+          type="radio"
+          value="symmetrical"
+          [formField]="contactForm.symmetry"
+        />
+        <label for="contact-symmetry-symmetrical" i18n="@@contact.symmetry.symmetrical"
+          >Symmetrical</label
+        >
+      </div>
+      <div>
+        <input
+          id="contact-symmetry-asymmetrical"
+          type="radio"
+          value="asymmetrical"
+          [formField]="contactForm.symmetry"
+        />
+        <label for="contact-symmetry-asymmetrical" i18n="@@contact.symmetry.asymmetrical"
+          >Asymmetrical</label
+        >
+      </div>
+      <div>
+        <input
+          id="contact-symmetry-not-sure"
+          type="radio"
+          value="not-sure"
+          [formField]="contactForm.symmetry"
+        />
+        <label for="contact-symmetry-not-sure" i18n="@@contact.symmetry.not-sure">Not sure</label>
+      </div>
+    </fieldset>
+    @if (symmetryError) {
+      <p id="contact-symmetry-error">{{ symmetryError }}</p>
+    }
   </fieldset>
 
   <fieldset>

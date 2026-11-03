@@ -61,6 +61,36 @@
         <target>02 — Tatuaje</target>
       </segment>
     </unit>
+    <unit id="contact.placement.label">
+      <segment>
+        <source>Body placement</source>
+        <target>Zona del cuerpo</target>
+      </segment>
+    </unit>
+    <unit id="contact.symmetry.label">
+      <segment>
+        <source>Symmetrical or asymmetrical?</source>
+        <target>¿Simétrico o asimétrico?</target>
+      </segment>
+    </unit>
+    <unit id="contact.symmetry.symmetrical">
+      <segment>
+        <source>Symmetrical</source>
+        <target>Simétrico</target>
+      </segment>
+    </unit>
+    <unit id="contact.symmetry.asymmetrical">
+      <segment>
+        <source>Asymmetrical</source>
+        <target>Asimétrico</target>
+      </segment>
+    </unit>
+    <unit id="contact.symmetry.not-sure">
+      <segment>
+        <source>Not sure</source>
+        <target>No lo sé</target>
+      </segment>
+    </unit>
     <unit id="contact.group.availability">
       <segment>
         <source>03 — Availability</source>
