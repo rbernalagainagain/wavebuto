@@ -25,6 +25,8 @@ phase 9 adds the look, not the responsiveness.
    - **A required consent checkbox** comes before "Send request", with a short notice of what happens to the person's data.
    - **Every label, option and message is written in English and Spanish** in `specs/form.md`; the design is in English only, and
      the Spanish text is the artist's to approve.
+     **Done** 2026-11-03 (`specs/2026-11-03-form-fields/`). The artist has not confirmed the fields yet: the open questions have
+     provisional answers in `specs/form.md`, and the confirmation moves to phase 11.
 3. **Validation.** One Zod schema with the rules for those fields, with tests written first.
 4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
    anchor `#contact` so a link can open the page directly on it. Unstyled.
@@ -36,8 +38,8 @@ phase 9 adds the look, not the responsiveness.
    Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
    `Web — v*` pages are not the reference.
 10. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
-11. **Launch.** Replace the placeholder privacy notice and contact address in `specs/form.md` with the artist's real ones, then
-    publish v1.
+11. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
+    text. Replace the placeholder privacy notice and contact address there with the artist's real ones, then publish v1.
 
 ## After v1
 

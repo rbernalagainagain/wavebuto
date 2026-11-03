@@ -113,7 +113,8 @@ The button's arrow icon is decoration, not text, and is styled in phase 9.
 ## Design inventory
 
 Every element of the form in the design, and where it went. Desktop and mobile show the same elements with the same text; they
-differ only in layout (one column on mobile, two fields per row in group 01 on desktop).
+differ only in layout: one column on mobile, while desktop puts the group titles in a column of their own, two fields per row in
+group 01 and the three uploads of group 03 side by side. The last group's title is empty on desktop and hidden on mobile.
 
 | Design group (desktop / mobile)                   | Design layer                   | Design text                                                                 | In this file                |
 | ------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- | --------------------------- |
@@ -150,8 +151,8 @@ differ only in layout (one column on mobile, two fields per row in group 01 on d
 ## Provisional answers, pending the artist
 
 The questions of phase 2's review (`specs/2026-11-03-form-fields/plan.md`, group 2) were answered by the developer, not the artist,
-so work can go on. Each answer is the one that changes least, so it is easy to revisit. The artist still has to confirm them; until
-then, phase 2 is not closed (`specs/2026-11-03-form-fields/validation.md`). An answer the artist changes is recorded under
+so work can go on. Each answer is the one that changes least, so it is easy to revisit. The artist confirms them, with the rest of
+the field list, before launch (`roadmap.md`, phase 11); phase 2 closed without waiting for that. An answer the artist changes is recorded under
 [Differences from the design](#differences-from-the-design) when it departs from the design, and this section is removed once all
 are confirmed.
 
