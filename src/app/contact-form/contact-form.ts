@@ -58,9 +58,26 @@ export class ContactForm {
   // Every rule is the schema's. It is built again each time the form
   // validates, so `today` is the browser's date at that moment, never the
   // build's (decision 4).
-  protected readonly contactForm = form(this.model, (path) => {
-    validateStandardSchema(path, () => createContactSchema(localDate(new Date())));
-  });
+  protected readonly contactForm = form(
+    this.model,
+    (path) => {
+      validateStandardSchema(path, () => createContactSchema(localDate(new Date())));
+    },
+    {
+      // Trying to send marks every field as left, so each shows its error
+      // (decision 7).
+      submission: {
+        // A valid form does nothing yet and makes no request: phase 6 sends it.
+        action: async () => undefined,
+        // The fields are declared in the order they appear on the page, so
+        // the first field with an error is the first invalid one on screen.
+        onInvalid: (root) => {
+          const [first] = root().errorSummary();
+          first?.fieldTree().focusBoundControl();
+        },
+      },
+    },
+  );
 
   /**
    * The error to show under a field, in the page's language, or `null`. A

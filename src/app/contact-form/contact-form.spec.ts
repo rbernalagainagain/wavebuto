@@ -609,6 +609,102 @@ describe('ContactForm', () => {
     });
   });
 
+  describe('trying to send', () => {
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date(2026, 10, 3, 12, 0));
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+      vi.restoreAllMocks();
+    });
+
+    // Every required field, by label, with a valid value; consent is ticked apart.
+    const REQUIRED: [string, string][] = [
+      ['Name', 'Ana López'],
+      ['Instagram', '@ana.lopez_'],
+      ['Email', 'ana@example.com'],
+      ['City / Country', 'Madrid / España'],
+      ['Body placement', 'Left forearm'],
+      ['From', '2026-11-10'],
+    ];
+    const CONSENT = 'I agree that my details are used to answer this request.';
+
+    function fill(root: HTMLElement, fields: [string, string][]): void {
+      for (const [label, value] of fields) {
+        type(controlLabelled(root, label), value);
+      }
+    }
+
+    async function send(root: HTMLElement, settle: () => Promise<unknown>): Promise<void> {
+      root.querySelector<HTMLButtonElement>('form > button[type="submit"]')?.click();
+      await settle();
+    }
+
+    function invalidControls(root: HTMLElement): string[] {
+      return [...root.querySelectorAll('[aria-invalid="true"]')].map((each) => each.id);
+    }
+
+    it('shows the error of every required field and of consent, none on the optional ones, and focuses Name', async () => {
+      const { root, settle } = await renderContactForm();
+
+      await send(root, settle);
+
+      expect(invalidControls(root)).toEqual([
+        'contact-name',
+        'contact-instagram',
+        'contact-email',
+        'contact-location',
+        'contact-placement',
+        'contact-dates-from',
+        'contact-consent',
+      ]);
+      expect(text(controlLabelled(root, 'Name').nextElementSibling)).toBe(
+        'This field is required.',
+      );
+      expect(text(controlLabelled(root, CONSENT).labels?.[0].nextElementSibling)).toBe(
+        'Tick the box to send your request.',
+      );
+      expect(document.activeElement).toBe(controlLabelled(root, 'Name'));
+    });
+
+    it('focuses the first invalid field when it is further down', async () => {
+      const { root, settle } = await renderContactForm();
+      fill(root, REQUIRED.slice(0, 4));
+
+      await send(root, settle);
+
+      expect(invalidControls(root)[0]).toBe('contact-placement');
+      expect(document.activeElement).toBe(controlLabelled(root, 'Body placement'));
+    });
+
+    it('focuses the consent checkbox when it is the only thing missing', async () => {
+      const { root, settle } = await renderContactForm();
+      fill(root, REQUIRED);
+
+      await send(root, settle);
+
+      expect(invalidControls(root)).toEqual(['contact-consent']);
+      expect(document.activeElement).toBe(controlLabelled(root, CONSENT));
+    });
+
+    it('does nothing visible with a valid form, and makes no request', async () => {
+      const fetch = vi.spyOn(globalThis, 'fetch');
+      const open = vi.spyOn(XMLHttpRequest.prototype, 'open');
+      const { root, settle } = await renderContactForm();
+      fill(root, REQUIRED);
+      controlLabelled(root, CONSENT).click();
+      const before = text(root);
+
+      await send(root, settle);
+
+      expect(invalidControls(root)).toEqual([]);
+      expect(text(root)).toBe(before);
+      expect(fetch).not.toHaveBeenCalled();
+      expect(open).not.toHaveBeenCalled();
+    });
+  });
+
   it('loads nothing', async () => {
     const root = await createContactForm();
     expect(root.querySelectorAll('[src], [href]').length).toBe(0);
