@@ -52,3 +52,6 @@ Thumbs.db
 # Package manager
 pnpm-debug.log*
 .npm
+
+# Wrangler local state (wrangler dev)
+/.wrangler

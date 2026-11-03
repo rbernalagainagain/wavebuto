@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "preview": "ng build && wrangler dev --local",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
@@ -46,7 +47,8 @@
     "stylelint": "17.14.1",
     "typescript": "6.0.2",
     "typescript-eslint": "8.66.0",
-    "vitest": "4.0.8"
+    "vitest": "4.0.8",
+    "wrangler": "4.156.2"
   },
   "volta": {
     "node": "24.19.0"
