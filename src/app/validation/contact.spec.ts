@@ -42,6 +42,15 @@ function errorsAt(request: Record<string, unknown>, path: string): string[] {
     .map((issue) => issue.message);
 }
 
+/** Parses the request and returns every error as `path: code`. */
+function allErrors(request: Record<string, unknown>): string[] {
+  const result = createContactSchema(TODAY).safeParse(request);
+  if (result.success) {
+    return [];
+  }
+  return result.error.issues.map((issue) => `${issue.path.join('.')}: ${issue.message}`);
+}
+
 /** Parses the request, expecting it to be valid, and returns the validated value. */
 function validated(request: Record<string, unknown>): Record<string, unknown> {
   const result = createContactSchema(TODAY).safeParse(request);
@@ -72,7 +81,7 @@ describe('createContactSchema', () => {
     expect(() => createContactSchema(TODAY)).not.toThrow();
   });
 
-  it.each(['', '03/11/2026', '2026-11-3', '2026-11-03T00:00:00Z'])(
+  it.each(['', '03/11/2026', '2026-11-3', '2026-11-03T00:00:00Z', '2026-02-30'])(
     'throws for a today in another format: %j',
     (today) => {
       expect(() => createContactSchema(today)).toThrow(TypeError);
@@ -190,9 +199,10 @@ describe('email', () => {
 });
 
 // validation.md, "Radio groups": each group's values, from specs/form.md.
-// flexibleDates and tattooHistory join them in groups 4 and 5.
+// tattooHistory joins them in group 5.
 const RADIO_GROUPS: Record<string, { values: string[]; otherGroupValue: string }> = {
   symmetry: { values: ['symmetrical', 'asymmetrical', 'not-sure'], otherGroupValue: 'yes' },
+  flexibleDates: { values: ['yes', 'no'], otherGroupValue: 'symmetrical' },
 };
 
 describe.each(Object.entries(RADIO_GROUPS))('%s', (field, { values, otherGroupValue }) => {
@@ -214,5 +224,67 @@ describe.each(Object.entries(RADIO_GROUPS))('%s', (field, { values, otherGroupVa
     [null],
   ])('rejects %j with option', (value) => {
     expect(errorsAt(requestWith(field, value), field)).toEqual(['option']);
+  });
+});
+
+// validation.md, "dates", with today = 2026-11-03.
+describe('dates', () => {
+  const withDates = (dates: unknown) => requestWith('dates', dates);
+
+  it.each([
+    ['', '', 'dates.from: required'],
+    ['2026-11-02', '', 'dates.from: date-past'],
+    ['2026-11-10', '2026-11-09', 'dates.to: date-order'],
+    ['2026-02-30', '', 'dates.from: date'],
+    ['03/11/2026', '', 'dates.from: date'],
+    ['2026-11-10', 'tomorrow', 'dates.to: date'],
+    ['2027-02-29', '', 'dates.from: date'],
+    // Edge cases beyond validation.md.
+    ['   ', '', 'dates.from: required'],
+    ['2026-11-03T10:00', '', 'dates.from: date'],
+    ['2026-13-01', '', 'dates.from: date'],
+    ['2026-11-10', '2026-02-30', 'dates.to: date'],
+    ['2026-11-10', '2026-11-03', 'dates.to: date-order'], // today, but before from
+    // to is only compared with a valid from: one error, on from.
+    ['2026-11-02', '2026-11-01', 'dates.from: date-past'],
+    ['nope', '2026-11-01', 'dates.from: date'],
+  ])('rejects from %j, to %j with %s', (from, to, error) => {
+    expect(allErrors(withDates({ from, to }))).toEqual([error]);
+  });
+
+  it.each([
+    ['2026-11-03', '', { from: '2026-11-03' }], // a single day, today
+    ['2026-11-10', '2026-11-10', { from: '2026-11-10', to: '2026-11-10' }],
+    ['2026-11-10', '2026-11-20', { from: '2026-11-10', to: '2026-11-20' }],
+    ['2027-11-03', '', { from: '2027-11-03' }], // no upper limit
+    ['2028-02-29', '', { from: '2028-02-29' }], // leap year
+    // Edge cases beyond validation.md.
+    [' 2026-11-10 ', '   ', { from: '2026-11-10' }], // trimmed; a blank to is absent
+    ['2026-12-31', '2027-01-01', { from: '2026-12-31', to: '2027-01-01' }], // across years
+  ] as [string, string, { from: string; to?: string }][])(
+    'accepts from %j, to %j',
+    (from, to, expected) => {
+      const dates = validated(withDates({ from, to }))['dates'];
+      expect(dates).toEqual(expected);
+      expect((dates as Record<string, unknown>)['to']).toBe(expected.to);
+    },
+  );
+
+  it('accepts a missing to as a single day', () => {
+    expect(validated(withDates({ from: '2026-11-10' }))['dates']).toEqual({ from: '2026-11-10' });
+  });
+
+  it('reports required on from when dates is missing', () => {
+    expect(allErrors(requestWith('dates', MISSING))).toEqual(['dates.from: required']);
+  });
+
+  it('reports required on dates when it is not an object', () => {
+    expect(allErrors(withDates('2026-11-10'))).toEqual(['dates: required']);
+  });
+
+  it('uses the today it was given', () => {
+    const request = withDates({ from: '2026-11-04', to: '' });
+    expect(createContactSchema('2026-11-04').safeParse(request).success).toBe(true);
+    expect(createContactSchema('2026-11-05').safeParse(request).success).toBe(false);
   });
 });
