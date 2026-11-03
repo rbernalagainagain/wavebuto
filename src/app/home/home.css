@@ -24,13 +24,21 @@ section + section {
   margin-block-start: var(--space-5);
 }
 
-/* The gallery is a plain list of images, one per row: the same column at every width. */
+/* Design experiment: the vertical clips sit side by side, three to a row. */
 ul {
   display: grid;
-  gap: var(--space-3);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+video {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  border-radius: var(--radius);
 }
 
 /* Contact slide (§9.10): #contact's contents slide up and fade in as the section

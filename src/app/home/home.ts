@@ -2,18 +2,18 @@ import { Component } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { ContactForm } from '../contact-form/contact-form';
 
-interface GalleryImage {
+interface GalleryVideo {
   readonly src: string;
-  readonly altKey: string;
+  readonly labelKey: string;
   readonly width: number;
   readonly height: number;
 }
 
-// Served from public/gallery/ (spec.md §6): same-origin, with intrinsic size declared up front.
-const GALLERY_IMAGES: readonly GalleryImage[] = [
-  { src: 'gallery/dawn.svg', altKey: 'gallery.images.dawn', width: 640, height: 400 },
-  { src: 'gallery/noon.svg', altKey: 'gallery.images.noon', width: 640, height: 400 },
-  { src: 'gallery/dusk.svg', altKey: 'gallery.images.dusk', width: 640, height: 400 },
+// Design experiment: vertical clips served from public/, same-origin, with intrinsic size declared up front.
+const GALLERY_VIDEOS: readonly GalleryVideo[] = [
+  { src: 'video-1.mp4', labelKey: 'gallery.videos.one', width: 720, height: 1280 },
+  { src: 'video-2.mp4', labelKey: 'gallery.videos.two', width: 360, height: 640 },
+  { src: 'video-3.mp4', labelKey: 'gallery.videos.three', width: 720, height: 1280 },
 ];
 
 @Component({
@@ -23,5 +23,5 @@ const GALLERY_IMAGES: readonly GalleryImage[] = [
   styleUrl: './home.css',
 })
 export class Home {
-  protected readonly galleryImages = GALLERY_IMAGES;
+  protected readonly galleryVideos = GALLERY_VIDEOS;
 }

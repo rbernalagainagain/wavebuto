@@ -19,6 +19,11 @@
       "dawn": "Abstract placeholder: a pale sky over three blue wave bands.",
       "noon": "Abstract placeholder: a single deep-blue wave crest on a light background.",
       "dusk": "Abstract placeholder: dark water under a muted grey sky with a thin light horizon."
+    },
+    "videos": {
+      "one": "Video clip 1",
+      "two": "Video clip 2",
+      "three": "Video clip 3"
     }
   },
   "contact": {
