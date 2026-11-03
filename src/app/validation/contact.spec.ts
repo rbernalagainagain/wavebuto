@@ -110,7 +110,7 @@ describe.each(['name', 'location', 'placement'])('%s', (field) => {
     ['a'.repeat(100), 'a'.repeat(100)],
     // Edge cases beyond validation.md.
     [`  ${'a'.repeat(100)}  `, 'a'.repeat(100)], // the limit counts the trimmed text
-    ['Ana López', 'Ana López'], // a no-break space is not a control character
+    ['Ana\u00a0López', 'Ana\u00a0López'], // a no-break space is not a control character
   ])('accepts %j as %j', (value, expected) => {
     expect(validated(requestWith(field, value))[field]).toBe(expected);
   });

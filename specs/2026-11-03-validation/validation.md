@@ -4,9 +4,9 @@ The phase can be merged when every check below passes.
 
 ## Automated
 
-- [ ] `pnpm check` passes (ESLint, stylelint, all tests).
-- [ ] `pnpm format:check` passes.
-- [ ] The spec in `src/app/validation/` passes every case below, with `today` = `2026-11-03`. A case lists the value of one field in
+- [x] `pnpm check` passes (ESLint, stylelint, all tests).
+- [x] `pnpm format:check` passes.
+- [x] The spec in `src/app/validation/` passes every case below, with `today` = `2026-11-03`. A case lists the value of one field in
       an otherwise valid request, and the expected result: valid (with the validated value when it differs) or the error code on
       that field.
 
@@ -102,21 +102,23 @@ The phase can be merged when every check below passes.
 
 ### Whole request
 
-- [ ] This request is valid, and its validated value is the same with `instagram` as `'ana.lopez_'`:
+- [x] This request is valid, and its validated value is the same with `instagram` as `'ana.lopez_'`:
       `name` `'Ana López'`, `instagram` `'@ana.lopez_'`, `email` `'ana@example.com'`, `location` `'Madrid / España'`, `placement`
       `'Left forearm'`, `symmetry` `'not-sure'`, `dates` `{ from: '2026-11-10', to: '2026-11-20' }`, `flexibleDates` `'yes'`,
       `tattooHistory` `'first'`, `notes` `'Fine line.'`, `consent` `true`.
-- [ ] The same request with only the required fields and `consent` is valid.
-- [ ] The same request with an extra key `subject` is valid, and `subject` is not in the validated value.
-- [ ] An empty object fails with `required` on every required field and `consent` on `consent`, and nothing on the optional ones.
+- [x] The same request with only the required fields and `consent` is valid.
+- [x] The same request with an extra key `subject` is valid, and `subject` is not in the validated value.
+- [x] An empty object fails with `required` on every required field and `consent` on `consent`, and nothing on the optional ones.
 
 ## Code
 
-- [ ] All the rules live in `src/app/validation/contact.ts`; no other file states a length, a format or a required check.
-- [ ] `src/app/validation/` imports only `zod` and types (`wavebuto/validation-pure-boundary` passes), and reads no clock: `today`
+- [x] All the rules live in `src/app/validation/contact.ts`; no other file states a length, a format or a required check for the
+      fields of `specs/form.md`. The old `/api/contact` handler in `src/index.js` still checks the old form's fields (`nombre`,
+      `email`, `mensaje`); it is out of this phase's scope and phase 5 replaces it (`specs/roadmap.md`).
+- [x] `src/app/validation/` imports only `zod` and types (`wavebuto/validation-pure-boundary` passes), and reads no clock: `today`
       is a parameter.
-- [ ] No spec in `src/app/validation/` imports `TestBed` or anything from Angular.
-- [ ] `src/app/validation/` holds no user-visible text: errors are the codes of `requirements.md`, decision 3.
-- [ ] Every error code has an English and a Spanish text in `specs/form.md`.
-- [ ] No dependency was added (`package.json` unchanged).
-- [ ] Phase 3 is marked done in `specs/roadmap.md`.
+- [x] No spec in `src/app/validation/` imports `TestBed` or anything from Angular.
+- [x] `src/app/validation/` holds no user-visible text: errors are the codes of `requirements.md`, decision 3.
+- [x] Every error code has an English and a Spanish text in `specs/form.md`.
+- [x] No dependency was added (`package.json` unchanged).
+- [x] Phase 3 is marked done in `specs/roadmap.md`.
