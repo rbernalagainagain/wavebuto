@@ -220,7 +220,87 @@
 
   <fieldset>
     <legend i18n="@@contact.group.additional">04 — Additional information</legend>
+    @let tattooHistoryError = errorOf(contactForm.tattooHistory);
+    <fieldset
+      role="radiogroup"
+      [attr.aria-invalid]="tattooHistoryError ? 'true' : null"
+      [attr.aria-describedby]="tattooHistoryError ? 'contact-tattooHistory-error' : null"
+    >
+      <legend i18n="@@contact.tattooHistory.label">
+        Is this your first tattoo, or do you already have tattoos in this area?
+      </legend>
+      <div>
+        <input
+          id="contact-tattooHistory-first"
+          type="radio"
+          value="first"
+          [formField]="contactForm.tattooHistory"
+        />
+        <label for="contact-tattooHistory-first" i18n="@@contact.tattooHistory.first"
+          >First tattoo</label
+        >
+      </div>
+      <div>
+        <input
+          id="contact-tattooHistory-same-area"
+          type="radio"
+          value="same-area"
+          [formField]="contactForm.tattooHistory"
+        />
+        <label for="contact-tattooHistory-same-area" i18n="@@contact.tattooHistory.same-area"
+          >I already have tattoos in this area</label
+        >
+      </div>
+      <div>
+        <input
+          id="contact-tattooHistory-other-areas"
+          type="radio"
+          value="other-areas"
+          [formField]="contactForm.tattooHistory"
+        />
+        <label for="contact-tattooHistory-other-areas" i18n="@@contact.tattooHistory.other-areas"
+          >I have tattoos, but not in this area</label
+        >
+      </div>
+    </fieldset>
+    @if (tattooHistoryError) {
+      <p id="contact-tattooHistory-error">{{ tattooHistoryError }}</p>
+    }
+    <div>
+      <label for="contact-notes" i18n="@@contact.notes.label">Anything else I should know?</label>
+      @let notesError = errorOf(contactForm.notes);
+      <textarea
+        id="contact-notes"
+        [formField]="contactForm.notes"
+        [attr.aria-invalid]="notesError ? 'true' : null"
+        [attr.aria-describedby]="notesError ? 'contact-notes-error' : null"
+      ></textarea>
+      @if (notesError) {
+        <p id="contact-notes-error">{{ notesError }}</p>
+      }
+    </div>
   </fieldset>
+
+  <div>
+    @let consentError = errorOf(contactForm.consent);
+    <input
+      id="contact-consent"
+      type="checkbox"
+      aria-required="true"
+      [formField]="contactForm.consent"
+      [attr.aria-invalid]="consentError ? 'true' : null"
+      [attr.aria-describedby]="consentError ? 'contact-consent-error' : null"
+    />
+    <label for="contact-consent">
+      <span i18n="@@contact.consent.label">
+        I agree that my details are used to answer this request.
+      </span>
+      <span aria-hidden="true"> *</span>
+    </label>
+    @if (consentError) {
+      <p id="contact-consent-error">{{ consentError }}</p>
+    }
+  </div>
 
   <p i18n="@@contact.privacy">
     Your details reach me by email and I use them only to answer this request. I do not share them
