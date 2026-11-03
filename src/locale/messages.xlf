@@ -35,15 +35,47 @@
     </unit>
     <unit id="contact.group.personal">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:9,12</note>
+        <note category="location">src/app/contact-form/contact-form.html:9,11</note>
       </notes>
       <segment>
         <source>01 — Personal information</source>
       </segment>
     </unit>
+    <unit id="contact.name.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:12,13</note>
+      </notes>
+      <segment>
+        <source>Name</source>
+      </segment>
+    </unit>
+    <unit id="contact.instagram.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:31,32</note>
+      </notes>
+      <segment>
+        <source>Instagram</source>
+      </segment>
+    </unit>
+    <unit id="contact.email.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:49,50</note>
+      </notes>
+      <segment>
+        <source>Email</source>
+      </segment>
+    </unit>
+    <unit id="contact.location.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:68,69</note>
+      </notes>
+      <segment>
+        <source>City / Country</source>
+      </segment>
+    </unit>
     <unit id="contact.group.tattoo">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:13,16</note>
+        <note category="location">src/app/contact-form/contact-form.html:87,90</note>
       </notes>
       <segment>
         <source>02 — Tattoo</source>
@@ -51,7 +83,7 @@
     </unit>
     <unit id="contact.group.availability">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:17,21</note>
+        <note category="location">src/app/contact-form/contact-form.html:91,95</note>
       </notes>
       <segment>
         <source>03 — Availability</source>
@@ -59,7 +91,7 @@
     </unit>
     <unit id="contact.group.additional">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:21,24</note>
+        <note category="location">src/app/contact-form/contact-form.html:95,98</note>
       </notes>
       <segment>
         <source>04 — Additional information</source>
@@ -67,7 +99,7 @@
     </unit>
     <unit id="contact.privacy">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:25,29</note>
+        <note category="location">src/app/contact-form/contact-form.html:99,103</note>
       </notes>
       <segment>
         <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
@@ -75,7 +107,7 @@
     </unit>
     <unit id="contact.send">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:29,31</note>
+        <note category="location">src/app/contact-form/contact-form.html:103,105</note>
       </notes>
       <segment>
         <source>Send request</source>
@@ -83,7 +115,7 @@
     </unit>
     <unit id="contact.notice">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:32,36</note>
+        <note category="location">src/app/contact-form/contact-form.html:106,110</note>
       </notes>
       <segment>
         <source> Submitting this form does not guarantee an appointment. I will review your request and contact you personally. </source>

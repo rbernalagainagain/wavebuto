@@ -1,4 +1,4 @@
-import type { ContactErrorCode } from '../validation/contact';
+import { CONTACT_ERROR_CODES, type ContactErrorCode } from '../validation/contact';
 
 /**
  * The text of each error code, from specs/form.md, "Errors". Typed by
@@ -17,3 +17,15 @@ export const CONTACT_ERROR_TEXT: Readonly<Record<ContactErrorCode, string>> = {
   'date-order': $localize`:@@contact.error.date-order:"To" can't be before "From".`,
   consent: $localize`:@@contact.error.consent:Tick the box to send your request.`,
 };
+
+function isContactErrorCode(code: string): code is ContactErrorCode {
+  return (CONTACT_ERROR_CODES as readonly string[]).includes(code);
+}
+
+/**
+ * The text shown for an error code. A code with no text would be a bug; it is
+ * shown as it is, so the field still fails visibly instead of looking valid.
+ */
+export function errorTextFor(code: string): string {
+  return isContactErrorCode(code) ? CONTACT_ERROR_TEXT[code] : code;
+}

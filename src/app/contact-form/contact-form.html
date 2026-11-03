@@ -7,6 +7,80 @@
 <form [formRoot]="contactForm" novalidate>
   <fieldset>
     <legend i18n="@@contact.group.personal">01 — Personal information</legend>
+    <div>
+      <label for="contact-name">
+        <span i18n="@@contact.name.label">Name</span>
+        <span aria-hidden="true"> *</span>
+      </label>
+      @let nameError = errorOf(contactForm.name);
+      <input
+        id="contact-name"
+        type="text"
+        autocomplete="name"
+        aria-required="true"
+        [formField]="contactForm.name"
+        [attr.aria-invalid]="nameError ? 'true' : null"
+        [attr.aria-describedby]="nameError ? 'contact-name-error' : null"
+      />
+      @if (nameError) {
+        <p id="contact-name-error">{{ nameError }}</p>
+      }
+    </div>
+    <div>
+      <label for="contact-instagram">
+        <span i18n="@@contact.instagram.label">Instagram</span>
+        <span aria-hidden="true"> *</span>
+      </label>
+      @let instagramError = errorOf(contactForm.instagram);
+      <input
+        id="contact-instagram"
+        type="text"
+        aria-required="true"
+        [formField]="contactForm.instagram"
+        [attr.aria-invalid]="instagramError ? 'true' : null"
+        [attr.aria-describedby]="instagramError ? 'contact-instagram-error' : null"
+      />
+      @if (instagramError) {
+        <p id="contact-instagram-error">{{ instagramError }}</p>
+      }
+    </div>
+    <div>
+      <label for="contact-email">
+        <span i18n="@@contact.email.label">Email</span>
+        <span aria-hidden="true"> *</span>
+      </label>
+      @let emailError = errorOf(contactForm.email);
+      <input
+        id="contact-email"
+        type="email"
+        autocomplete="email"
+        aria-required="true"
+        [formField]="contactForm.email"
+        [attr.aria-invalid]="emailError ? 'true' : null"
+        [attr.aria-describedby]="emailError ? 'contact-email-error' : null"
+      />
+      @if (emailError) {
+        <p id="contact-email-error">{{ emailError }}</p>
+      }
+    </div>
+    <div>
+      <label for="contact-location">
+        <span i18n="@@contact.location.label">City / Country</span>
+        <span aria-hidden="true"> *</span>
+      </label>
+      @let locationError = errorOf(contactForm.location);
+      <input
+        id="contact-location"
+        type="text"
+        aria-required="true"
+        [formField]="contactForm.location"
+        [attr.aria-invalid]="locationError ? 'true' : null"
+        [attr.aria-describedby]="locationError ? 'contact-location-error' : null"
+      />
+      @if (locationError) {
+        <p id="contact-location-error">{{ locationError }}</p>
+      }
+    </div>
   </fieldset>
 
   <fieldset>
