@@ -5,12 +5,14 @@ v1 is complete.
 
 The form comes first: before anything else, a request has to reach the artist's inbox. Both languages are part of the structure from
 the first phase, so no text is ever written in only one. The visual design from Figma is applied in its own phase, after structure and
-behaviour work.
+behaviour work. Every phase works on any screen from 320px wide (`tech-stack.md`): an unstyled phase still reflows on a phone, and
+phase 9 adds the look, not the responsiveness.
 
 ## v1
 
 1. **Two languages.** Set up Angular's built-in i18n with `/en/` and `/es/` prerendered as separate pages, and `/` redirecting to
    the visitor's language (English by default). Remove Transloco.
+   **Done** 2026-11-03 (`specs/2026-11-03-two-languages/`).
 2. **Form fields.** Take the v1 fields from the [Figma design](https://www.figma.com/design/6T0g1ib2lMXa5mTP9sOY0o/wavebuto), page
    "Web — v4" (`150:2`), and confirm them with the artist: contact details, the tattoo they want, availability, and other notes. The
    agreed list is written to `specs/form.md`, which from then on is the source of truth for the fields.
@@ -20,9 +22,10 @@ behaviour work.
 5. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
 6. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 7. **Introduction.** The introduction section above the form.
-8. **Video.** The video of the artist's work, between the introduction and the form.
-9. **Visual design.** Apply the Figma design to the whole page, following page "Web — v4" (`150:2`): frames "Landing — Desktop
-   1440" (`150:9`) and "Landing — Mobile 390" (`210:61`). The other `Web — v*` pages are not the reference.
+8. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen.
+9. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
+   Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
+   `Web — v*` pages are not the reference.
 10. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
 11. **Launch.** Publish v1.
 

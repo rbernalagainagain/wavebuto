@@ -143,8 +143,8 @@ Treat a violation as a build failure.
 
 10. **The base stylesheet is the mobile stylesheet.**
     - No `max-width` media query, ever. Wider layouts are `min-width` additions to the base rules, never corrections of them
-      (`CONSTITUTION.md` §2.4). Exactly one breakpoint exists — `min-width: 40rem` (`spec.md` §9.6); adding a second is a spec
-      change, not an implementation detail.
+      (`specs/tech-stack.md`, "Responsive, mobile first"). Exactly one breakpoint exists — `min-width: 40rem`; adding a second is
+      a change to `specs/tech-stack.md`, not an implementation detail. stylelint rejects any other width query.
     - `outline: none` (or `outline: 0`) is prohibited unless the same rule provides an equivalent visible indicator. The focus ring is
       never removed to make something look tidier (`spec.md` §9.8).
     - No raw colour or spacing literal outside `src/styles.css`. Components reference the `--color-*` and `--space-*` tokens of

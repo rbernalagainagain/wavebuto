@@ -6,10 +6,11 @@
    — no off-origin fonts, stylesheets or icons (CONSTITUTION.md §2.3). The font
    stack resolves to whatever the operating system already has.
 
-   This is also the mobile stylesheet. There is not a single width query in this
-   file: the base layer is the narrowest viewport, and the one breakpoint of
-   §9.6 only ever adds to it (CONSTITUTION.md §2.4). The one media query here is
-   the motion opt-in of §9.10. */
+   This is also the mobile stylesheet (specs/tech-stack.md, "Responsive, mobile
+   first"). There is not a single width query in this file: the base layer is
+   the narrowest viewport (320px), and the one breakpoint, min-width: 40rem,
+   only ever adds to it. The one media query here is the motion opt-in of
+   §9.10. */
 
 :root {
   color-scheme: light;
@@ -54,7 +55,7 @@
 }
 
 html {
-  /* Content reflows; it is never scaled down to fit (CONSTITUTION.md §2.4). */
+  /* Content reflows; it is never scaled down to fit (specs/tech-stack.md). */
   -webkit-text-size-adjust: 100%;
 }
 
@@ -75,7 +76,7 @@ body {
   background-color: var(--color-bg);
   color: var(--color-fg);
   font-family: var(--font-body);
-  /* Fluid across §9.6's range — 320px to the 40rem breakpoint — so the scale
+  /* Fluid from 320px to the 40rem breakpoint (specs/tech-stack.md), so the scale
      never steps at the breakpoint (§9.4). Controls inherit this and so never
      render below 1rem, which is what stops iOS zooming on focus. */
   font-size: clamp(1rem, 0.9375rem + 0.3125vw, 1.0625rem);

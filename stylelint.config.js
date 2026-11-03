@@ -18,9 +18,21 @@ const NON_SPACING_UNITS = ['%', 'fr', 'vw', 'vh', 'dvw', 'dvh', 'svh', 'lvh', 'm
 /** @type {import('stylelint').Config} */
 module.exports = {
   rules: {
-    // The base stylesheet is the mobile stylesheet (CONSTITUTION.md §2.4).
-    // A max-width query undoes a base rule instead of adding to it.
-    'media-feature-name-disallowed-list': ['max-width'],
+    // The base stylesheet is the mobile stylesheet (specs/tech-stack.md).
+    // A max-width query undoes a base rule instead of adding to it. The range
+    // syntax (width >= …) and the device-width family are rejected too, so
+    // every width query goes through the one allowed form below.
+    'media-feature-name-disallowed-list': [
+      'max-width',
+      'width',
+      'device-width',
+      'min-device-width',
+      'max-device-width',
+    ],
+
+    // One breakpoint (specs/tech-stack.md). Adding a second is a change to
+    // that file first, then to this list.
+    'media-feature-name-value-allowed-list': { 'min-width': ['40rem'] },
 
     // The focus ring is never removed to make something look tidier
     // (spec.md §9.8). Removing it is only defensible alongside an equivalent

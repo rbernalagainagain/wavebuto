@@ -4,12 +4,12 @@ The phase can be merged when every check below passes.
 
 ## Automated
 
-- [ ] `pnpm check` passes (ESLint, stylelint, all tests).
-- [ ] `pnpm format:check` passes.
-- [ ] `pnpm build` passes and produces `dist/wavebuto/browser/en/index.html` and `dist/wavebuto/browser/es/index.html`.
-- [ ] `en/index.html` has `<html lang="en">`, `<base href="/en/">` and the English text. `es/index.html` has `<html lang="es">`,
+- [x] `pnpm check` passes (ESLint, stylelint, all tests).
+- [x] `pnpm format:check` passes.
+- [x] `pnpm build` passes and produces `dist/wavebuto/browser/en/index.html` and `dist/wavebuto/browser/es/index.html`.
+- [x] `en/index.html` has `<html lang="en">`, `<base href="/en/">` and the English text. `es/index.html` has `<html lang="es">`,
       `<base href="/es/">` and the Spanish text.
-- [ ] The language-choice tests pass, with at least these cases:
+- [x] The language-choice tests pass, with at least these cases:
 
 | `Accept-Language`          | Result |
 | -------------------------- | ------ |
@@ -27,20 +27,20 @@ The phase can be merged when every check below passes.
 
 ## Code
 
-- [ ] No reference to Transloco outside `docs/archive/` (`grep -ri transloco`), and no `@jsverse/transloco` in `package.json` or
+- [x] No reference to Transloco outside `docs/archive/` (`grep -ri transloco`), and no `@jsverse/transloco` in `package.json` or
       `pnpm-lock.yaml`.
-- [ ] `public/i18n/`, `src/app/i18n/`, `src/app/contact-form/`, `src/app/submit/` and `src/app/validation/` no longer exist.
-- [ ] Every user-visible text in a template is marked with `i18n` and has a Spanish translation in `src/locale/messages.es.xlf`.
-- [ ] The only new dependencies are `@angular/localize` and `wrangler` (dev).
-- [ ] `CLAUDE.md` no longer mentions Transloco or the translation loader as part of the stack.
+- [x] `public/i18n/`, `src/app/i18n/`, `src/app/contact-form/`, `src/app/submit/` and `src/app/validation/` no longer exist.
+- [x] Every user-visible text in a template is marked with `i18n` and has a Spanish translation in `src/locale/messages.es.xlf`.
+- [x] The only new dependencies are `@angular/localize` and `wrangler` (dev).
+- [x] `CLAUDE.md` no longer mentions Transloco or the translation loader as part of the stack.
 
 ## Manual (`pnpm preview`, `wrangler dev`)
 
-- [ ] `/` with the browser in Spanish lands on `/es/`.
-- [ ] `/` with the browser in English, or another language, lands on `/en/`.
-- [ ] `curl -sI http://localhost:8787/` answers `302`, with `Location: /en/` and `Vary: Accept-Language`.
-- [ ] `curl -sI -H 'Accept-Language: es-ES' http://localhost:8787/` answers `302` with `Location: /es/`.
-- [ ] Opening `/#contact` in the browser ends on `/en/#contact` or `/es/#contact`, keeping the anchor.
-- [ ] `/en/` and `/es/` load with no request to another domain, and no request at all besides the page's own files (DevTools →
+- [x] `/` with the browser in Spanish lands on `/es/`.
+- [x] `/` with the browser in English, or another language, lands on `/en/`.
+- [x] `curl -sI http://localhost:8787/` answers `302`, with `Location: /en/` and `Vary: Accept-Language`.
+- [x] `curl -sI -H 'Accept-Language: es-ES' http://localhost:8787/` answers `302` with `Location: /es/`.
+- [x] Opening `/#contact` in the browser ends on `/en/#contact` or `/es/#contact`, keeping the anchor.
+- [x] `/en/` and `/es/` load with no request to another domain, and no request at all besides the page's own files (DevTools →
       Network).
-- [ ] An unknown path (`/nope`) answers 404.
+- [x] An unknown path (`/nope`) answers 404.

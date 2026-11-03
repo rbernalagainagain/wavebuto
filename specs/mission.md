@@ -13,11 +13,12 @@ artist. The page shows an introduction and a video of the artist's work first, a
 
 ## What the site does
 
-- Collects one appointment request through one form: the person's contact details, the tattoo they want, reference images, their
-  availability, and any other notes.
+- Collects one appointment request through one form: the person's contact details, the tattoo they want, their availability, and any
+  other notes. Reference images are added after v1 (see `roadmap.md`).
 - Gives the form **a direct link** the artist can share. It is one link with no language in it: the site opens in the visitor's
   language, and **English is the default** whenever that language is not Spanish or cannot be told.
 - Delivers each request to the artist **by email**.
+- Works on **any screen**, from a phone to a desktop. The page adapts its layout to the screen, and every screen gets the same content.
 - Speaks **English and Spanish**.
 
 ## What the site never does
