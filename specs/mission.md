@@ -5,13 +5,18 @@ artist. The page shows an introduction and a video of the artist's work first, a
 
 ## Who it is for
 
-- **People who already follow the artist**, for example on Instagram, and come to request an appointment.
-- **People who don't know the artist yet** and find the site on their own.
+- **People from the artist's social media.** This is where most of the audience comes from. When someone gets in touch there, the
+  artist replies with a link to the site that goes straight to the form (the `#contact` anchor), so they land on the form
+  without scrolling through the page.
+- **People who find the site through search.** The site should also bring in organic traffic from people who don't know the artist yet.
+  For them, the introduction and the video come before the form.
 
 ## What the site does
 
 - Collects one appointment request through one form: the person's contact details, the tattoo they want, reference images, their
   availability, and any other notes.
+- Gives the form **a direct link** the artist can share. It is one link with no language in it: the site opens in the visitor's
+  language, and **English is the default** whenever that language is not Spanish or cannot be told.
 - Delivers each request to the artist **by email**.
 - Speaks **English and Spanish**.
 

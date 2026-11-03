@@ -9,17 +9,20 @@ behaviour work.
 
 ## v1
 
-1. **Two languages.** Set up Angular's built-in i18n with `/en/` and `/es/` prerendered as separate pages. Remove Transloco.
+1. **Two languages.** Set up Angular's built-in i18n with `/en/` and `/es/` prerendered as separate pages, and `/` redirecting to
+   the visitor's language (English by default). Remove Transloco.
 2. **Form fields.** Agree the exact v1 fields with the artist: contact details, the tattoo they want, availability, and other notes.
 3. **Validation.** One Zod schema with the rules for those fields, with tests written first.
-4. **Form.** The form on the page with every field, its label and its error messages, in both languages. Unstyled.
+4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
+   anchor `#contact` so a link can open the page directly on it. Unstyled.
 5. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
 6. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 7. **Introduction.** The introduction section above the form.
 8. **Video.** The video of the artist's work, between the introduction and the form.
 9. **Visual design.** Apply the Figma design to the whole page.
-10. **Launch.** Publish v1.
+10. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
+11. **Launch.** Publish v1.
 
 ## After v1
 
-11. **Reference images.** Let people attach reference images to their request.
+12. **Reference images.** Let people attach reference images to their request.
