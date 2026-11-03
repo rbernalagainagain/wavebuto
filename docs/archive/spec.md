@@ -1,7 +1,6 @@
-# SPEC — Wavebuto (first slice)
+# SPEC — wavebuto 
 
-The concrete slice to build now. This document holds decisions that are expected to change; the durable invariants live in `CONSTITUTION.md`
-and win on any conflict.
+The concrete slice to build now. This document holds decisions that are expected to change; the durable invariants live in `CONSTITUTION.md` and win on any conflict.
 
 Everything here is normative. If the implementation disagrees with this document, the implementation is wrong.
 
@@ -9,49 +8,109 @@ Everything here is normative. If the implementation disagrees with this document
 
 ## 1. Scope
 
-One page with three sections and one contact form.
+One page and one contact form.
 
 | Route | Page | Render mode |
 | ----- | ---- | ----------- |
 | `/`   | Home | Prerender   |
 
-The page is divided into three sections, reached through in-page anchor links:
+The page reads top to bottom in this order:
 
-| Section | Anchor     | Content                     |
-| ------- | ---------- | --------------------------- |
-| Landing | `#home`    | Introduction to the site    |
-| Gallery | `#gallery` | Images                      |
-| Contact | `#contact` | The contact form            |
+| Part    | Anchor     | Content                  |
+| ------- | ---------- | ------------------------ |
+| Landing | —          | Introduction to the site |
+| Video   | —          | A video                  |
+| Contact | `#contact` | The contact form         |
 
-There are no other routes. There is no `/about` and no `/contact` route.
+Only the contact form is a declared section with an anchor. The landing
+and the video have no anchor and no link to them. The page therefore has
+exactly two addresses: `/` and `/#contact`.
 
-The address bar always reads `/`. Following a section link scrolls to
-the section without adding its anchor to the URL. A URL that arrives
-with an anchor (for example `/#gallery`) opens on that section, then
-drops the anchor from the address bar. A refresh opens at the top of
-the page, not at the last position scrolled to.
+The address bar always reads `/`. Following the contact link scrolls to
+the form without adding its anchor to the URL. A URL that arrives with
+the anchor (`/#contact`) opens on the form, then drops the anchor from
+the address bar. A refresh opens at the top of the page, not at the last
+position scrolled to.
 
 ## 2. Form fields
 
-Exactly these four. No others (`CLAUDE.md` guardrail 6).
+The form is a tattoo appointment request. Exactly these thirteen fields,
+in this order. No others (`CLAUDE.md` guardrail 6).
 
-| Field   | Name      | Type     | Required | Label                |
-| ------- | --------- | -------- | -------- | -------------------- |
-| Name    | `name`    | text     | yes      | "Your name"          |
-| Email   | `email`   | email    | yes      | "Email address"      |
-| Subject | `subject` | select   | yes      | "What's this about?" |
-| Message | `message` | textarea | yes      | "Message"            |
+The fields are grouped. Each group is a `<fieldset>` whose `<legend>` is
+the group title.
 
-`subject` options, in order: `general`, `support`, `other`.
-Displayed as: "General enquiry", "Support", "Something else".
-No option is preselected; the control starts on an empty prompt option.
+### 2.1 Personal information
+
+| Field          | Name       | Type  | Required | Label            |
+| -------------- | ---------- | ----- | -------- | ---------------- |
+| Name           | `name`     | text  | yes      | "Name"           |
+| Instagram      | `instagram` | text  | yes      | "Instagram"      |
+| Email          | `email`    | email | yes      | "Email"          |
+| City / Country | `location` | text  | yes      | "City / Country" |
+
+### 2.2 Tattoo
+
+| Field          | Name            | Type  | Required | Label                           |
+| -------------- | --------------- | ----- | -------- | ------------------------------- |
+| Body placement | `bodyPlacement` | text  | yes      | "Body placement"                |
+| Symmetry       | `symmetry`      | radio | yes      | "Symmetrical or asymmetrical?"  |
+
+`symmetry` options, in order: `symmetrical`, `asymmetrical`, `not-sure`.
+Displayed as: "Symmetrical", "Asymmetrical", "Not sure".
+
+### 2.3 References
+
+| Field                  | Name                   | Type                  | Required | Label                     |
+| ---------------------- | ---------------------- | --------------------- | -------- | ------------------------- |
+| Reference from my work | `workReference`        | image file (one)      | no       | "Reference from my work"  |
+| Additional references  | `additionalReferences` | image files (several) | no       | "Additional references"   |
+| Body photo             | `bodyPhoto`            | image file (one)      | no       | "Body photo"              |
+
+Help text, shown below the control and associated with it via
+`aria-describedby`:
+
+- `workReference`: "Attach a screenshot of any of my tattoos you would
+  like to use as reference."
+- `bodyPhoto`: "If needed, attach a photo of the area to be tattooed."
+
+### 2.4 Availability
+
+| Field                  | Name             | Type  | Required | Label                          |
+| ---------------------- | ---------------- | ----- | -------- | ------------------------------ |
+| Preferred date / dates | `preferredDates` | text  | yes      | "Preferred date / dates"       |
+| Flexible with dates    | `flexibleDates`  | radio | yes      | "Are you flexible with dates?" |
+
+`flexibleDates` options, in order: `yes`, `no`.
+Displayed as: "Yes", "No".
+
+### 2.5 Additional information
+
+| Field          | Name            | Type     | Required | Label                                                                 |
+| -------------- | --------------- | -------- | -------- | --------------------------------------------------------------------- |
+| Tattoo history | `tattooHistory` | radio    | yes      | "Is this your first tattoo, or do you already have tattoos in this area?" |
+| Anything else  | `notes`         | textarea | no       | "Anything else I should know?"                                        |
+
+`tattooHistory` options, in order: `first-tattoo`, `tattoos-in-area`,
+`tattoos-elsewhere`. Displayed as: "First tattoo", "I already have
+tattoos in this area", "I have tattoos, but not in this area".
+
+### 2.6 Choice controls
+
+Each radio group is a `<fieldset>` whose `<legend>` is its label. No
+option is preselected: a required radio group starts with nothing chosen.
 
 ## 3. Validation rules
 
-All rules are defined once, as a single Zod schema in `src/app/validation/`. The same schema validates what the user types and the
-payload sent in §5; no rule is restated elsewhere. All rules trim leading and trailing whitespace before evaluating, and each rule is a
-pure function over a string value.
+All rules are defined once, as a single Zod schema in `src/app/validation/`. The same schema validates what the user enters and the
+payload sent in §5; no rule is restated elsewhere. Each rule is a pure function over a value, testable with no page rendered:
 
+- **Text rules** take a string. They trim leading and trailing whitespace before evaluating.
+- **Choice rules** take a string: the value of the chosen option, or `""` when nothing is chosen.
+- **Image rules** take the file's metadata — its MIME `type` (a string) and its `size` in bytes (a number) — never the browser's
+  `File` object, so they need no DOM.
+
+An optional text field that is empty or whitespace-only passes. An optional image field with no file passes.
 
 ### 3.1 `name`
 
@@ -70,7 +129,30 @@ pure function over a string value.
 | 81 × `"a"`  | fail   | over maximum             |
 | 80 × `"a"`  | pass   | exactly at the maximum   |
 
-### 3.2 `email`
+### 3.2 `instagram`
+
+- Required.
+- One optional leading `@`, then 1 to 30 characters, each a letter, a
+  digit, a period `.` or an underscore `_`.
+- The leading `@`, if present, is removed from the value that is sent.
+
+This is deliberately permissive. It accepts anything shaped like a
+username; it does not check that the account exists.
+
+| Input               | Result | Reason                           |
+| ------------------- | ------ | -------------------------------- |
+| `"ada.lovelace"`    | pass   |                                  |
+| `"@ada_lovelace"`   | pass   | leading `@` allowed, then dropped |
+| `"  @ada  "`        | pass   | trimmed to `"@ada"`              |
+| `""`                | fail   | required                         |
+| `"@"`               | fail   | nothing after `@`                |
+| `"ada lovelace"`    | fail   | space inside                     |
+| `"ada!"`            | fail   | character not allowed            |
+| `"instagram.com/ada"` | fail | a link, not a username           |
+| 30 × `"a"`          | pass   | exactly at the maximum           |
+| 31 × `"a"`          | fail   | over maximum                     |
+
+### 3.3 `email`
 
 - Required.
 - Must contain exactly one `@`, at least one character before it, and a
@@ -91,29 +173,126 @@ This is deliberately permissive. The rule rejects obvious mistakes; it does not 
 | `"ada@example.c"`         | fail   | final segment too short  |
 | `""`                      | fail   | required                 |
 
-### 3.3 `subject`
+### 3.4 `location`
 
-- Required. Must be one of `general`, `support`, `other`.
+- Required. Empty or whitespace-only fails.
+- Minimum 2 characters after trimming.
+- Maximum 100 characters after trimming.
 
-| Input       | Result | Reason                       |
-| ----------- | ------ | ---------------------------- |
-| `"support"` | pass   |                              |
-| `""`        | fail   | prompt option still selected |
-| `"urgent"`  | fail   | not in the allowed set       |
+| Input                  | Result | Reason                   |
+| ---------------------- | ------ | ------------------------ |
+| `"Madrid, Spain"`      | pass   |                          |
+| `"UK"`                 | pass   | exactly at the minimum   |
+| `"M"`                  | fail   | below minimum            |
+| `""`                   | fail   | required                 |
+| `"   "`                | fail   | whitespace-only is empty |
+| 100 × `"a"`            | pass   | exactly at the maximum   |
+| 101 × `"a"`            | fail   | over maximum             |
 
-### 3.4 `message`
+### 3.5 `bodyPlacement`
 
-- Required.
-- Minimum 10 characters after trimming.
+- Required. Empty or whitespace-only fails.
+- Minimum 2 characters after trimming.
+- Maximum 100 characters after trimming.
+
+| Input               | Result | Reason                   |
+| ------------------- | ------ | ------------------------ |
+| `"Left forearm"`    | pass   |                          |
+| `"Ar"`              | pass   | exactly at the minimum   |
+| `"A"`               | fail   | below minimum            |
+| `""`                | fail   | required                 |
+| `"   "`             | fail   | whitespace-only is empty |
+| 100 × `"a"`         | pass   | exactly at the maximum   |
+| 101 × `"a"`         | fail   | over maximum             |
+
+### 3.6 `symmetry`
+
+- Required. Must be one of `symmetrical`, `asymmetrical`, `not-sure`.
+
+| Input            | Result | Reason                 |
+| ---------------- | ------ | ---------------------- |
+| `"not-sure"`     | pass   |                        |
+| `""`             | fail   | nothing chosen         |
+| `"round"`        | fail   | not in the allowed set |
+
+### 3.7 Images: `workReference`, `additionalReferences`, `bodyPhoto`
+
+All three are optional. Every file, in any of the three fields, must:
+
+- Have a `type` of `image/jpeg`, `image/png`, `image/webp` or
+  `image/heic`.
+- Be at most 10 MB (10 485 760 bytes).
+
+`workReference` and `bodyPhoto` hold at most one file each.
+`additionalReferences` holds at most 5 files, and fails as a whole if any
+one of them fails.
+
+| Field                  | Input                                   | Result | Reason                     |
+| ---------------------- | --------------------------------------- | ------ | -------------------------- |
+| `workReference`        | no file                                 | pass   | optional                   |
+| `workReference`        | `image/jpeg`, 2 000 000 bytes           | pass   |                            |
+| `bodyPhoto`            | `image/heic`, 10 485 760 bytes          | pass   | exactly at the maximum     |
+| `bodyPhoto`            | `image/png`, 10 485 761 bytes           | fail   | over maximum size          |
+| `workReference`        | `application/pdf`, 100 000 bytes        | fail   | not an allowed image type  |
+| `workReference`        | `""` (type unknown), 100 000 bytes      | fail   | not an allowed image type  |
+| `additionalReferences` | no files                                | pass   | optional                   |
+| `additionalReferences` | 5 × `image/webp`, 1 000 000 bytes each  | pass   | exactly at the maximum count |
+| `additionalReferences` | 6 × `image/webp`, 1 000 000 bytes each  | fail   | over maximum count         |
+| `additionalReferences` | 2 × `image/png` + 1 × `image/gif`       | fail   | one file not allowed       |
+
+### 3.8 `preferredDates`
+
+- Required. Empty or whitespace-only fails.
+- Minimum 2 characters after trimming.
+- Maximum 200 characters after trimming.
+
+Free text: the rule does not parse dates. "Any weekend in May" is as
+valid as "12/05".
+
+| Input                    | Result | Reason                   |
+| ------------------------ | ------ | ------------------------ |
+| `"Any weekend in May"`   | pass   |                          |
+| `"12/05"`                | pass   | not parsed as a date     |
+| `"Ma"`                   | pass   | exactly at the minimum   |
+| `"M"`                    | fail   | below minimum            |
+| `""`                     | fail   | required                 |
+| `"   "`                  | fail   | whitespace-only is empty |
+| 200 × `"a"`              | pass   | exactly at the maximum   |
+| 201 × `"a"`              | fail   | over maximum             |
+
+### 3.9 `flexibleDates`
+
+- Required. Must be one of `yes`, `no`.
+
+| Input     | Result | Reason                 |
+| --------- | ------ | ---------------------- |
+| `"yes"`   | pass   |                        |
+| `""`      | fail   | nothing chosen         |
+| `"maybe"` | fail   | not in the allowed set |
+
+### 3.10 `tattooHistory`
+
+- Required. Must be one of `first-tattoo`, `tattoos-in-area`,
+  `tattoos-elsewhere`.
+
+| Input                 | Result | Reason                 |
+| --------------------- | ------ | ---------------------- |
+| `"tattoos-elsewhere"` | pass   |                        |
+| `""`                  | fail   | nothing chosen         |
+| `"many"`              | fail   | not in the allowed set |
+
+### 3.11 `notes`
+
+- Optional. Empty or whitespace-only passes and is sent as `""`.
 - Maximum 2000 characters after trimming.
 
-| Input           | Result | Reason                   |
-| --------------- | ------ | ------------------------ |
-| `"Hello there"` | pass   |                          |
-| `"Hi"`          | fail   | below minimum            |
-| 10 × `"a"`      | pass   | exactly at the minimum   |
-| `"          "`  | fail   | whitespace-only is empty |
-| 2001 × `"a"`    | fail   | over maximum             |
+| Input                         | Result | Reason                     |
+| ----------------------------- | ------ | -------------------------- |
+| `""`                          | pass   | optional                   |
+| `"   "`                       | pass   | whitespace-only is empty   |
+| `"I'm allergic to latex"`     | pass   |                            |
+| 2000 × `"a"`                  | pass   | exactly at the maximum     |
+| 2001 × `"a"`                  | fail   | over maximum               |
 
 ## 4. Error messages
 
