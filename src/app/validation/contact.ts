@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import * as z from 'zod';
 
 /**
  * The error codes of the appointment form (specs/2026-11-03-validation/
