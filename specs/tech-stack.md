@@ -13,6 +13,8 @@
 
 - **Angular's built-in i18n** (`@angular/localize`): each language is prerendered as its own page, `/en/` and `/es/`, so search engines
   see both.
+- **`/` has no language of its own.** The Worker answers it with a redirect to `/es/` when the browser's `Accept-Language` prefers
+  Spanish, and to `/en/` otherwise. A redirect keeps the link's anchor, so `/#contact` opens the form in the chosen language.
 - This replaces Transloco, which is currently installed.
 
 ## Hosting and email
