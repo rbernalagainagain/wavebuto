@@ -7,6 +7,7 @@ The phase can be merged when every check below passes.
 - [ ] `pnpm check` passes (ESLint, stylelint, all tests).
 - [ ] `pnpm format:check` passes.
 - [ ] `pnpm build` passes with `"i18nMissingTranslation": "error"` set on the build target in `angular.json`.
+- [ ] `pnpm build` shows no budget warning (`requirements.md`, decision 14).
 - [ ] `dist/wavebuto/browser/en/index.html` has `<section id="contact">` with the form and its English text, and
       `dist/wavebuto/browser/es/index.html` has it with the Spanish text. Neither shows an error message or has
       `aria-invalid="true"` in the prerendered HTML.

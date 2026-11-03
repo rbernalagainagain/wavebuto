@@ -80,6 +80,10 @@ a section with the anchor `#contact` so a link can open the page directly on it.
     default a text without a Spanish translation is only a warning and the page shows the English text; CI runs only `pnpm build`,
     so the build is where this has to fail.
 13. **One commit per task group** in `plan.md`, each with `pnpm check` green.
+14. **Zod is imported as a namespace.** `src/app/validation/contact.ts` uses `import * as z from 'zod'` instead of
+    `import { z } from 'zod'`, so the build can drop the parts of Zod the schema does not use. With the named import, Zod took
+    454 kB of the initial bundle and pushed it past its 500 kB budget; with the namespace import it takes 87 kB. The rules do not
+    change. Added during group 2, with the developer's approval, as a separate commit.
 
 ## Consequences
 
