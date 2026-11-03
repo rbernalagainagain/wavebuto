@@ -16,9 +16,15 @@ describe('Home', () => {
     expect(headings.length).toBe(1);
     expect(headings[0].textContent?.trim()).toBe('Wavebuto');
 
-    const paragraphs = root.querySelectorAll('p');
+    const paragraphs = root.querySelectorAll(':scope > p');
     expect(paragraphs.length).toBe(1);
     expect(paragraphs[0].textContent?.trim()).not.toBe('');
+  });
+
+  it('places the form in the section with the contact anchor', async () => {
+    const root = await createHome();
+
+    expect(root.querySelector(':scope > section#contact > app-contact-form form')).not.toBeNull();
   });
 
   it('loads nothing', async () => {

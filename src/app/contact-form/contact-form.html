@@ -1,0 +1,35 @@
+<header>
+  <p i18n="@@contact.eyebrow">Bookings</p>
+  <h2 i18n="@@contact.title">Tattoo appointment</h2>
+  <p i18n="@@contact.requiredLegend">* Required</p>
+</header>
+
+<form [formRoot]="contactForm" novalidate>
+  <fieldset>
+    <legend i18n="@@contact.group.personal">01 — Personal information</legend>
+  </fieldset>
+
+  <fieldset>
+    <legend i18n="@@contact.group.tattoo">02 — Tattoo</legend>
+  </fieldset>
+
+  <fieldset>
+    <legend i18n="@@contact.group.availability">03 — Availability</legend>
+  </fieldset>
+
+  <fieldset>
+    <legend i18n="@@contact.group.additional">04 — Additional information</legend>
+  </fieldset>
+
+  <p i18n="@@contact.privacy">
+    Your details reach me by email and I use them only to answer this request. I do not share them
+    with anyone. To have them deleted, write to me at hello&#64;wavebuto.example.
+  </p>
+
+  <button type="submit" i18n="@@contact.send">Send request</button>
+
+  <p i18n="@@contact.notice">
+    Submitting this form does not guarantee an appointment. I will review your request and contact
+    you personally.
+  </p>
+</form>

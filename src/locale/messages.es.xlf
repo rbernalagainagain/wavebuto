@@ -7,6 +7,126 @@
         <target>Wavebuto</target>
       </segment>
     </unit>
+    <unit id="contact.eyebrow">
+      <segment>
+        <source>Bookings</source>
+        <target>Reservas</target>
+      </segment>
+    </unit>
+    <unit id="contact.title">
+      <segment>
+        <source>Tattoo appointment</source>
+        <target>Cita para tatuaje</target>
+      </segment>
+    </unit>
+    <unit id="contact.requiredLegend">
+      <segment>
+        <source>* Required</source>
+        <target>* Obligatorio</target>
+      </segment>
+    </unit>
+    <unit id="contact.group.personal">
+      <segment>
+        <source>01 — Personal information</source>
+        <target>01 — Datos personales</target>
+      </segment>
+    </unit>
+    <unit id="contact.group.tattoo">
+      <segment>
+        <source>02 — Tattoo</source>
+        <target>02 — Tatuaje</target>
+      </segment>
+    </unit>
+    <unit id="contact.group.availability">
+      <segment>
+        <source>03 — Availability</source>
+        <target>03 — Disponibilidad</target>
+      </segment>
+    </unit>
+    <unit id="contact.group.additional">
+      <segment>
+        <source>04 — Additional information</source>
+        <target>04 — Información adicional</target>
+      </segment>
+    </unit>
+    <unit id="contact.privacy">
+      <segment>
+        <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
+        <target>Tus datos me llegan por email y solo los uso para responder a esta solicitud. No los comparto con nadie. Para que los borre, escríbeme a hello@wavebuto.example.</target>
+      </segment>
+    </unit>
+    <unit id="contact.send">
+      <segment>
+        <source>Send request</source>
+        <target>Enviar solicitud</target>
+      </segment>
+    </unit>
+    <unit id="contact.notice">
+      <segment>
+        <source> Submitting this form does not guarantee an appointment. I will review your request and contact you personally. </source>
+        <target>Enviar este formulario no garantiza una cita. Revisaré tu solicitud y te contactaré personalmente.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.required">
+      <segment>
+        <source>This field is required.</source>
+        <target>Este campo es obligatorio.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.too-long">
+      <segment>
+        <source>This text is too long.</source>
+        <target>Este texto es demasiado largo.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.characters">
+      <segment>
+        <source>This text contains characters that are not allowed.</source>
+        <target>Este texto tiene caracteres que no se admiten.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.email">
+      <segment>
+        <source>Enter a valid email address, like name@example.com.</source>
+        <target>Escribe un email válido, como nombre@ejemplo.com.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.instagram">
+      <segment>
+        <source>Enter your Instagram username: letters, numbers, dots and underscores, up to 30.</source>
+        <target>Escribe tu usuario de Instagram: letras, números, puntos y guiones bajos, hasta 30.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.option">
+      <segment>
+        <source>Choose one of the options.</source>
+        <target>Elige una de las opciones.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.date">
+      <segment>
+        <source>Choose a valid date.</source>
+        <target>Elige una fecha válida.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.date-past">
+      <segment>
+        <source>Choose today or a later date.</source>
+        <target>Elige hoy o una fecha posterior.</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.date-order">
+      <segment>
+        <source>&quot;To&quot; can&apos;t be before &quot;From&quot;.</source>
+        <target>«Hasta» no puede ser anterior a «Desde».</target>
+      </segment>
+    </unit>
+    <unit id="contact.error.consent">
+      <segment>
+        <source>Tick the box to send your request.</source>
+        <target>Marca la casilla para enviar tu solicitud.</target>
+      </segment>
+    </unit>
     <unit id="home.title">
       <segment>
         <source>Wavebuto</source>

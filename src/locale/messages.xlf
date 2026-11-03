@@ -9,6 +9,166 @@
         <source>Wavebuto</source>
       </segment>
     </unit>
+    <unit id="contact.eyebrow">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:2,3</note>
+      </notes>
+      <segment>
+        <source>Bookings</source>
+      </segment>
+    </unit>
+    <unit id="contact.title">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:3,4</note>
+      </notes>
+      <segment>
+        <source>Tattoo appointment</source>
+      </segment>
+    </unit>
+    <unit id="contact.requiredLegend">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:4,7</note>
+      </notes>
+      <segment>
+        <source>* Required</source>
+      </segment>
+    </unit>
+    <unit id="contact.group.personal">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:9,12</note>
+      </notes>
+      <segment>
+        <source>01 — Personal information</source>
+      </segment>
+    </unit>
+    <unit id="contact.group.tattoo">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:13,16</note>
+      </notes>
+      <segment>
+        <source>02 — Tattoo</source>
+      </segment>
+    </unit>
+    <unit id="contact.group.availability">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:17,21</note>
+      </notes>
+      <segment>
+        <source>03 — Availability</source>
+      </segment>
+    </unit>
+    <unit id="contact.group.additional">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:21,24</note>
+      </notes>
+      <segment>
+        <source>04 — Additional information</source>
+      </segment>
+    </unit>
+    <unit id="contact.privacy">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:25,29</note>
+      </notes>
+      <segment>
+        <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
+      </segment>
+    </unit>
+    <unit id="contact.send">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:29,31</note>
+      </notes>
+      <segment>
+        <source>Send request</source>
+      </segment>
+    </unit>
+    <unit id="contact.notice">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:32,36</note>
+      </notes>
+      <segment>
+        <source> Submitting this form does not guarantee an appointment. I will review your request and contact you personally. </source>
+      </segment>
+    </unit>
+    <unit id="contact.error.required">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:9</note>
+      </notes>
+      <segment>
+        <source>This field is required.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.too-long">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:10</note>
+      </notes>
+      <segment>
+        <source>This text is too long.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.characters">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:11</note>
+      </notes>
+      <segment>
+        <source>This text contains characters that are not allowed.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.email">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:12</note>
+      </notes>
+      <segment>
+        <source>Enter a valid email address, like name@example.com.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.instagram">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:13</note>
+      </notes>
+      <segment>
+        <source>Enter your Instagram username: letters, numbers, dots and underscores, up to 30.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.option">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:14</note>
+      </notes>
+      <segment>
+        <source>Choose one of the options.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.date">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:15</note>
+      </notes>
+      <segment>
+        <source>Choose a valid date.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.date-past">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:16</note>
+      </notes>
+      <segment>
+        <source>Choose today or a later date.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.date-order">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:17</note>
+      </notes>
+      <segment>
+        <source>&quot;To&quot; can&apos;t be before &quot;From&quot;.</source>
+      </segment>
+    </unit>
+    <unit id="contact.error.consent">
+      <notes>
+        <note category="location">src/app/contact-form/error-text.ts:18</note>
+      </notes>
+      <segment>
+        <source>Tick the box to send your request.</source>
+      </segment>
+    </unit>
     <unit id="home.title">
       <notes>
         <note category="location">src/app/home/home.html:1,2</note>
@@ -19,7 +179,7 @@
     </unit>
     <unit id="home.sentence">
       <notes>
-        <note category="location">src/app/home/home.html:2,3</note>
+        <note category="location">src/app/home/home.html:2,4</note>
       </notes>
       <segment>
         <source>Wavebuto is a tattoo artist&apos;s website.</source>
