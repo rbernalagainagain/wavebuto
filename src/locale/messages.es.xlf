@@ -31,6 +31,30 @@
         <target>01 — Datos personales</target>
       </segment>
     </unit>
+    <unit id="contact.name.label">
+      <segment>
+        <source>Name</source>
+        <target>Nombre</target>
+      </segment>
+    </unit>
+    <unit id="contact.instagram.label">
+      <segment>
+        <source>Instagram</source>
+        <target>Instagram</target>
+      </segment>
+    </unit>
+    <unit id="contact.email.label">
+      <segment>
+        <source>Email</source>
+        <target>Email</target>
+      </segment>
+    </unit>
+    <unit id="contact.location.label">
+      <segment>
+        <source>City / Country</source>
+        <target>Ciudad / País</target>
+      </segment>
+    </unit>
     <unit id="contact.group.tattoo">
       <segment>
         <source>02 — Tattoo</source>

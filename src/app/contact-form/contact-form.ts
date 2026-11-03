@@ -1,8 +1,15 @@
 import { Component, signal } from '@angular/core';
-import { form, FormRoot, validateStandardSchema } from '@angular/forms/signals';
+import {
+  type FieldTree,
+  form,
+  FormField,
+  FormRoot,
+  StandardSchemaValidationError,
+  validateStandardSchema,
+} from '@angular/forms/signals';
 
 import { createContactSchema } from '../validation/contact';
-import { CONTACT_ERROR_TEXT } from './error-text';
+import { errorTextFor } from './error-text';
 import { localDate } from './local-date';
 
 /**
@@ -42,7 +49,7 @@ const EMPTY: ContactFormModel = {
 /** The appointment form of specs/form.md. Unstyled until phase 9. */
 @Component({
   selector: 'app-contact-form',
-  imports: [FormRoot],
+  imports: [FormRoot, FormField],
   templateUrl: './contact-form.html',
 })
 export class ContactForm {
@@ -55,6 +62,22 @@ export class ContactForm {
     validateStandardSchema(path, () => createContactSchema(localDate(new Date())));
   });
 
-  /** The text shown for each error code, in the page's language. */
-  protected readonly errorText = CONTACT_ERROR_TEXT;
+  /**
+   * The error to show under a field, in the page's language, or `null`. A
+   * field shows its error only once the person has left it or tried to send,
+   * and only one: the schema reports at most one code per field (decision 6).
+   */
+  protected errorOf<T>(field: FieldTree<T>): string | null {
+    const state = field();
+    if (!state.touched()) {
+      return null;
+    }
+    const [error] = state.errors();
+    if (!error) {
+      return null;
+    }
+    return errorTextFor(
+      error instanceof StandardSchemaValidationError ? error.issue.message : error.kind,
+    );
+  }
 }
