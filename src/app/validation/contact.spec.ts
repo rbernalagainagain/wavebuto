@@ -80,8 +80,8 @@ describe('createContactSchema', () => {
   );
 });
 
-// validation.md, "Text fields". `placement` joins them in group 3.
-describe.each(['name', 'location'])('%s', (field) => {
+// validation.md, "Text fields".
+describe.each(['name', 'location', 'placement'])('%s', (field) => {
   it.each([
     ['', 'required'],
     ['   ', 'required'],
@@ -186,5 +186,33 @@ describe('email', () => {
     ['Ana.Lopez+tattoo@example.co.uk', 'Ana.Lopez+tattoo@example.co.uk'],
   ])('accepts %j as %j', (value, expected) => {
     expect(validated(requestWith('email', value))['email']).toBe(expected);
+  });
+});
+
+// validation.md, "Radio groups": each group's values, from specs/form.md.
+// flexibleDates and tattooHistory join them in groups 4 and 5.
+const RADIO_GROUPS: Record<string, { values: string[]; otherGroupValue: string }> = {
+  symmetry: { values: ['symmetrical', 'asymmetrical', 'not-sure'], otherGroupValue: 'yes' },
+};
+
+describe.each(Object.entries(RADIO_GROUPS))('%s', (field, { values, otherGroupValue }) => {
+  it.each([[MISSING], ['']])('treats %j as absent', (value) => {
+    expect(validated(requestWith(field, value))[field]).toBeUndefined();
+  });
+
+  it.each(values)('accepts %j', (value) => {
+    expect(validated(requestWith(field, value))[field]).toBe(value);
+  });
+
+  it.each([
+    [values[0].charAt(0).toUpperCase() + values[0].slice(1)], // another case
+    [otherGroupValue], // a value of another group
+    // Edge cases beyond validation.md.
+    [` ${values[0]} `], // a radio value is never typed, so it is not trimmed
+    ['   '],
+    [42],
+    [null],
+  ])('rejects %j with option', (value) => {
+    expect(errorsAt(requestWith(field, value), field)).toEqual(['option']);
   });
 });

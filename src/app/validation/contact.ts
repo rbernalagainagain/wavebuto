@@ -66,6 +66,18 @@ function instagram() {
     .transform((value) => value.replace(/^@/, ''));
 }
 
+/**
+ * An optional radio group with the given values (specs/form.md). Nothing
+ * chosen, sent as a missing key or `''`, is absent. A radio value is never
+ * typed, so it is matched exactly: no trimming, no change of case.
+ */
+function optionalRadio<const Values extends readonly [string, ...string[]]>(values: Values) {
+  return z.preprocess(
+    (value) => (value === '' ? undefined : value),
+    z.enum(values, { error: 'option' }).optional(),
+  );
+}
+
 /** A required email address, at most `EMAIL_MAX` characters. */
 function email() {
   return requiredText(EMAIL_MAX).pipe(z.email({ error: 'email' }));
@@ -87,6 +99,9 @@ export function createContactSchema(today: string) {
     instagram: instagram(),
     email: email(),
     location: singleLineText(),
+    // 02 — Tattoo
+    placement: singleLineText(),
+    symmetry: optionalRadio(['symmetrical', 'asymmetrical', 'not-sure']),
   });
 }
 
