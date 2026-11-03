@@ -1,13 +1,15 @@
 # Form
 
 The v1 appointment form: its fields and every text it shows, in English and Spanish. This file is the source of truth for the fields
-(`roadmap.md`, phase 2). It comes from the Figma design, page "Web — v4" (`150:2`), with the changes agreed with the artist listed
-under [Differences from the design](#differences-from-the-design).
+(`roadmap.md`, phase 2). It is derived from the Figma design, page "Web — v4" (`150:2`), frames "Landing — Desktop 1440" (`150:9`)
+and "Landing — Mobile 390" (`210:61`), section "Contacto" (`175:110` and `210:70`). Every change from the design is listed under
+[Differences from the design](#differences-from-the-design).
 
-The rules for each field beyond "required" and its type (lengths, formats, date limits) are defined in phase 3, in the Zod schema.
-Error messages come with them (phases 3 and 4); the sent and failed messages come with phase 6.
+The rules for each field beyond "required" and its control (lengths, formats, date limits) are defined in phase 3, in the Zod
+schema. Error messages come with them (phases 3 and 4); the sent and failed messages come with phase 6.
 
-The Spanish text is a proposal for the artist to approve. It addresses the visitor as _tú_.
+The Spanish text is a proposal for the artist to approve before launch (phase 11). It addresses the visitor as _tú_ and, like the
+design, speaks as the artist in the first person, so it never needs to say who the artist is.
 
 ## Header
 
@@ -19,7 +21,8 @@ The Spanish text is a proposal for the artist to approve. It addresses the visit
 
 ## Fields
 
-`*` marks a required field. The key is the field's name in the form value and in the request sent to `/api/contact`.
+`*` marks a required field. The key is the field's name in the form value and in the request sent to `/api/contact`. No field has
+placeholder or helper text: the design shows none for the fields kept in v1.
 
 ### 01 — Personal information / 01 — Datos personales
 
@@ -68,10 +71,10 @@ The Spanish text is a proposal for the artist to approve. It addresses the visit
 
 ### 04 — Additional information / 04 — Información adicional
 
-| Key             | Control                 | Req. | English                                                                 | Spanish                                                   |
-| --------------- | ----------------------- | ---- | ----------------------------------------------------------------------- | --------------------------------------------------------- |
-| `tattooHistory` | radio group (3 options) |      | Is this your first tattoo, or do you already have tattoos in this area? | ¿Es tu primer tatuaje, o ya tienes tatuajes en esta zona? |
-| `notes`         | multi-line text         |      | Anything else I should know?                                            | ¿Algo más que deba saber?                                 |
+| Key             | Control                 | Req. | English                                                                 | Spanish                                                  |
+| --------------- | ----------------------- | ---- | ----------------------------------------------------------------------- | -------------------------------------------------------- |
+| `tattooHistory` | radio group (3 options) |      | Is this your first tattoo, or do you already have tattoos in this area? | ¿Es tu primer tatuaje o ya tienes tatuajes en esta zona? |
+| `notes`         | multi-line text         |      | Anything else I should know?                                            | ¿Algo más que deba saber?                                |
 
 `tattooHistory` options:
 
@@ -81,7 +84,10 @@ The Spanish text is a proposal for the artist to approve. It addresses the visit
 | `same-area`   | I already have tattoos in this area  | Ya tengo tatuajes en esta zona       |
 | `other-areas` | I have tattoos, but not in this area | Tengo tatuajes, pero no en esta zona |
 
-### Sending / Envío
+### Sending (no group title)
+
+The design's last group ("Acciones") has no visible title. It holds, in this order: the consent checkbox, the privacy notice, the
+button and the notice.
 
 | Key       | Control  | Req. | English                                                  | Spanish                                                       |
 | --------- | -------- | ---- | -------------------------------------------------------- | ------------------------------------------------------------- |
@@ -92,15 +98,41 @@ Below the checkbox, before the button, the privacy notice:
 > **Placeholder.** Invented for development; it must be replaced with the artist's real notice before launch (`roadmap.md`,
 > phase 11). The address uses the reserved `.example` domain, so it cannot reach anyone by mistake.
 
-- **English:** Your details are sent to the artist by email and are used only to answer this request. They are not shared with anyone
-  else. To have them deleted, write to hello@wavebuto.example.
-- **Spanish:** Tus datos se envían al artista por email y solo se usan para responder a esta solicitud. No se comparten con nadie más.
-  Para que se borren, escribe a hello@wavebuto.example.
+- **English:** Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have
+  them deleted, write to me at hello@wavebuto.example.
+- **Spanish:** Tus datos me llegan por email y solo los uso para responder a esta solicitud. No los comparto con nadie. Para que los
+  borre, escríbeme a hello@wavebuto.example.
 
 | Element | English                                                                                                        | Spanish                                                                                            |
 | ------- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
 | Button  | Send request                                                                                                   | Enviar solicitud                                                                                   |
 | Notice  | Submitting this form does not guarantee an appointment. I will review your request and contact you personally. | Enviar este formulario no garantiza una cita. Revisaré tu solicitud y te contactaré personalmente. |
+
+The button's arrow icon is decoration, not text, and is styled in phase 9.
+
+## Design inventory
+
+Every element of the form in the design, and where it went. Desktop and mobile show the same elements with the same text; they
+differ only in layout (one column on mobile, two fields per row in group 01 on desktop).
+
+| Design group (desktop / mobile)                   | Design layer                   | Design text                                                                 | In this file                |
+| ------------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------- | --------------------------- |
+| Cabecera (`175:111` / `210:71`)                   | Etiqueta, Título, Leyenda      | BOOKINGS · TATTOO APPOINTMENT · \* REQUIRED                                 | Header                      |
+| 01 — Personal information (`566:202`/`566:259`)   | Campo — Name                   | NAME \*                                                                     | `name`                      |
+|                                                   | Campo — Instagram              | INSTAGRAM \*                                                                | `instagram`                 |
+|                                                   | Campo — Email (type=email)     | EMAIL \*                                                                    | `email`                     |
+|                                                   | Campo — City / Country         | CITY / COUNTRY \*                                                           | `location`                  |
+| 02 — Tattoo (`566:212` / `566:269`)               | Campo — Body placement         | BODY PLACEMENT \*                                                           | `placement`                 |
+|                                                   | Campo — Symmetry               | SYMMETRICAL OR ASYMMETRICAL? · Symmetrical · Asymmetrical · Not sure        | `symmetry`                  |
+| 03 — References (`566:223` / `566:280`)           | Campo — Reference from my work | REFERENCE FROM MY WORK · UPLOAD IMAGE · helper text                         | Not in v1 (see differences) |
+|                                                   | Campo — Additional references  | ADDITIONAL REFERENCES · UPLOAD IMAGES                                       | Not in v1 (see differences) |
+|                                                   | Campo — Body photo             | BODY PHOTO · UPLOAD IMAGE · helper text                                     | Not in v1 (see differences) |
+| 04 — Availability (`566:231` / `566:288`)         | Campo — Preferred dates        | PREFERRED DATE / DATES \*                                                   | `dates` (group 03)          |
+|                                                   | Campo — Flexible dates         | ARE YOU FLEXIBLE WITH DATES? · Yes · No                                     | `flexibleDates` (group 03)  |
+| 05 — Additional information (`566:241`/`566:298`) | Campo — Tattoo history         | IS THIS YOUR FIRST TATTOO, OR DO YOU ALREADY HAVE TATTOOS IN THIS AREA? · … | `tattooHistory` (group 04)  |
+|                                                   | Campo — Anything else          | ANYTHING ELSE I SHOULD KNOW?                                                | `notes` (group 04)          |
+| Acciones (`566:252` / `566:309`)                  | Send request                   | SEND REQUEST                                                                | Button                      |
+|                                                   | Aviso                          | Submitting this form does not guarantee an appointment. …                   | Notice                      |
 
 ## Differences from the design
 
@@ -108,7 +140,24 @@ Below the checkbox, before the button, the privacy notice:
   images come after v1 (`roadmap.md`, phase 12). The groups after it move up, so the form has four groups, numbered 01–04.
 - **No field describes the tattoo.** The design has none and none is added; the tattoo is described by its placement, its symmetry
   and "Anything else".
-- **Dates are a range of native date pickers**, not one text field. The design's label is kept; the "From" and "To" labels are new.
+- **Dates are a range of native date pickers.** The design has one single-line field; v1 has two date inputs under the design's
+  label. The "From" and "To" labels are new.
 - **A required consent checkbox and a privacy notice** are added before "Send request". They are not in the design.
 - **Spanish text** is new: the design is in English only.
-- **Casing.** The design shows labels in capitals; that is styling (phase 9), so the text here is in sentence case.
+- **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 9), so the text here is in
+  sentence case.
+
+## Open questions for the artist
+
+Asked in phase 2's review (`specs/2026-11-03-form-fields/plan.md`, group 2). Each answer is recorded under
+[Differences from the design](#differences-from-the-design), and this section is removed once all are answered.
+
+1. **Is anything missing?** With these fields, can you answer a request, or do you need to know something else first (for example
+   the tattoo's size, or colour or black and grey)? A new field also changes `roadmap.md`'s "no field describes the tattoo".
+2. **Tattoo history.** The question asks "first tattoo, or tattoos in this area?", but its third option ("I have tattoos, but not in
+   this area") answers a broader question. Keep the label as in the design, or change it to "Do you already have tattoos?"
+   ("¿Ya tienes tatuajes?")?
+3. **Dates.** Two date pickers, "From" and "To", where an empty "To" means a single day. Does that work for how you plan
+   appointments?
+4. **Voice of the privacy notice.** The placeholder speaks in your first person ("Your details reach me…"), like the design's notice.
+   Should the real one (phase 11) do the same?
