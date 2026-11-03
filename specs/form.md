@@ -6,7 +6,8 @@ and "Landing — Mobile 390" (`210:61`), section "Contacto" (`175:110` and `210:
 [Differences from the design](#differences-from-the-design).
 
 The rules for each field beyond "required" and its control (lengths, formats, date limits) are defined in phase 3, in the Zod
-schema. Error messages come with them (phases 3 and 4); the sent and failed messages come with phase 6.
+schema (`specs/2026-11-03-validation/requirements.md`). Their messages are listed under [Errors](#errors); the sent and failed
+messages come with phase 6.
 
 The Spanish text is a proposal for the artist to approve before launch (phase 11). It addresses the visitor as _tú_ and, like the
 design, speaks as the artist in the first person, so it never needs to say who the artist is.
@@ -109,6 +110,24 @@ Below the checkbox, before the button, the privacy notice:
 | Notice  | Submitting this form does not guarantee an appointment. I will review your request and contact you personally. | Enviar este formulario no garantiza una cita. Revisaré tu solicitud y te contactaré personalmente. |
 
 The button's arrow icon is decoration, not text, and is styled in phase 9.
+
+## Errors
+
+The schema reports each error as a code (`specs/2026-11-03-validation/requirements.md`, decision 3), and the form shows the code's
+text under the field. A field shows one error at a time.
+
+| Code         | English                                                                          | Spanish                                                                             |
+| ------------ | -------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `required`   | This field is required.                                                          | Este campo es obligatorio.                                                          |
+| `too-long`   | This text is too long.                                                           | Este texto es demasiado largo.                                                      |
+| `characters` | This text contains characters that are not allowed.                              | Este texto tiene caracteres que no se admiten.                                      |
+| `email`      | Enter a valid email address, like name@example.com.                              | Escribe un email válido, como nombre@ejemplo.com.                                   |
+| `instagram`  | Enter your Instagram username: letters, numbers, dots and underscores, up to 30. | Escribe tu usuario de Instagram: letras, números, puntos y guiones bajos, hasta 30. |
+| `option`     | Choose one of the options.                                                       | Elige una de las opciones.                                                          |
+| `date`       | Choose a valid date.                                                             | Elige una fecha válida.                                                             |
+| `date-past`  | Choose today or a later date.                                                    | Elige hoy o una fecha posterior.                                                    |
+| `date-order` | "To" can't be before "From".                                                     | «Hasta» no puede ser anterior a «Desde».                                            |
+| `consent`    | Tick the box to send your request.                                               | Marca la casilla para enviar tu solicitud.                                          |
 
 ## Design inventory
 
