@@ -40,7 +40,8 @@
               "allowedHosts": []
             },
             "polyfills": ["@angular/localize/init"],
-            "localize": true
+            "localize": true,
+            "i18nMissingTranslation": "error"
           },
           "configurations": {
             "production": {
