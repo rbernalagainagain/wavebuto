@@ -147,17 +147,27 @@ differ only in layout (one column on mobile, two fields per row in group 01 on d
 - **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 9), so the text here is in
   sentence case.
 
-## Open questions for the artist
+## Provisional answers, pending the artist
 
-Asked in phase 2's review (`specs/2026-11-03-form-fields/plan.md`, group 2). Each answer is recorded under
-[Differences from the design](#differences-from-the-design), and this section is removed once all are answered.
+The questions of phase 2's review (`specs/2026-11-03-form-fields/plan.md`, group 2) were answered by the developer, not the artist,
+so work can go on. Each answer is the one that changes least, so it is easy to revisit. The artist still has to confirm them; until
+then, phase 2 is not closed (`specs/2026-11-03-form-fields/validation.md`). An answer the artist changes is recorded under
+[Differences from the design](#differences-from-the-design) when it departs from the design, and this section is removed once all
+are confirmed.
 
 1. **Is anything missing?** With these fields, can you answer a request, or do you need to know something else first (for example
-   the tattoo's size, or colour or black and grey)? A new field also changes `roadmap.md`'s "no field describes the tattoo".
+   the tattoo's size, or colour or black and grey)?
+   **Provisional:** nothing is added. Size, colour or anything else about the tattoo goes in "Anything else I should know?", as
+   `roadmap.md` phase 2 decided ("no field describes the tattoo").
 2. **Tattoo history.** The question asks "first tattoo, or tattoos in this area?", but its third option ("I have tattoos, but not in
    this area") answers a broader question. Keep the label as in the design, or change it to "Do you already have tattoos?"
    ("¿Ya tienes tatuajes?")?
+   **Provisional:** the design's label is kept. The three options make the question clear enough, and the change is one line of
+   text if the artist wants it.
 3. **Dates.** Two date pickers, "From" and "To", where an empty "To" means a single day. Does that work for how you plan
    appointments?
+   **Provisional:** yes, as written under [03 — Availability](#03--availability--03--disponibilidad), together with "Are you flexible
+   with dates?".
 4. **Voice of the privacy notice.** The placeholder speaks in your first person ("Your details reach me…"), like the design's notice.
    Should the real one (phase 11) do the same?
+   **Provisional:** yes, the real notice speaks in the first person too, like the rest of the form's text.
