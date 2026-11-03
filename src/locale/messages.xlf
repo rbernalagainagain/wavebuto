@@ -123,15 +123,63 @@
     </unit>
     <unit id="contact.group.availability">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:151,155</note>
+        <note category="location">src/app/contact-form/contact-form.html:151,154</note>
       </notes>
       <segment>
         <source>03 — Availability</source>
       </segment>
     </unit>
+    <unit id="contact.dates.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:154,155</note>
+      </notes>
+      <segment>
+        <source>Preferred date / dates</source>
+      </segment>
+    </unit>
+    <unit id="contact.dates.from">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:159,160</note>
+      </notes>
+      <segment>
+        <source>From</source>
+      </segment>
+    </unit>
+    <unit id="contact.dates.to">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:176,177</note>
+      </notes>
+      <segment>
+        <source>To</source>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.label">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:196,199</note>
+      </notes>
+      <segment>
+        <source>Are you flexible with dates?</source>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.yes">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:204,207</note>
+      </notes>
+      <segment>
+        <source>Yes</source>
+      </segment>
+    </unit>
+    <unit id="contact.flexibleDates.no">
+      <notes>
+        <note category="location">src/app/contact-form/contact-form.html:213,216</note>
+      </notes>
+      <segment>
+        <source>No</source>
+      </segment>
+    </unit>
     <unit id="contact.group.additional">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:155,158</note>
+        <note category="location">src/app/contact-form/contact-form.html:222,225</note>
       </notes>
       <segment>
         <source>04 — Additional information</source>
@@ -139,7 +187,7 @@
     </unit>
     <unit id="contact.privacy">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:159,163</note>
+        <note category="location">src/app/contact-form/contact-form.html:226,230</note>
       </notes>
       <segment>
         <source> Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have them deleted, write to me at hello@wavebuto.example. </source>
@@ -147,7 +195,7 @@
     </unit>
     <unit id="contact.send">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:163,165</note>
+        <note category="location">src/app/contact-form/contact-form.html:230,232</note>
       </notes>
       <segment>
         <source>Send request</source>
@@ -155,7 +203,7 @@
     </unit>
     <unit id="contact.notice">
       <notes>
-        <note category="location">src/app/contact-form/contact-form.html:166,170</note>
+        <note category="location">src/app/contact-form/contact-form.html:233,237</note>
       </notes>
       <segment>
         <source> Submitting this form does not guarantee an appointment. I will review your request and contact you personally. </source>

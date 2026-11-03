@@ -123,6 +123,85 @@ function itIsARequiredTextField(field: TextFieldCase): void {
   });
 }
 
+/** The fieldset whose legend reads `legend`, without the required marker. */
+function fieldsetByLegend(root: HTMLElement, legend: string): HTMLFieldSetElement {
+  const match = [...root.querySelectorAll('legend')].find((each) => labelText(each) === legend);
+  const group = match?.parentElement;
+  if (!(group instanceof HTMLFieldSetElement)) {
+    throw new Error(`No fieldset has the legend "${legend}"`);
+  }
+  return group;
+}
+
+interface RadioGroupCase {
+  key: 'symmetry' | 'flexibleDates' | 'tattooHistory';
+  legend: string;
+  /** Each option's value and label, in order. */
+  options: [string, string][];
+  /** A value that is not one of the options. */
+  outside: string;
+}
+
+/** The behaviour every optional radio group shares (decisions 6 and 8). */
+function itIsAnOptionalRadioGroup(radio: RadioGroupCase): void {
+  it('is a radio group named by its legend, with one labelled radio per option, none chosen', async () => {
+    const root = await createContactForm();
+    const group = fieldsetByLegend(root, radio.legend);
+    const radios = [...group.querySelectorAll('input')];
+
+    expect(group.getAttribute('role')).toBe('radiogroup');
+    expect(
+      radios.map((each) => [each.type, each.value, labelText(each.labels?.[0] as Element)]),
+    ).toEqual(radio.options.map(([value, label]) => ['radio', value, label]));
+    expect(radios.some((each) => each.checked)).toBe(false);
+    expect(new Set(radios.map((each) => each.name)).size).toBe(1);
+    expect(radios[0].name).not.toBe('');
+  });
+
+  it('is optional: nothing marks it required', async () => {
+    const root = await createContactForm();
+    const group = fieldsetByLegend(root, radio.legend);
+
+    expect(text(group.querySelector('legend'))).not.toContain('*');
+    expect(group.querySelectorAll('[aria-required], [required]').length).toBe(0);
+    expect(group.hasAttribute('aria-required')).toBe(false);
+  });
+
+  it('takes the chosen option and shows no error', async () => {
+    const { root, settle } = await renderContactForm();
+    const group = fieldsetByLegend(root, radio.legend);
+    const [value] = radio.options[radio.options.length - 1];
+    const option = group.querySelector<HTMLInputElement>(`input[value="${value}"]`);
+
+    option?.click();
+    leave(option as HTMLInputElement);
+    await settle();
+
+    expect(option?.checked).toBe(true);
+    expect(group.hasAttribute('aria-invalid')).toBe(false);
+    expect(text(root)).not.toContain('Choose one of the options.');
+  });
+
+  it('shows its error right after the group, tied to the group', async () => {
+    const { fixture, root, settle } = await renderContactForm();
+    // No radio can choose a value outside the options, so the model is set
+    // directly, as a tampered page would.
+    fixture.componentInstance['model'].update((model) => ({
+      ...model,
+      [radio.key]: radio.outside,
+    }));
+    fixture.componentInstance['contactForm'][radio.key]().markAsTouched();
+    await settle();
+
+    const group = fieldsetByLegend(root, radio.legend);
+    const error = group.nextElementSibling;
+    expect(text(error)).toBe('Choose one of the options.');
+    expect(group.getAttribute('aria-invalid')).toBe('true');
+    expect(error?.id).toBeTruthy();
+    expect(group.getAttribute('aria-describedby')).toBe(error?.id);
+  });
+}
+
 describe('ContactForm', () => {
   describe('header (specs/form.md, "Header")', () => {
     it('shows the eyebrow, the title as a level-two heading and the required legend', async () => {
@@ -279,72 +358,136 @@ describe('ContactForm', () => {
     });
 
     describe('Symmetrical or asymmetrical?', () => {
-      function symmetryGroup(root: HTMLElement): HTMLFieldSetElement {
-        const group = root.querySelector('form > fieldset:nth-of-type(2) > fieldset');
-        if (!(group instanceof HTMLFieldSetElement)) {
-          throw new Error('No symmetry fieldset');
+      itIsAnOptionalRadioGroup({
+        key: 'symmetry',
+        legend: 'Symmetrical or asymmetrical?',
+        options: [
+          ['symmetrical', 'Symmetrical'],
+          ['asymmetrical', 'Asymmetrical'],
+          ['not-sure', 'Not sure'],
+        ],
+        outside: 'Symmetrical',
+      });
+    });
+  });
+
+  describe('03 — Availability', () => {
+    // validation.md's cases use this date as today.
+    beforeEach(() => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date(2026, 10, 3, 12, 0));
+    });
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('holds the preferred dates, then the flexible dates question', async () => {
+      const root = await createContactForm();
+      const group = root.querySelector('form > fieldset:nth-of-type(3)');
+
+      expect([...(group?.querySelectorAll(':scope > fieldset > legend') ?? [])].map(text)).toEqual([
+        'Preferred date / dates *',
+        'Are you flexible with dates?',
+      ]);
+      expect([...(group?.children ?? [])].map((child) => child.tagName)).toEqual([
+        'LEGEND',
+        'FIELDSET',
+        'FIELDSET',
+      ]);
+    });
+
+    describe('Preferred date / dates', () => {
+      it('is a group of two date inputs, From (required) and To (optional), with no native rule', async () => {
+        const root = await createContactForm();
+        const from = controlLabelled(root, 'From');
+        const to = controlLabelled(root, 'To');
+
+        expect(fieldsetByLegend(root, 'Preferred date / dates').contains(from)).toBe(true);
+        expect(fieldsetByLegend(root, 'Preferred date / dates').contains(to)).toBe(true);
+        expect([from.type, to.type]).toEqual(['date', 'date']);
+        expect(text(from.labels?.[0])).toBe('From *');
+        expect(text(to.labels?.[0])).toBe('To');
+        expect(from.getAttribute('aria-required')).toBe('true');
+        expect(to.hasAttribute('aria-required')).toBe(false);
+        for (const control of [from, to]) {
+          expect(NATIVE_CONSTRAINTS.filter((name) => control.hasAttribute(name))).toEqual([]);
         }
-        return group;
-      }
-
-      it('is a radio group named by its legend, with one labelled radio per option, none chosen', async () => {
-        const root = await createContactForm();
-        const group = symmetryGroup(root);
-        const radios = [...group.querySelectorAll('input')];
-
-        expect(group.getAttribute('role')).toBe('radiogroup');
-        expect(
-          radios.map((radio) => [radio.type, radio.value, labelText(radio.labels?.[0] as Element)]),
-        ).toEqual([
-          ['radio', 'symmetrical', 'Symmetrical'],
-          ['radio', 'asymmetrical', 'Asymmetrical'],
-          ['radio', 'not-sure', 'Not sure'],
-        ]);
-        expect(radios.some((radio) => radio.checked)).toBe(false);
-        expect(new Set(radios.map((radio) => radio.name)).size).toBe(1);
-        expect(radios[0].name).not.toBe('');
       });
 
-      it('is optional: nothing marks it required', async () => {
-        const root = await createContactForm();
-        const group = symmetryGroup(root);
-
-        expect(text(group.querySelector('legend'))).not.toContain('*');
-        expect(group.querySelectorAll('[aria-required], [required]').length).toBe(0);
-        expect(group.hasAttribute('aria-required')).toBe(false);
-      });
-
-      it('takes the chosen option and shows no error', async () => {
+      it('shows "required" on From when it is left empty', async () => {
         const { root, settle } = await renderContactForm();
-        const group = symmetryGroup(root);
-        const notSure = group.querySelector<HTMLInputElement>('input[value="not-sure"]');
+        const from = controlLabelled(root, 'From');
 
-        notSure?.click();
-        leave(notSure as HTMLInputElement);
+        leave(from);
         await settle();
 
-        expect(notSure?.checked).toBe(true);
-        expect(group.hasAttribute('aria-invalid')).toBe(false);
-        expect(group.nextElementSibling).toBeNull();
+        expect(text(from.nextElementSibling)).toBe('This field is required.');
       });
 
-      it('shows its error right after the group, tied to the group', async () => {
-        const { fixture, root, settle } = await renderContactForm();
-        // No radio can choose a value outside the options, so the model is
-        // set directly, as a tampered page would.
-        fixture.componentInstance['model'].update((model) => ({
-          ...model,
-          symmetry: 'Symmetrical',
-        }));
-        fixture.componentInstance['contactForm'].symmetry().markAsTouched();
+      it('shows a past From on From, tied to it, until it is today or later', async () => {
+        const { root, settle } = await renderContactForm();
+        const from = controlLabelled(root, 'From');
+
+        type(from, '2026-11-02');
+        leave(from);
         await settle();
 
-        const group = symmetryGroup(root);
-        const error = group.nextElementSibling;
-        expect(text(error)).toBe('Choose one of the options.');
-        expect(group.getAttribute('aria-invalid')).toBe('true');
-        expect(error?.id).toBeTruthy();
-        expect(group.getAttribute('aria-describedby')).toBe(error?.id);
+        const error = from.nextElementSibling;
+        expect(text(error)).toBe('Choose today or a later date.');
+        expect(from.getAttribute('aria-invalid')).toBe('true');
+        expect(from.getAttribute('aria-describedby')).toBe(error?.id);
+
+        type(from, '2026-11-03');
+        await settle();
+
+        expect(from.hasAttribute('aria-invalid')).toBe(false);
+        expect(text(root)).not.toContain('Choose today or a later date.');
+      });
+
+      it('shows a To before From on To, not on From', async () => {
+        const { root, settle } = await renderContactForm();
+        const from = controlLabelled(root, 'From');
+        const to = controlLabelled(root, 'To');
+
+        type(from, '2026-11-10');
+        leave(from);
+        type(to, '2026-11-09');
+        leave(to);
+        await settle();
+
+        const error = to.nextElementSibling;
+        expect(text(error)).toBe('"To" can\'t be before "From".');
+        expect(to.getAttribute('aria-invalid')).toBe('true');
+        expect(to.getAttribute('aria-describedby')).toBe(error?.id);
+        expect(from.hasAttribute('aria-invalid')).toBe(false);
+      });
+
+      it('takes a single day, with To left empty, and a range', async () => {
+        const { root, settle } = await renderContactForm();
+        const from = controlLabelled(root, 'From');
+        const to = controlLabelled(root, 'To');
+
+        type(from, '2026-11-03');
+        leave(from);
+        leave(to);
+        await settle();
+        expect(root.querySelectorAll('[aria-invalid]').length).toBe(0);
+
+        type(to, '2026-11-20');
+        await settle();
+        expect(root.querySelectorAll('[aria-invalid]').length).toBe(0);
+      });
+    });
+
+    describe('Are you flexible with dates?', () => {
+      itIsAnOptionalRadioGroup({
+        key: 'flexibleDates',
+        legend: 'Are you flexible with dates?',
+        options: [
+          ['yes', 'Yes'],
+          ['no', 'No'],
+        ],
+        outside: 'Yes',
       });
     });
   });

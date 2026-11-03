@@ -149,6 +149,73 @@
 
   <fieldset>
     <legend i18n="@@contact.group.availability">03 — Availability</legend>
+    <fieldset>
+      <legend>
+        <span i18n="@@contact.dates.label">Preferred date / dates</span>
+        <span aria-hidden="true"> *</span>
+      </legend>
+      <div>
+        <label for="contact-dates-from">
+          <span i18n="@@contact.dates.from">From</span>
+          <span aria-hidden="true"> *</span>
+        </label>
+        @let fromError = errorOf(contactForm.dates.from);
+        <input
+          id="contact-dates-from"
+          type="date"
+          aria-required="true"
+          [formField]="contactForm.dates.from"
+          [attr.aria-invalid]="fromError ? 'true' : null"
+          [attr.aria-describedby]="fromError ? 'contact-dates-from-error' : null"
+        />
+        @if (fromError) {
+          <p id="contact-dates-from-error">{{ fromError }}</p>
+        }
+      </div>
+      <div>
+        <label for="contact-dates-to" i18n="@@contact.dates.to">To</label>
+        @let toError = errorOf(contactForm.dates.to);
+        <input
+          id="contact-dates-to"
+          type="date"
+          [formField]="contactForm.dates.to"
+          [attr.aria-invalid]="toError ? 'true' : null"
+          [attr.aria-describedby]="toError ? 'contact-dates-to-error' : null"
+        />
+        @if (toError) {
+          <p id="contact-dates-to-error">{{ toError }}</p>
+        }
+      </div>
+    </fieldset>
+    @let flexibleDatesError = errorOf(contactForm.flexibleDates);
+    <fieldset
+      role="radiogroup"
+      [attr.aria-invalid]="flexibleDatesError ? 'true' : null"
+      [attr.aria-describedby]="flexibleDatesError ? 'contact-flexibleDates-error' : null"
+    >
+      <legend i18n="@@contact.flexibleDates.label">Are you flexible with dates?</legend>
+      <div>
+        <input
+          id="contact-flexibleDates-yes"
+          type="radio"
+          value="yes"
+          [formField]="contactForm.flexibleDates"
+        />
+        <label for="contact-flexibleDates-yes" i18n="@@contact.flexibleDates.yes">Yes</label>
+      </div>
+      <div>
+        <input
+          id="contact-flexibleDates-no"
+          type="radio"
+          value="no"
+          [formField]="contactForm.flexibleDates"
+        />
+        <label for="contact-flexibleDates-no" i18n="@@contact.flexibleDates.no">No</label>
+      </div>
+    </fieldset>
+    @if (flexibleDatesError) {
+      <p id="contact-flexibleDates-error">{{ flexibleDatesError }}</p>
+    }
   </fieldset>
 
   <fieldset>
