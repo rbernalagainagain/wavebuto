@@ -44,7 +44,9 @@ responsiveness.
    ones outside `src/app/validation/`.
 10. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 11. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
-    text. Replace the placeholder privacy notice and contact address there with the artist's real ones, then publish v1.
+    text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
+    (`specs/2026-11-04-introduction/requirements.md`, decision 9), and say whether the header links to their Instagram. Replace the
+    placeholder privacy notice and contact address in `specs/form.md` with the artist's real ones, then publish v1.
 
 ## After v1
 
