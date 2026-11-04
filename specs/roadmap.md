@@ -3,10 +3,11 @@
 High-level implementation order, in very small phases. The phases are built and verified locally; the site is published once, when
 v1 is complete.
 
-The form comes first: before anything else, a request has to reach the artist's inbox. Both languages are part of the structure from
-the first phase, so no text is ever written in only one. The visual design from Figma is applied in its own phase, after structure and
-behaviour work. Every phase works on any screen from 320px wide (`tech-stack.md`): an unstyled phase still reflows on a phone, and
-phase 9 adds the look, not the responsiveness.
+The form comes first, but sending it comes last: the whole page is built and styled before a request reaches the artist's inbox, and
+email delivery and sending are the last phases before launch. Both languages are part of the structure from the first phase, so no
+text is ever written in only one. The visual design from Figma is applied in its own phase, after structure work. Every phase works
+on any screen from 320px wide (`tech-stack.md`): an unstyled phase still reflows on a phone, and phase 7 adds the look, not the
+responsiveness.
 
 ## v1
 
@@ -32,16 +33,16 @@ phase 9 adds the look, not the responsiveness.
 4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
    anchor `#contact` so a link can open the page directly on it. Unstyled.
    **Done** 2026-11-03 (`specs/2026-11-03-form/`).
-5. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
-   This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
-   ones outside `src/app/validation/`.
-6. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
-7. **Introduction.** The introduction section above the form.
-8. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen.
-9. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
+5. **Introduction.** The introduction section above the form.
+6. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen.
+7. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
    Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
    `Web — v*` pages are not the reference.
-10. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
+8. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
+9. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
+   This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
+   ones outside `src/app/validation/`.
+10. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 11. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
     text. Replace the placeholder privacy notice and contact address there with the artist's real ones, then publish v1.
 

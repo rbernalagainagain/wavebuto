@@ -7,7 +7,7 @@ and "Landing — Mobile 390" (`210:61`), section "Contacto" (`175:110` and `210:
 
 The rules for each field beyond "required" and its control (lengths, formats, date limits) are defined in phase 3, in the Zod
 schema (`specs/2026-11-03-validation/requirements.md`). Their messages are listed under [Errors](#errors); the sent and failed
-messages come with phase 6.
+messages come with phase 10.
 
 The Spanish text is a proposal for the artist to approve before launch (phase 11). It addresses the visitor as _tú_ and, like the
 design, speaks as the artist in the first person, so it never needs to say who the artist is.
@@ -109,7 +109,7 @@ Below the checkbox, before the button, the privacy notice:
 | Button  | Send request                                                                                                   | Enviar solicitud                                                                                   |
 | Notice  | Submitting this form does not guarantee an appointment. I will review your request and contact you personally. | Enviar este formulario no garantiza una cita. Revisaré tu solicitud y te contactaré personalmente. |
 
-The button's arrow icon is decoration, not text, and is styled in phase 9.
+The button's arrow icon is decoration, not text, and is styled in phase 7.
 
 ## Errors
 
@@ -164,7 +164,7 @@ group 01 and the three uploads of group 03 side by side. The last group's title 
   label. The "From" and "To" labels are new.
 - **A required consent checkbox and a privacy notice** are added before "Send request". They are not in the design.
 - **Spanish text** is new: the design is in English only.
-- **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 9), so the text here is in
+- **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 7), so the text here is in
   sentence case.
 
 ## Provisional answers, pending the artist
