@@ -20,7 +20,7 @@ const RESOURCE_ATTRS_BY_TAG = {
   source: ['src'],
   img: ['src'],
   audio: ['src'],
-  video: ['src'],
+  video: ['src', 'poster'],
   track: ['src'],
 };
 
