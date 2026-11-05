@@ -45,7 +45,9 @@ responsiveness.
 10. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
 11. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
     text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
-    (`specs/2026-11-04-introduction/requirements.md`, decision 9), and say whether the header links to their Instagram. Replace the
+    (`specs/2026-11-04-introduction/requirements.md`, decision 9), and say whether the header links to their Instagram. Ask them
+    for larger originals of the introduction's torso and face photos, which Figma only has at 724px and ≈558px wide (same file,
+    Consequences). Replace the
     placeholder privacy notice and contact address in `specs/form.md` with the artist's real ones, then publish v1.
 
 ## After v1
