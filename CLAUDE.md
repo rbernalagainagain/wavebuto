@@ -77,7 +77,7 @@ pnpm ng generate component <name>        # Scaffold a standalone component
 
 - **Standalone components, no NgModules.** `App` (`src/app/app.ts`) is the root standalone component bootstrapped directly in `src/main.ts` via `bootstrapApplication`.
 - **SSR + hydration + static prerendering are all wired up already** — this is not opt-in scaffolding to add later:
-  - `src/app/app.config.ts` — client-side providers: router (with `withInMemoryScrolling({ anchorScrolling: 'enabled' })` for the `#contact` anchor), `provideBrowserGlobalErrorListeners()`, `provideClientHydration()`.
+  - `src/app/app.config.ts` — client-side providers: router (with `withInMemoryScrolling({ anchorScrolling: 'enabled' })` for the `#contact` anchor), `provideBrowserGlobalErrorListeners()`, `provideClientHydration(withI18nSupport())` (without i18n support Angular skips hydrating every component that has i18n blocks, and renders it again).
   - `src/app/app.config.server.ts` — merges `appConfig` with `provideServerRendering(withRoutes(serverRoutes))` for the server build.
   - `src/app/app.routes.server.ts` — per-route render-mode config (`RenderMode.Prerender`, etc.) consumed by the server config; currently a catch-all prerender rule.
   - `src/main.server.ts` — server entry point (`bootstrap` function used by the Angular SSR build).
