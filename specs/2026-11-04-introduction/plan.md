@@ -12,7 +12,8 @@ commit holds both files, so no text is ever in English only.
 
 1. Export from Figma, through `get_design_context`, the logo (`210:65`) as SVG, the torso photo (`210:63`) and the face crop
    (`625:297`, as the annotation describes).
-2. Convert both photos to WebP with ImageMagick: the torso 1440px wide, the face at its own width. Save them in `public/web/` as
+2. Convert both photos to WebP with ImageMagick: both at their own width (the torso 724px, the face 558px), neither
+   upscaled. Save them in `public/web/` as
    `logo-wavebuto.svg`, `intro-torso.webp` and `intro-face.webp`.
 3. Check that the SVG references nothing off-origin, and note each file's width, height and weight.
 4. `pnpm check`, then commit.

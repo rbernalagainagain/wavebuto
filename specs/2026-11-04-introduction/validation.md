@@ -29,7 +29,8 @@ The phase can be merged when every check below passes.
 - [ ] The Spanish units match the table in `requirements.md`, decision 9.
 - [ ] `src/app/home/home.spec.ts` changed only in the two checks of `requirements.md`, decision 10.
 - [ ] No `id` other than `contact` on the page, and no Instagram link.
-- [ ] `public/web/logo-wavebuto.svg` references nothing off-origin (`grep` for `http`, `//` and `<image`).
+- [ ] `public/web/logo-wavebuto.svg` references nothing off-origin (`grep` for `http`, `//` and `<image`; the
+      `xmlns` namespace is the only expected match).
 - [ ] No dependency was added (`package.json` and `pnpm-lock.yaml` unchanged).
 - [ ] Phase 5 is marked done in `specs/roadmap.md`.
 
