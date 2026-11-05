@@ -38,6 +38,8 @@ look, not the responsiveness.
 6. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
    Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
    `Web — v*` pages are not the reference.
+   **Done** 2026-11-05 (`specs/2026-11-05-visual-design/`). The fonts moved to phase 11, and the manual checks in the browser
+   wait for the developer's review.
 7. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen. It comes
    after the visual design, so it arrives already styled to match the rest of the page.
 8. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.

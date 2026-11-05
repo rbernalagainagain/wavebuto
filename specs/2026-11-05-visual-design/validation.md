@@ -4,26 +4,29 @@ The phase can be merged when every check below passes.
 
 ## Automated
 
-- [ ] `pnpm check` passes (ESLint, stylelint, all tests).
-- [ ] `pnpm format:check` passes.
-- [ ] `pnpm build` passes with no missing translation and no budget warning.
+- [x] `pnpm check` passes (ESLint, stylelint, all tests).
+- [x] `pnpm format:check` passes.
+- [x] `pnpm build` passes with no missing translation and no budget warning.
 
 ## Code
 
-- [ ] No template, test or `stylelint.config.js` changed, and `angular.json` only in the `anyComponentStyle` warning (6kB,
+- [x] No template, test or `stylelint.config.js` changed, and `angular.json` only in the `anyComponentStyle` warning (6kB,
       decision 13) (`git diff main --stat`).
-- [ ] No component style holds a colour, a `rem`, `em` or `px`, a `max-width` query, or a width query other than
+- [x] No component style holds a colour, a `rem`, `em` or `px`, a `max-width` query, or a width query other than
       `min-width: 40rem` (stylelint, and a `grep` to confirm).
-- [ ] No old token name (`--color-bg`, `--space-1` … `--space-5`, `--measure`) is left anywhere in `src/`.
-- [ ] `--color-error` has its measured ratio against `--color-surface` in a comment, and it is at least 4.5:1.
-- [ ] The focus ring is in `src/styles.css` and no rule removes it.
-- [ ] The readable manifesto is hidden visually, not with `display: none` or `visibility: hidden`.
-- [ ] The button's arrow is generated content with empty alternative text.
-- [ ] `specs/tech-stack.md` and `CLAUDE.md` describe the self-hosted fonts.
-- [ ] No dependency was added (`package.json` and `pnpm-lock.yaml` unchanged).
-- [ ] Phase 6 is marked done in `specs/roadmap.md`.
+- [x] No old token name (`--color-bg`, `--space-1` … `--space-5`, `--measure`) is left anywhere in `src/`.
+- [x] `--color-error` has its measured ratio against `--color-surface` in a comment, and it is at least 4.5:1.
+- [x] The focus ring is in `src/styles.css` and no rule removes it.
+- [x] The readable manifesto is hidden visually, not with `display: none` or `visibility: hidden`.
+- [x] The button's arrow is generated content with empty alternative text.
+- [x] `specs/tech-stack.md` and `CLAUDE.md` describe the self-hosted fonts.
+- [x] No dependency was added (`package.json` and `pnpm-lock.yaml` unchanged).
+- [x] Phase 6 is marked done in `specs/roadmap.md`.
 
 ## Manual (`pnpm preview`)
+
+Not checked when the phase closed: the agent's sandbox cannot render the page, so these wait for the developer's review in
+the browser. The built pages were checked for off-origin URLs (none).
 
 - [ ] At 390px and 1440px, `/en/` matches frames `210:61` and `150:9` of "Web — v4", apart from the differences in
       `requirements.md`.
