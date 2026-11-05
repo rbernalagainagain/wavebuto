@@ -58,8 +58,8 @@ look, not the responsiveness.
     text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
     (`specs/2026-11-04-introduction/requirements.md`, decision 9), and the video's label and button texts
     (`specs/2026-11-05-video/requirements.md`, decision 5), and say whether the header links to their Instagram. Ask them for
-    larger originals of the introduction's torso and face photos, which Figma only has at 724px and ≈558px wide (same file,
-    Consequences), and of the video, which is 1280px wide. Replace the placeholder privacy notice and contact address in
+    larger originals of the introduction's photos: the face crop is 558px wide and the torso's desktop crop 2232px (same file,
+    Consequences); and of the video, which is 1280px wide. Replace the placeholder privacy notice and contact address in
     `specs/form.md` with the artist's real ones, then publish v1.
 
 ## After v1

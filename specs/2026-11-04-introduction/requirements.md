@@ -56,16 +56,21 @@ LIMITED SPOTS · MORE TO COME`, cities in Inter Black and phrases in Inter Light
    only the word. Figma's description of "Nav/Bookings" says it links to `#bookings`; `specs/` names the anchor `#contact`, and
    `specs/` wins (confirmed by the developer).
 5. **No Instagram link.** It needs the artist's real account and is an outgoing link; it is left out until there is one.
-6. **Images.** All three live in `public/web/`, next to the video's poster, and are referenced by a path relative to the page
+6. **Images.** All of them live in `public/web/`, next to the video's poster, and are referenced by a path relative to the page
    (`web/…`), so `/en/` and `/es/` each load their own copy.
    - `logo-wavebuto.svg`: the logo exported from Figma, cleaned (decided by the developer, 2026-11-05): the same paths with
      coordinates rounded to two decimals, Figma's drop-shadow chain as one equivalent `feDropShadow`, and without Figma's extra
      attributes (`preserveAspectRatio="none"`, inline `style`, layer ids). Its size and viewBox are Figma's, and its rendering
      matches the export to within anti-aliasing.
-   - `intro-torso.webp`: the torso photo at its own width (724px, the size of the original in Figma); it is not upscaled
-     (confirmed by the developer).
+   - The torso photo is two files, one per frame of the design, because each frame crops the same original (2480×3508 in
+     Figma) its own way (decided by the developer, 2026-11-05). Each is the frame's photo layer exported from Figma at the
+     resolution its crop has in the original, so nothing is upscaled, and with the colour adjustments of the design:
+     `intro-torso.webp` is the mobile crop ("Foto — torso" `210:63`, 912×1684) and `intro-torso-wide.webp` the desktop
+     crop (`150:27`, 2232×1364). A `<picture>` shows the desktop crop from `min-width: 40rem` on, the page's only
+     breakpoint, and the mobile crop otherwise; the `<img>` keeps the alternative text. This replaces the first export, a
+     724px crop that was mistaken for the original.
    - `intro-face.webp`: the face crop that the Figma annotation describes, exported as its own asset, at the crop's own width
-     (≈558px); it is not upscaled.
+     (558px, all the original in Figma has for that crop); it is not upscaled.
    - The photos are converted to WebP with ImageMagick, which is already on the system and is not a project dependency.
    - Every `<img>` has `width` and `height` with the file's own size, so the page does not jump while it loads. The face photo has
      `loading="lazy"`; the torso photo and the logo load at once, since they are the first thing on the page.
@@ -119,7 +124,7 @@ LIMITED SPOTS · MORE TO COME`, cities in Inter Black and phrases in Inter Light
 - Phase 7 decides whether the visual version's line breaks are fixed per breakpoint (as in the design) or left to the browser.
 - Phase 11 has the artist approve the introduction's copy and its Spanish translation along with `specs/form.md`'s, and add the
   Instagram link if they want it.
-- The face crop is only ≈558px wide, so it is not sharp at 2× on desktop; the Figma annotation suggests asking the artist for a
+- The face crop is only 558px wide, so it is not sharp at 2× on desktop; the Figma annotation suggests asking the artist for a
   larger original.
-- The torso photo is only 724px wide, so it is soft wherever it is shown wider than that (the desktop frame is 1440px); ask the
-  artist for a larger original too.
+- The torso's desktop crop is 2232px wide, enough for the 1440px frame at 1.5×; a larger original from the artist would make it
+  sharp at 2×.

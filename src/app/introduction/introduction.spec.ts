@@ -33,7 +33,7 @@ describe('Introduction', () => {
       const root = await createIntroduction();
 
       const children = [...header(root).children].map((child) => child.tagName);
-      expect(children).toEqual(['A', 'H1', 'IMG']);
+      expect(children).toEqual(['A', 'H1', 'PICTURE']);
     });
 
     it('links Bookings to the contact anchor, with its arrow hidden from screen readers', async () => {
@@ -63,15 +63,27 @@ describe('Introduction', () => {
       expect(logo.getAttribute('loading')).not.toBe('lazy');
     });
 
-    it('shows the torso photo with its alternative text and size', async () => {
+    it("shows the torso photo in the mobile frame's crop, with its alternative text and size", async () => {
       const root = await createIntroduction();
-      const photo = header(root).querySelector(':scope > img') as HTMLImageElement;
+      const picture = header(root).querySelector(':scope > picture') as HTMLPictureElement;
+      expect([...picture.children].map((child) => child.tagName)).toEqual(['SOURCE', 'IMG']);
 
+      const photo = picture.querySelector(':scope > img') as HTMLImageElement;
       expect(photo.getAttribute('alt')).toBe('Black line tattoo across a torso');
       expect(photo.getAttribute('src')).toBe('web/intro-torso.webp');
-      expect(photo.getAttribute('width')).toBe('724');
-      expect(photo.getAttribute('height')).toBe('1024');
+      expect(photo.getAttribute('width')).toBe('912');
+      expect(photo.getAttribute('height')).toBe('1684');
       expect(photo.getAttribute('loading')).not.toBe('lazy');
+    });
+
+    it("switches the torso photo to the desktop frame's crop at the breakpoint", async () => {
+      const root = await createIntroduction();
+      const source = header(root).querySelector(':scope > picture > source') as HTMLSourceElement;
+
+      expect(source.getAttribute('media')).toBe('(min-width: 40rem)');
+      expect(source.getAttribute('srcset')).toBe('web/intro-torso-wide.webp');
+      expect(source.getAttribute('width')).toBe('2232');
+      expect(source.getAttribute('height')).toBe('1364');
     });
   });
 

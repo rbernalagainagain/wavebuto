@@ -14,7 +14,7 @@ header {
   overflow: hidden;
 }
 
-header > img {
+header > picture > img {
   position: absolute;
   inset: 0;
   z-index: -1;

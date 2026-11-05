@@ -137,7 +137,8 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 ## Consequences
 
 - Phase 7 adds the video between the manifesto and the contact section, with the design's sizes and these tokens.
-- The torso photo (724px) is upscaled on screens wider than that, and the face crop (≈558px) is soft at 2×. Phase 12 already asks
-  the artist for larger originals.
+- The face crop (558px) is soft at 2×. The torso photo was a 724px crop upscaled on desktop; it is now one crop per frame at the
+  original's resolution (`specs/2026-11-04-introduction/requirements.md`, decision 6). Phase 12 asks the artist for larger
+  originals.
 - Until phase 11 the page shows the system fonts. The font files add to the first load; their weight is noted when they are
   added.

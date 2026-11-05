@@ -14,13 +14,23 @@
       height="187"
     />
   </h1>
-  <img
-    src="web/intro-torso.webp"
-    alt="Black line tattoo across a torso"
-    i18n-alt="@@intro.torso.alt"
-    width="724"
-    height="1024"
-  />
+  <!-- Each frame of the design crops the photo its own way: the mobile crop by
+       default, the desktop one from the breakpoint on. -->
+  <picture>
+    <source
+      media="(min-width: 40rem)"
+      srcset="web/intro-torso-wide.webp"
+      width="2232"
+      height="1364"
+    />
+    <img
+      src="web/intro-torso.webp"
+      alt="Black line tattoo across a torso"
+      i18n-alt="@@intro.torso.alt"
+      width="912"
+      height="1684"
+    />
+  </picture>
 </header>
 
 <!-- Manifiesto. -->
