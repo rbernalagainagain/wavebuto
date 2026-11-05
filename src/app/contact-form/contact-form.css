@@ -156,3 +156,132 @@ form > div {
     margin-inline-start: var(--fields-start);
   }
 }
+
+/* Labels and the questions above the options and the dates. */
+label,
+fieldset fieldset > legend {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-12);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-label);
+  line-height: var(--line-height-solid);
+  text-transform: uppercase;
+}
+
+/* Text, email and date fields: no box, a line under the value. */
+input:not([type='radio'], [type='checkbox']),
+textarea {
+  display: block;
+  inline-size: 100%;
+  min-block-size: var(--size-control);
+  padding: var(--space-12);
+  border: 0;
+  border-block-end: var(--border-width-control) solid var(--color-border);
+  border-radius: 0;
+  background-color: transparent;
+  font-family: var(--font-body);
+  font-size: var(--font-size-17);
+}
+
+textarea {
+  min-block-size: var(--size-textarea);
+  border: var(--border-width-control) solid var(--color-border);
+  resize: vertical;
+}
+
+/* Options: the native control and its label, which is a whole touch target
+   high. */
+[role='radiogroup'] {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-28);
+}
+
+[role='radiogroup'] > div,
+form > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-12);
+}
+
+[role='radiogroup']:has(#contact-tattooHistory-first) > div {
+  flex-basis: 100%;
+}
+
+input[type='radio'],
+input[type='checkbox'] {
+  flex: none;
+  inline-size: var(--size-option);
+  block-size: var(--size-option);
+  margin: 0;
+  accent-color: var(--color-accent);
+}
+
+input + label {
+  display: block;
+  min-block-size: var(--touch-target);
+  align-content: center;
+  font-family: var(--font-body);
+  font-size: var(--font-size-16);
+  letter-spacing: normal;
+  line-height: var(--line-height-helper);
+  text-transform: none;
+}
+
+/* Errors: the message under its field and the field's line, in
+   --color-error. The message says what is wrong, so colour is never the only
+   signal. */
+p[id$='-error'] {
+  color: var(--color-error);
+  font-size: var(--font-size-14);
+  line-height: var(--line-height-helper);
+}
+
+[role='radiogroup'] + p[id$='-error'] {
+  margin-block-start: calc(var(--space-8) - var(--space-32));
+}
+
+form > div > p[id$='-error'] {
+  flex-basis: 100%;
+}
+
+:is(input, textarea)[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+/* Sending: the button, with its arrow as decoration, and the notices. */
+button {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-16);
+  min-inline-size: var(--size-button-width);
+  min-block-size: var(--size-button-height);
+  padding: 0 var(--space-32);
+  border: 0;
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-button);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+button::after {
+  content: '→' / '';
+}
+
+form > p {
+  max-inline-size: var(--size-notice);
+  color: var(--color-muted);
+  font-size: var(--font-size-14);
+}
+
+@media (min-width: 40rem) {
+  [role='radiogroup'] {
+    column-gap: var(--space-40);
+  }
+}

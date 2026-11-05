@@ -11,7 +11,8 @@ The phase can be merged when every check below passes.
 
 ## Code
 
-- [ ] No template, test, `angular.json` or `stylelint.config.js` changed (`git diff main --stat`).
+- [ ] No template, test or `stylelint.config.js` changed, and `angular.json` only in the `anyComponentStyle` warning (6kB,
+      decision 13) (`git diff main --stat`).
 - [ ] No component style holds a colour, a `rem`, `em` or `px`, a `max-width` query, or a width query other than
       `min-width: 40rem` (stylelint, and a `grep` to confirm).
 - [ ] No old token name (`--color-bg`, `--space-1` … `--space-5`, `--measure`) is left anywhere in `src/`.

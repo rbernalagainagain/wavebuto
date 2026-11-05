@@ -120,8 +120,8 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
     `--color-muted`.
 12. **Widths.** Mobile has a 24px gutter, so at 320px the column is 272px. Desktop has the design's 160px gutter at 1440, made
     fluid so it shrinks at narrower desktops. The contact section's content is never wider than 1120px.
-13. **Budgets are not raised.** `anyComponentStyle` warns at 4kB. If a component's styles pass it, that is a question for the
-    developer, not a change to `angular.json`.
+13. **Budgets are not raised without asking.** `anyComponentStyle` warned at 4kB. `contact-form.css` reached 4.83kB, mostly from
+    the attribute Angular adds to every selector, and the developer chose to raise the warning to 6kB (the error stays at 8kB).
 14. **One commit per task group** in `plan.md`, each with `pnpm check` green.
 
 ## Differences from the design

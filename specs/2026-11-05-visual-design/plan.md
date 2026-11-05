@@ -1,8 +1,8 @@
 # Plan — Visual design
 
 Branch `feat/visual-design`. Scope and decisions are in `requirements.md`; what counts as done is in `validation.md`. Each group ends
-with `pnpm check` green and one commit. No group touches a template, a test, `angular.json` or `stylelint.config.js`
-(`requirements.md`, decisions 1 and 13).
+with `pnpm check` green and one commit. No group touches a template, a test or `stylelint.config.js` (`requirements.md`, decision 1); `angular.json`
+changes only in the budget the developer raised (decision 13).
 
 Every group starts from the design: create a Figma session, load the `/figma-design-to-code` skill, and read the group's frames with
 `get_design_context` on both the mobile and the desktop node. Its output is a reference to adapt to the tokens, not code to paste.
