@@ -1,7 +1,7 @@
-/* The shell of the skeleton page: one content column. Values come from the
-   tokens in styles.css. Phase 6 (visual design) replaces this. */
+/* The page shell. <main> has no padding of its own, so the hero reaches the
+   edges of the screen; each section sets its own gutters from the tokens in
+   styles.css. */
 
 main {
-  padding-block: var(--space-3);
-  padding-inline: max(var(--space-3), calc((100% - var(--measure)) / 2));
+  display: block;
 }
