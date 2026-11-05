@@ -22,3 +22,37 @@
     height="1024"
   />
 </header>
+
+<!-- Manifiesto. -->
+<div>
+  <img
+    src="web/intro-face.webp"
+    alt="Close-up of a face with black lines"
+    i18n-alt="@@intro.face.alt"
+    width="558"
+    height="164"
+    loading="lazy"
+  />
+  <!--
+    What the eye reads: one run of capitals, cities in bold, and a <wbr> where
+    each space was. Every word sits inside a tag (<b> or <ng-container>), so the
+    whitespace of this template never reaches the run.
+  -->
+  <p aria-hidden="true">
+    @for (piece of visual; track $index) {
+      @switch (piece.kind) {
+        @case ('break') {
+          <wbr />
+        }
+        @case ('city') {
+          <b>{{ piece.text }}</b>
+        }
+        @default {
+          <ng-container>{{ piece.text }}</ng-container>
+        }
+      }
+    }
+  </p>
+  <!-- What a screen reader reads. -->
+  <p>{{ readable }}</p>
+</div>

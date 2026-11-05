@@ -271,5 +271,65 @@
         <target>Tatuaje de líneas negras sobre un torso</target>
       </segment>
     </unit>
+    <unit id="intro.face.alt">
+      <segment>
+        <source>Close-up of a face with black lines</source>
+        <target>Primer plano de un rostro con líneas negras</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.1">
+      <segment>
+        <source>London</source>
+        <target>Londres</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.2">
+      <segment>
+        <source>Freehand structure</source>
+        <target>Estructura a mano alzada</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.3">
+      <segment>
+        <source>Amsterdam</source>
+        <target>Ámsterdam</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.4">
+      <segment>
+        <source>Based on your anatomy</source>
+        <target>Basada en tu anatomía</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.5">
+      <segment>
+        <source>Brazil</source>
+        <target>Brasil</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.6">
+      <segment>
+        <source>To create a unique new skin</source>
+        <target>Para crear una piel nueva y única</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.7">
+      <segment>
+        <source>Sydney</source>
+        <target>Sídney</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.8">
+      <segment>
+        <source>Limited spots</source>
+        <target>Plazas limitadas</target>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.9">
+      <segment>
+        <source>More to come</source>
+        <target>Próximamente, más</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

@@ -75,6 +75,76 @@ describe('Introduction', () => {
     });
   });
 
+  describe('Manifiesto', () => {
+    const READABLE =
+      'London. Freehand structure. Amsterdam. Based on your anatomy. Brazil. ' +
+      'To create a unique new skin. Sydney. Limited spots. More to come.';
+
+    function manifesto(root: HTMLElement) {
+      const block = root.querySelector<HTMLElement>(':scope > header + div');
+      if (!block) {
+        throw new Error('No block follows the header');
+      }
+      const [photo, visual, readable] = [...block.children] as HTMLElement[];
+      return { block, photo, visual, readable };
+    }
+
+    it('follows the header with the face photo, the visual version and the readable one', async () => {
+      const root = await createIntroduction();
+
+      expect([...root.children].map((child) => child.tagName)).toEqual(['HEADER', 'DIV']);
+      const { block } = manifesto(root);
+      expect([...block.children].map((child) => child.tagName)).toEqual(['IMG', 'P', 'P']);
+    });
+
+    it('shows the face photo with its alternative text and size, loaded only when near', async () => {
+      const root = await createIntroduction();
+      const { photo } = manifesto(root);
+
+      expect(photo.getAttribute('alt')).toBe('Close-up of a face with black lines');
+      expect(photo.getAttribute('src')).toBe('web/intro-face.webp');
+      expect(photo.getAttribute('width')).toBe('558');
+      expect(photo.getAttribute('height')).toBe('164');
+      expect(photo.getAttribute('loading')).toBe('lazy');
+    });
+
+    it('hides the visual version from screen readers', async () => {
+      const root = await createIntroduction();
+      const { visual, readable } = manifesto(root);
+
+      expect(visual.getAttribute('aria-hidden')).toBe('true');
+      expect(readable.hasAttribute('aria-hidden')).toBe(false);
+    });
+
+    it('runs the visual version together in upper case, with the cities in bold', async () => {
+      const root = await createIntroduction();
+      const { visual } = manifesto(root);
+
+      expect(visual.textContent).toBe(
+        'LONDONFREEHANDSTRUCTUREAMSTERDAMBASEDONYOURANATOMYBRAZIL' +
+          'TOCREATEAUNIQUENEWSKINSYDNEYLIMITEDSPOTSMORETOCOME',
+      );
+      const cities = [...visual.querySelectorAll('b')].map((city) => city.textContent);
+      expect(cities).toEqual(['LONDON', 'AMSTERDAM', 'BRAZIL', 'SYDNEY']);
+    });
+
+    it('lets the visual version break wherever a space was', async () => {
+      const root = await createIntroduction();
+      const { visual } = manifesto(root);
+
+      const spaced = visual.cloneNode(true) as HTMLElement;
+      spaced.querySelectorAll('wbr').forEach((wbr) => wbr.replaceWith(' '));
+      expect(spaced.textContent).toBe(READABLE.replaceAll('.', '').toUpperCase());
+    });
+
+    it('gives screen readers the manifesto as one readable paragraph', async () => {
+      const root = await createIntroduction();
+      const { readable } = manifesto(root);
+
+      expect(readable.textContent).toBe(READABLE);
+    });
+  });
+
   it('has no link other than Bookings', async () => {
     const root = await createIntroduction();
 

@@ -361,5 +361,85 @@
         <source>Black line tattoo across a torso</source>
       </segment>
     </unit>
+    <unit id="intro.face.alt">
+      <notes>
+        <note category="location">src/app/introduction/introduction.html:30,31</note>
+      </notes>
+      <segment>
+        <source>Close-up of a face with black lines</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.1">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:22</note>
+      </notes>
+      <segment>
+        <source>London</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.2">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:23</note>
+      </notes>
+      <segment>
+        <source>Freehand structure</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.3">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:24</note>
+      </notes>
+      <segment>
+        <source>Amsterdam</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.4">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:25</note>
+      </notes>
+      <segment>
+        <source>Based on your anatomy</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.5">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:26</note>
+      </notes>
+      <segment>
+        <source>Brazil</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.6">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:27</note>
+      </notes>
+      <segment>
+        <source>To create a unique new skin</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.7">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:28</note>
+      </notes>
+      <segment>
+        <source>Sydney</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.8">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:29</note>
+      </notes>
+      <segment>
+        <source>Limited spots</source>
+      </segment>
+    </unit>
+    <unit id="intro.manifesto.9">
+      <notes>
+        <note category="location">src/app/introduction/introduction.ts:30</note>
+      </notes>
+      <segment>
+        <source>More to come</source>
+      </segment>
+    </unit>
   </file>
 </xliff>
