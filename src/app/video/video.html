@@ -1,0 +1,32 @@
+<!--
+  The video of the artist's work. No autoplay attribute: the component starts
+  it in the browser, the first time it is in view, unless the visitor prefers
+  reduced motion. No controls attribute: the button below pauses and plays it.
+  Each source names its codec, so a browser that cannot decode AV1 skips to
+  the MP4 instead of failing on the WebM.
+-->
+<video
+  #video
+  muted
+  loop
+  playsinline
+  preload="none"
+  poster="web/wavebuto-video-poster.webp"
+  width="1280"
+  height="720"
+  aria-label="Black line tattoo drawn along a back"
+  i18n-aria-label="@@video.label"
+  (play)="playing.set(true)"
+  (pause)="playing.set(false)"
+>
+  <source src="web/wavebuto-video.webm" type='video/webm; codecs="av01.0.05M.08"' />
+  <source src="web/wavebuto-video.mp4" type='video/mp4; codecs="avc1.640028"' />
+</video>
+<!-- Says what pressing it does. It follows the video's own events. -->
+<button type="button" (click)="toggle()">
+  @if (playing()) {
+    <ng-container i18n="@@video.pause">Pause video</ng-container>
+  } @else {
+    <ng-container i18n="@@video.play">Play video</ng-container>
+  }
+</button>

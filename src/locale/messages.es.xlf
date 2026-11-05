@@ -331,5 +331,23 @@
         <target>Próximamente, más</target>
       </segment>
     </unit>
+    <unit id="video.label">
+      <segment>
+        <source>Black line tattoo drawn along a back</source>
+        <target>Tatuaje de líneas negras trazado a lo largo de una espalda</target>
+      </segment>
+    </unit>
+    <unit id="video.pause">
+      <segment>
+        <source>Pause video</source>
+        <target>Pausar vídeo</target>
+      </segment>
+    </unit>
+    <unit id="video.play">
+      <segment>
+        <source>Play video</source>
+        <target>Reproducir vídeo</target>
+      </segment>
+    </unit>
   </file>
 </xliff>

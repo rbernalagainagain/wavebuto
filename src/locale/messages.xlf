@@ -441,5 +441,29 @@
         <source>More to come</source>
       </segment>
     </unit>
+    <unit id="video.label">
+      <notes>
+        <note category="location">src/app/video/video.html:17,18</note>
+      </notes>
+      <segment>
+        <source>Black line tattoo drawn along a back</source>
+      </segment>
+    </unit>
+    <unit id="video.pause">
+      <notes>
+        <note category="location">src/app/video/video.html:28,29</note>
+      </notes>
+      <segment>
+        <source>Pause video</source>
+      </segment>
+    </unit>
+    <unit id="video.play">
+      <notes>
+        <note category="location">src/app/video/video.html:30,32</note>
+      </notes>
+      <segment>
+        <source>Play video</source>
+      </segment>
+    </unit>
   </file>
 </xliff>

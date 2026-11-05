@@ -30,6 +30,16 @@ describe('Home', () => {
     ).toBeTruthy();
   });
 
+  it('shows the introduction, then the video, then the contact section', async () => {
+    const root = await createHome();
+
+    expect([...root.children].map((child) => child.tagName.toLowerCase())).toEqual([
+      'app-introduction',
+      'app-video',
+      'section',
+    ]);
+  });
+
   it('places the form in the section with the contact anchor', async () => {
     const root = await createHome();
 
