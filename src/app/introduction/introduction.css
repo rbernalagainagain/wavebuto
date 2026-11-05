@@ -1,0 +1,89 @@
+/* The introduction (specs/2026-11-05-visual-design/requirements.md, decisions
+   5 and 6): the hero. Every value is a token. */
+
+:host {
+  display: block;
+}
+
+/* Hero: the header is the frame, the torso photo its cover, with the fade,
+   the logo and the Bookings link above them. */
+header {
+  position: relative;
+  isolation: isolate;
+  block-size: var(--size-hero);
+  overflow: hidden;
+}
+
+header > img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  inline-size: 100%;
+  max-width: none;
+  block-size: 100%;
+  object-fit: cover;
+  object-position: bottom;
+}
+
+/* The fade into the page, over the frame's bottom third. */
+header::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: -1;
+  block-size: var(--size-fade);
+  background-image: linear-gradient(transparent, var(--color-surface));
+}
+
+/* The logo's centre sits at 45% of the frame's height, as in the design. */
+h1 {
+  position: absolute;
+  inset-block-start: 45%;
+  inset-inline-start: 50%;
+  inline-size: var(--size-logo);
+  translate: -50% -50%;
+}
+
+h1 > img {
+  inline-size: 100%;
+}
+
+header > a {
+  position: absolute;
+  inset-block-start: var(--space-20);
+  inset-inline-end: var(--space-20);
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  padding: var(--space-14) var(--space-28);
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-nav);
+  line-height: var(--line-height-solid);
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+@media (min-width: 40rem) {
+  header {
+    block-size: var(--size-hero-wide);
+  }
+
+  header::after {
+    block-size: var(--size-fade-wide);
+  }
+
+  h1 {
+    inline-size: var(--size-logo-wide);
+  }
+
+  header > a {
+    inset-block-start: var(--space-40);
+    inset-inline-end: var(--space-56);
+  }
+}

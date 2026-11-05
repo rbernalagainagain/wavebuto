@@ -62,6 +62,7 @@ function readableText(segments: readonly Segment[]): string {
   selector: 'app-introduction',
   imports: [RouterLink],
   templateUrl: './introduction.html',
+  styleUrl: './introduction.css',
 })
 export class Introduction {
   private readonly locale = inject(LOCALE_ID);
