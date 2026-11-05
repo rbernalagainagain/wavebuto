@@ -51,6 +51,7 @@ const EMPTY: ContactFormModel = {
   selector: 'app-contact-form',
   imports: [FormRoot, FormField],
   templateUrl: './contact-form.html',
+  styleUrl: './contact-form.css',
 })
 export class ContactForm {
   protected readonly model = signal<ContactFormModel>(EMPTY);
