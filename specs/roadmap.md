@@ -34,6 +34,7 @@ responsiveness.
    anchor `#contact` so a link can open the page directly on it. Unstyled.
    **Done** 2026-11-03 (`specs/2026-11-03-form/`).
 5. **Introduction.** The introduction section above the form.
+   **Done** 2026-11-05 (`specs/2026-11-04-introduction/`).
 6. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen.
 7. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
    Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
