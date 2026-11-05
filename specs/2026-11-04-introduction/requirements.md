@@ -104,6 +104,8 @@ LIMITED SPOTS · MORE TO COME`, cities in Inter Black and phrases in Inter Light
     - "loads nothing" becomes "loads nothing off-origin": every `[src]` and `[href]` under `Home` is a same-origin path (no scheme
       and no leading `//`). It keeps the intent of guardrail 3 now that the page has images and a link.
     - "places the form in the section with the contact anchor" does not change.
+    - The helper that creates `Home` also provides a router (`provideRouter([])`), since the Bookings link is a `routerLink`
+      (decision 4); no check changes because of it (approved by the developer).
 11. **One commit per task group** in `plan.md`, each with `pnpm check` green.
 
 ## Consequences

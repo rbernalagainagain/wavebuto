@@ -27,7 +27,8 @@ The phase can be merged when every check below passes.
 - [ ] Every text in the template is marked with `i18n` and an `@@intro.` ID; the manifesto's segments are marked with `$localize`
       and `@@intro.manifesto.<n>`; the copy is written once, and both versions are built from it.
 - [ ] The Spanish units match the table in `requirements.md`, decision 9.
-- [ ] `src/app/home/home.spec.ts` changed only in the two checks of `requirements.md`, decision 10.
+- [ ] `src/app/home/home.spec.ts` changed only in the two checks of `requirements.md`, decision 10, and in
+      the router its helper provides.
 - [ ] No `id` other than `contact` on the page, and no Instagram link.
 - [ ] `public/web/logo-wavebuto.svg` references nothing off-origin (`grep` for `http`, `//` and `<image`; the
       `xmlns` namespace is the only expected match).

@@ -253,16 +253,22 @@
         <target>Marca la casilla para enviar tu solicitud.</target>
       </segment>
     </unit>
-    <unit id="home.title">
+    <unit id="intro.bookings">
+      <segment>
+        <source>Bookings</source>
+        <target>Reservas</target>
+      </segment>
+    </unit>
+    <unit id="intro.logo.alt">
       <segment>
         <source>Wavebuto</source>
         <target>Wavebuto</target>
       </segment>
     </unit>
-    <unit id="home.sentence">
+    <unit id="intro.torso.alt">
       <segment>
-        <source>Wavebuto is a tattoo artist&apos;s website.</source>
-        <target>Wavebuto es una web de tatuajes.</target>
+        <source>Black line tattoo across a torso</source>
+        <target>Tatuaje de líneas negras sobre un torso</target>
       </segment>
     </unit>
   </file>

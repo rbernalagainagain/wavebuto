@@ -337,20 +337,28 @@
         <source>Tick the box to send your request.</source>
       </segment>
     </unit>
-    <unit id="home.title">
+    <unit id="intro.bookings">
       <notes>
-        <note category="location">src/app/home/home.html:1,2</note>
+        <note category="location">src/app/introduction/introduction.html:5,6</note>
+      </notes>
+      <segment>
+        <source>Bookings</source>
+      </segment>
+    </unit>
+    <unit id="intro.logo.alt">
+      <notes>
+        <note category="location">src/app/introduction/introduction.html:11,12</note>
       </notes>
       <segment>
         <source>Wavebuto</source>
       </segment>
     </unit>
-    <unit id="home.sentence">
+    <unit id="intro.torso.alt">
       <notes>
-        <note category="location">src/app/home/home.html:2,4</note>
+        <note category="location">src/app/introduction/introduction.html:19,20</note>
       </notes>
       <segment>
-        <source>Wavebuto is a tattoo artist&apos;s website.</source>
+        <source>Black line tattoo across a torso</source>
       </segment>
     </unit>
   </file>
