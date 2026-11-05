@@ -69,6 +69,12 @@ header > a {
   white-space: nowrap;
 }
 
+/* The link is a flex container, so its arrow's span is a flex item and would
+   drop the space at its start; kept, it reads "BOOKINGS →" as in the design. */
+header > a > span {
+  white-space: pre;
+}
+
 /* Manifesto: the face photo above the text on mobile, beside it on desktop. */
 header + div {
   position: relative;
