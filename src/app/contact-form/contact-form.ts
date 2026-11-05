@@ -46,7 +46,10 @@ const EMPTY: ContactFormModel = {
   consent: false,
 };
 
-/** The appointment form of specs/form.md. Unstyled until phase 6. */
+/**
+ * The appointment form of specs/form.md, styled after the Figma design
+ * (specs/2026-11-05-visual-design/).
+ */
 @Component({
   selector: 'app-contact-form',
   imports: [FormRoot, FormField],
