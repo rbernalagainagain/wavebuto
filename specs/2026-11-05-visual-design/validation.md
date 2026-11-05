@@ -10,7 +10,7 @@ The phase can be merged when every check below passes.
 
 ## Code
 
-- [x] No template, test or `stylelint.config.js` changed, and `angular.json` only in the `anyComponentStyle` warning (6kB,
+- [x] No template, test or `stylelint.config.js` changed, and `angular.json` only in the `anyComponentStyle` warning (7kB,
       decision 13) (`git diff main --stat`).
 - [x] No component style holds a colour, a `rem`, `em` or `px`, a `max-width` query, or a width query other than
       `min-width: 40rem` (stylelint, and a `grep` to confirm).
@@ -38,6 +38,11 @@ the browser. The built pages were checked for off-origin URLs (none).
       sent.
 - [ ] Every option row, the checkbox row, the Bookings link and the button are at least 44px high.
 - [ ] Sending the empty form shows every error in `--color-error`, under its field, with the field's border in the same colour.
+- [ ] Radios are an empty ring with a dot when chosen, and the consent a square with a tick when ticked, as in Form/Radio; with
+      Windows forced colours the dot and the tick are still visible.
+- [ ] With a mouse, the states of decision 15: a field tints on hover and more on focus, an option's control tints when the
+      control or its label is hovered, the button turns to an outline on hover and to the 80% fill while pressed. On a touch
+      screen, a tap leaves no hover state behind.
 - [ ] A screen reader (or the accessibility tree) reads "Send request" without the arrow, skips the visual manifesto and reads the
       readable one.
 - [ ] The console shows no error and no hydration warning on `/en/` or `/es/`.

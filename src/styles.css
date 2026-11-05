@@ -28,9 +28,17 @@
   --color-border: #e6e0d8;
   --color-on-photo: #fff;
 
-  /* Not in the design, which shows no error. A warm red, measured 6.12:1
+  /* The design's error colour (Form/Input, state Error). Measured 5.38:1
      against --color-surface (at least 4.5:1 is required). */
-  --color-error: #ef6a5a;
+  --color-error: #c9725c;
+
+  /* The design's interaction states: --color-fg over the surface at 4%
+     (field hover), 8% (field focus) and 12% (option hover), and the
+     button's fill at 80% while pressed. */
+  --color-tint-hover: color-mix(in srgb, var(--color-fg) 4%, transparent);
+  --color-tint-focus: color-mix(in srgb, var(--color-fg) 8%, transparent);
+  --color-tint-option: color-mix(in srgb, var(--color-fg) 12%, transparent);
+  --color-accent-active: color-mix(in srgb, var(--color-accent) 80%, var(--color-surface));
 
   /* Spacing: the design's spacing variables, by their value in px. 8 and 12
      are not variables in the design but are used by its fields (the gap under
@@ -107,15 +115,21 @@
   --size-control: 3.25rem;
   --size-textarea: 10rem;
   --size-option: 1.125rem;
+  /* The dot of a chosen radio (the design's), and the consent's tick, which
+     the design does not draw. */
+  --size-option-dot: 0.5rem;
+  --size-option-tick: 0.625rem;
   --size-button-width: 15.5rem;
   --size-button-height: 3.5rem;
   --size-notice: 32.5rem;
 
   /* The 44px touch target, the hairline of the group rules, the stronger
-     line under a field, and the 1px box of visually hidden text. */
+     line under a field, the stroke of the options and of the button's hover
+     outline, and the 1px box of visually hidden text. */
   --touch-target: 44px;
   --border-width: 1px;
   --border-width-control: 2px;
+  --border-width-stroke: 1.5px;
   --size-hidden: 1px;
 }
 

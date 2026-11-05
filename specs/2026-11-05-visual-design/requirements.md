@@ -43,7 +43,8 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 - Group "03 — References" and its uploads (`specs/form.md`, Differences from the design).
 - The manifesto's ink texture (decision 6).
 - The fonts' files and `@font-face` rules: moved to roadmap phase 11 (decision 2).
-- Hover or motion effects that the design does not show.
+- Hover or motion effects that the design does not show. The states drawn in the design's components (Form/Input, Form/Radio,
+  Form/Button) are in (decision 15).
 - Changing a test, the build budgets or the stylelint rules.
 
 ## Decisions
@@ -65,8 +66,9 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 3. **Tokens.** `src/styles.css` takes the design's variables as its tokens and drops the archived ones (`--color-bg` becomes
    `--color-surface`, and so on). Every token is renamed in one place, and no component keeps an old name.
    - **Colours** are the design's, under the design's names. The page is dark: `--color-surface` background, `--color-fg` text.
-   - **`--color-error`** is new. The design shows no error, so its value is chosen here: a warm red that measures at least 4.5:1
-     against `--color-surface`, measured and noted in a comment.
+   - **`--color-error`** is the design's (`#c9725c`, Form/Input, state Error), decided by the developer on 2026-11-05. It
+     measures 5.38:1 against `--color-surface` (at least 4.5:1 is required), noted in a comment. It replaces the `#ef6a5a` first
+     chosen here, when the design was thought to show no error.
    - **Spacing** is `--space-<px>` for each design value, in `rem` (`--space-24: 1.5rem`).
    - **Type** gets one token per family (`--font-display`, `--font-body`, `--font-mono`), one per size and one per letter-spacing
      (in `em`, from the design's percentages). The title and the manifesto sizes are `clamp()` from their mobile to their desktop
@@ -107,12 +109,16 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
    - Labels and nested legends in JetBrains Mono, upper case, as in `form/label`.
    - Text, email and date inputs: no box, only a bottom border in `--color-border`; the value in Archivo 17px.
    - Textarea: a full border, as in "Campo — Anything else".
-   - Radios and the checkbox are the native controls with `accent-color` and the design's size. Each option, with its label, is
-     at least `--touch-target` high. The design draws 18px rows; the extra height is padding.
+   - Radios and the checkbox are the native inputs drawn as the design's Form/Radio (decided by the developer on 2026-11-05):
+     `appearance: none`, an 18px ring with a 1.5px `--color-border` stroke, and an 8px `--color-fg` dot when chosen. The
+     checkbox, which the design does not draw, is the same control, square, with a tick. In forced colours the dot and the tick
+     use `CanvasText`. Each option, with its label, is at least `--touch-target` high. The design draws 18px rows; the extra
+     height is padding, and the radio group's margins take it back so the question, the controls and what follows sit at the
+     design's distances.
    - The date range ("From" and "To", not in the design): the two inputs under the design's label "Preferred date / dates",
      stacked on mobile and side by side on desktop.
    - The consent checkbox (not in the design) uses the option style.
-10. **Errors** (not in the design): the message under its field in `--color-error`, in `form/helper`'s type; the field marked
+10. **Errors** (Form/Input, state Error): the message under its field in `--color-error`, in `form/helper`'s type; the field marked
     `aria-invalid="true"` gets its border in `--color-error` too. The text already says what is wrong, so colour is never the only
     signal.
 11. **Sending.** The button is the design's ("Send request"): `--color-accent` fill, `--color-on-accent` text, Archivo Black upper
@@ -123,15 +129,26 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
     fluid so it shrinks at narrower desktops. The contact section's content is never wider than 1120px.
 13. **Budgets are not raised without asking.** `anyComponentStyle` warned at 4kB. `contact-form.css` reached 4.83kB, mostly from
     the attribute Angular adds to every selector, and the developer chose to raise the warning to 6kB (the error stays at 8kB).
+    Drawing the options and adding the states (decisions 9 and 15) took it to 6.24kB, and the developer raised the warning to
+    7kB on 2026-11-05 (the error stays at 8kB).
 14. **One commit per task group** in `plan.md`, each with `pnpm check` green.
+15. **Interaction states** (decided by the developer on 2026-11-05), as in the design's components:
+    - Text, email and date inputs and the textarea: a `--color-fg` tint of 4% on hover and 8% on focus.
+    - Radios and the checkbox: a 12% tint inside the control on hover, of the control or of its label.
+    - The button: on hover, no fill, a 1.5px `--color-fg` outline and `--color-fg` text; while pressed, the fill at 80%.
+    - Hover applies only under `(hover: hover)`, so a tap does not leave it stuck.
+    - The focus ring of decision 4 stays on every control. The design's own focus rings (1px around a radio, none on a field)
+      are not copied: the ring is never thinner or removed.
 
 ## Differences from the design
 
 - No ink texture on the manifesto, and its line breaks are not fixed (decision 6).
 - No "/ instagram" link in the hero's header (phase 5, decision 5).
 - No group "03 — References"; the groups are numbered 01–04 (`specs/form.md`).
-- Elements the design does not draw, styled here in its language: the date range, the consent checkbox, the privacy notice, the
-  error messages and the error colour.
+- Elements the design does not draw, styled here in its language: the date range, the consent checkbox and its tick, and the
+  privacy notice.
+- The focus ring is decision 4's on every control, not the design's 1px ring on radios or its tint-only focus on fields
+  (decision 15).
 - Radio and checkbox rows are 44px high, not 18px, so they meet the touch target.
 
 ## Consequences

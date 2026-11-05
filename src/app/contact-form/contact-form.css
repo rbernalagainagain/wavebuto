@@ -10,6 +10,10 @@
   --columns: minmax(0, 376fr) repeat(2, minmax(0, 348fr));
   --fields-start: calc((100% - 2 * var(--space-24)) * 376 / 1072 + var(--space-24));
   --section-gap: var(--space-56);
+  /* An option's row is a touch target high, but the design measures from
+     its 18px control: the row overhangs the control by this much on each
+     side. */
+  --option-overhang: calc((var(--touch-target) - var(--size-option)) / 2);
 
   display: flex;
   flex-direction: column;
@@ -190,36 +194,88 @@ textarea {
 }
 
 /* Options: the native control and its label, which is a whole touch target
-   high. */
+   high. The group's margins take back the rows' overhang, so the question,
+   the controls and whatever follows sit at the design's distances. */
 [role='radiogroup'] {
   display: flex;
   flex-wrap: wrap;
   column-gap: var(--space-28);
+  margin-block-end: calc(-1 * var(--option-overhang));
+}
+
+[role='radiogroup'] > legend {
+  margin-block-end: calc(var(--space-16) - var(--option-overhang));
 }
 
 [role='radiogroup'] > div,
 form > div {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
   gap: 0 var(--space-12);
+}
+
+/* The consent wraps only to put its error on a line of its own. Its label
+   starts from no width, so a long text wraps beside the checkbox instead of
+   dropping under it. */
+form > div {
+  flex-wrap: wrap;
+}
+
+form > div > label {
+  flex: 1 1 0;
 }
 
 [role='radiogroup']:has(#contact-tattooHistory-first) > div {
   flex-basis: 100%;
 }
 
-input[type='radio'],
-input[type='checkbox'] {
+/* The radios and the checkbox are still the native inputs, drawn as the
+   design's Form/Radio: an empty ring, and a dot when chosen. The checkbox,
+   which the design does not draw, is the same control, square, with a
+   tick. */
+[type='radio'],
+[type='checkbox'] {
+  display: grid;
   flex: none;
+  place-content: center;
   inline-size: var(--size-option);
   block-size: var(--size-option);
   margin: 0;
-  accent-color: var(--color-accent);
+  border: var(--border-width-stroke) solid var(--color-border);
+  background-color: transparent;
+  appearance: none;
+}
+
+[type='radio'],
+[type='radio']::before {
+  border-radius: 50%;
+}
+
+:checked::before {
+  content: '';
+  inline-size: var(--size-option-dot);
+  block-size: var(--size-option-dot);
+  background-color: var(--color-fg);
+}
+
+[type='checkbox']::before {
+  inline-size: var(--size-option-tick);
+  block-size: var(--size-option-tick);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0, 43% 62%);
+}
+
+/* In forced colours the dot and the tick keep the text colour instead of
+   being painted over with the background. */
+@media (forced-colors: active) {
+  :checked::before {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
 input + label {
   display: block;
+  min-inline-size: 0;
   min-block-size: var(--touch-target);
   align-content: center;
   font-family: var(--font-body);
@@ -238,8 +294,9 @@ p[id$='-error'] {
   line-height: var(--line-height-helper);
 }
 
+/* 8 under the last row's touch target, which the group's margin overlaps. */
 [role='radiogroup'] + p[id$='-error'] {
-  margin-block-start: calc(var(--space-8) - var(--space-32));
+  margin-block-start: calc(var(--space-8) - var(--space-32) + var(--option-overhang));
 }
 
 form > div > p[id$='-error'] {
@@ -260,7 +317,7 @@ button {
   min-inline-size: var(--size-button-width);
   min-block-size: var(--size-button-height);
   padding: 0 var(--space-32);
-  border: 0;
+  border: var(--border-width-stroke) solid transparent;
   background-color: var(--color-accent);
   color: var(--color-on-accent);
   font-family: var(--font-body);
@@ -284,4 +341,35 @@ form > p {
   [role='radiogroup'] {
     column-gap: var(--space-40);
   }
+}
+
+/* The design's interaction states. Hover only where a pointer can hover, so
+   a tap does not leave it stuck. The focus ring of src/styles.css is kept
+   on every control. */
+@media (hover: hover) {
+  :is(input, textarea):hover {
+    background-color: var(--color-tint-hover);
+  }
+
+  /* An option is hovered through its label too. */
+  :is([type='radio'], [type='checkbox']):is(:hover, :has(+ label:hover)) {
+    background-color: var(--color-tint-option);
+  }
+
+  button:hover {
+    border-color: var(--color-fg);
+    background-color: transparent;
+    color: var(--color-fg);
+  }
+}
+
+input:not([type='radio'], [type='checkbox']):focus,
+textarea:focus {
+  background-color: var(--color-tint-focus);
+}
+
+button:active {
+  border-color: transparent;
+  background-color: var(--color-accent-active);
+  color: var(--color-on-accent);
 }
