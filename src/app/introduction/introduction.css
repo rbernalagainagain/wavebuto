@@ -1,5 +1,5 @@
 /* The introduction (specs/2026-11-05-visual-design/requirements.md, decisions
-   5 and 6): the hero. Every value is a token. */
+   5 and 6): the hero, then the manifesto. Every value is a token. */
 
 :host {
   display: block;
@@ -69,6 +69,44 @@ header > a {
   white-space: nowrap;
 }
 
+/* Manifesto: the face photo above the text on mobile, beside it on desktop. */
+header + div {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  padding: var(--space-72) var(--gutter);
+}
+
+header + div > img {
+  inline-size: 100%;
+}
+
+/* The visual version. The browser breaks its lines at the <wbr> between
+   words; no hyphens, no fixed breaks. */
+p[aria-hidden='true'] {
+  font-family: var(--font-display);
+  font-size: var(--font-size-manifesto);
+  font-weight: var(--font-weight-light);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--line-height-solid);
+  hyphens: none;
+}
+
+p[aria-hidden='true'] > b {
+  font-weight: var(--font-weight-black);
+}
+
+/* The readable version: hidden from the eye, kept for screen readers. */
+header + div > p:not([aria-hidden]) {
+  position: absolute;
+  inline-size: var(--size-hidden);
+  block-size: var(--size-hidden);
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 @media (min-width: 40rem) {
   header {
     block-size: var(--size-hero-wide);
@@ -85,5 +123,23 @@ header > a {
   header > a {
     inset-block-start: var(--space-40);
     inset-inline-end: var(--space-56);
+  }
+
+  /* Photo 400 and text 680 of the 1120 column, 40 apart. */
+  header + div {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--space-40);
+    padding: var(--space-160) var(--gutter-wide);
+  }
+
+  header + div > img {
+    flex: 0 0 calc(400 / 1120 * 100%);
+    min-inline-size: 0;
+  }
+
+  p[aria-hidden='true'] {
+    flex: 1 1 0;
+    min-inline-size: 0;
   }
 }
