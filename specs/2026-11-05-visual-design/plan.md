@@ -1,25 +1,21 @@
 # Plan — Visual design
 
 Branch `feat/visual-design`. Scope and decisions are in `requirements.md`; what counts as done is in `validation.md`. Each group ends
-with `pnpm check` green and one commit. No group touches a template, a test or `stylelint.config.js` (`requirements.md`, decision 1); `angular.json`
-changes only in the budget the developer raised (decision 13).
+with `pnpm check` green and one commit. No group touches a template, a test or `stylelint.config.js` (`requirements.md`, decision
+1); `angular.json` changes only in the budget the developer raised (decision 13).
 
 Every group starts from the design: create a Figma session, load the `/figma-design-to-code` skill, and read the group's frames with
 `get_design_context` on both the mobile and the desktop node. Its output is a reference to adapt to the tokens, not code to paste.
 Every group ends by looking at the page in the browser with `pnpm start`, at 320px, 390px and 1440px.
 
-## 1. Fonts and tokens
+## 1. Tokens
 
-1. Ask the developer for the six `woff2` files (Inter 300, 700 and 900; Archivo 400 and 900; JetBrains Mono 500) and their licence
-   texts. Do not fetch them from a URL the developer has not typed.
-2. Save them in `src/fonts/` with their `OFL.txt` files. Check that each covers the characters the page shows in both languages,
-   `→` included, with `fc-query`. Note each file's weight.
-3. In `src/styles.css`: the `@font-face` rules, then the tokens of decision 3, then the element defaults of decision 4. Measure
-   `--color-error` against `--color-surface` and write the ratio in a comment.
-4. Rename every use of an old token in `src/app/app.css`.
-5. `pnpm build`: check that each locale's stylesheet references the fonts by a same-origin path and that the files exist in
-   `dist/`.
-6. `pnpm check`, then commit.
+The fonts' files and `@font-face` rules moved to roadmap phase 11 (`requirements.md`, decision 2).
+
+1. In `src/styles.css`: the tokens of decision 3, then the element defaults of decision 4. Measure `--color-error` against
+   `--color-surface` and write the ratio in a comment.
+2. Rename every use of an old token in `src/app/app.css`.
+3. `pnpm check`, then commit.
 
 ## 2. Shell and hero
 

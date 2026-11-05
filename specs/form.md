@@ -9,7 +9,7 @@ The rules for each field beyond "required" and its control (lengths, formats, da
 schema (`specs/2026-11-03-validation/requirements.md`). Their messages are listed under [Errors](#errors); the sent and failed
 messages come with phase 10.
 
-The Spanish text is a proposal for the artist to approve before launch (phase 11). It addresses the visitor as _tú_ and, like the
+The Spanish text is a proposal for the artist to approve before launch (phase 12). It addresses the visitor as _tú_ and, like the
 design, speaks as the artist in the first person, so it never needs to say who the artist is.
 
 ## Header
@@ -97,7 +97,7 @@ button and the notice.
 Below the checkbox, before the button, the privacy notice:
 
 > **Placeholder.** Invented for development; it must be replaced with the artist's real notice before launch (`roadmap.md`,
-> phase 11). The address uses the reserved `.example` domain, so it cannot reach anyone by mistake.
+> phase 12). The address uses the reserved `.example` domain, so it cannot reach anyone by mistake.
 
 - **English:** Your details reach me by email and I use them only to answer this request. I do not share them with anyone. To have
   them deleted, write to me at hello@wavebuto.example.
@@ -157,7 +157,7 @@ group 01 and the three uploads of group 03 side by side. The last group's title 
 ## Differences from the design
 
 - **No references.** Group "03 — References" (reference from my work, additional references, body photo) is not in v1: reference
-  images come after v1 (`roadmap.md`, phase 12). The groups after it move up, so the form has four groups, numbered 01–04.
+  images come after v1 (`roadmap.md`, phase 13). The groups after it move up, so the form has four groups, numbered 01–04.
 - **No field describes the tattoo.** The design has none and none is added; the tattoo is described by its placement, its symmetry
   and "Anything else".
 - **Dates are a range of native date pickers.** The design has one single-line field; v1 has two date inputs under the design's
@@ -171,7 +171,7 @@ group 01 and the three uploads of group 03 side by side. The last group's title 
 
 The questions of phase 2's review (`specs/2026-11-03-form-fields/plan.md`, group 2) were answered by the developer, not the artist,
 so work can go on. Each answer is the one that changes least, so it is easy to revisit. The artist confirms them, with the rest of
-the field list, before launch (`roadmap.md`, phase 11); phase 2 closed without waiting for that. An answer the artist changes is recorded under
+the field list, before launch (`roadmap.md`, phase 12); phase 2 closed without waiting for that. An answer the artist changes is recorded under
 [Differences from the design](#differences-from-the-design) when it departs from the design, and this section is removed once all
 are confirmed.
 
@@ -189,5 +189,5 @@ are confirmed.
    **Provisional:** yes, as written under [03 — Availability](#03--availability--03--disponibilidad), together with "Are you flexible
    with dates?".
 4. **Voice of the privacy notice.** The placeholder speaks in your first person ("Your details reach me…"), like the design's notice.
-   Should the real one (phase 11) do the same?
+   Should the real one (phase 12) do the same?
    **Provisional:** yes, the real notice speaks in the first person too, like the rest of the form's text.

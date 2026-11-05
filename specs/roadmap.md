@@ -27,7 +27,7 @@ look, not the responsiveness.
    - **Every label, option and message is written in English and Spanish** in `specs/form.md`; the design is in English only, and
      the Spanish text is the artist's to approve.
      **Done** 2026-11-03 (`specs/2026-11-03-form-fields/`). The artist has not confirmed the fields yet: the open questions have
-     provisional answers in `specs/form.md`, and the confirmation moves to phase 11.
+     provisional answers in `specs/form.md`, and the confirmation moves to phase 12.
 3. **Validation.** One Zod schema with the rules for those fields, with tests written first.
    **Done** 2026-11-03 (`specs/2026-11-03-validation/`).
 4. **Form.** The form on the page with every field, its label and its error messages, in both languages, in a section with the
@@ -45,7 +45,12 @@ look, not the responsiveness.
    This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
    ones outside `src/app/validation/`.
 10. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
-11. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
+11. **Fonts.** Self-host the design's fonts, as decided in phase 6 (`specs/2026-11-05-visual-design/requirements.md`,
+    decision 2), which left them out: the six `woff2` files (Inter 300, 700 and 900; Archivo 400 and 900; JetBrains Mono 500) with
+    their licence texts in `src/fonts/`, and their `@font-face` rules in `src/styles.css`. The tokens already name the families;
+    until this phase every stack falls back to the system font. The files cover every character of both languages, `→` included,
+    and the built pages load them from the same origin.
+12. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
     text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
     (`specs/2026-11-04-introduction/requirements.md`, decision 9), and say whether the header links to their Instagram. Ask them
     for larger originals of the introduction's torso and face photos, which Figma only has at 724px and ≈558px wide (same file,
@@ -54,4 +59,4 @@ look, not the responsiveness.
 
 ## After v1
 
-12. **Reference images.** Let people attach reference images to their request.
+13. **Reference images.** Let people attach reference images to their request.

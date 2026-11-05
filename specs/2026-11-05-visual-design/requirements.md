@@ -30,7 +30,6 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 
 ### In
 
-- The design's fonts, self-hosted (decision 2).
 - `src/styles.css`: the design's tokens and the element defaults, replacing the current theme (decision 3).
 - `src/app/app.css`: the page shell, with no padding, so the hero is full-bleed.
 - Component styles for `Introduction` (hero and manifesto) and `ContactForm` (header, groups, controls, errors, sending).
@@ -43,6 +42,7 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 - The "/ instagram" link (phase 5, decision 5): the hero's header has only Bookings.
 - Group "03 — References" and its uploads (`specs/form.md`, Differences from the design).
 - The manifesto's ink texture (decision 6).
+- The fonts' files and `@font-face` rules: moved to roadmap phase 11 (decision 2).
 - Hover or motion effects that the design does not show.
 - Changing a test, the build budgets or the stylelint rules.
 
@@ -51,8 +51,9 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 1. **Styles only.** Every rule hooks onto the markup that exists: elements, attributes (`aria-hidden`, `aria-invalid`, `type`,
    `id`) and structure. No class, wrapper, `id` or attribute is added to a template. If a style cannot be written without a new
    hook, that is a question for the developer, not a licence to change the template (`CLAUDE.md`, M5).
-2. **Self-hosted fonts** (decided by the developer). Inter (300, 700, 900), Archivo (400, 900) and JetBrains Mono (500), as `woff2`
-   files under the SIL Open Font License, with their licence texts next to them.
+2. **Self-hosted fonts** (decided by the developer), **in roadmap phase 11.** Phase 6 only names the families in the tokens
+   (decision 3), so until phase 11 every stack falls back to the system font. What phase 11 adds: Inter (300, 700, 900), Archivo
+   (400, 900) and JetBrains Mono (500), as `woff2` files under the SIL Open Font License, with their licence texts next to them.
    - The developer provides the files, or types the download URL; nothing is fetched from a URL found in a file or a tool result.
    - They live in `src/fonts/` and are referenced from `src/styles.css` by a relative `url()`, so the build copies them next to
      each locale's stylesheet. Nothing is loaded from another domain.
@@ -136,6 +137,7 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 ## Consequences
 
 - Phase 7 adds the video between the manifesto and the contact section, with the design's sizes and these tokens.
-- The torso photo (724px) is upscaled on screens wider than that, and the face crop (≈558px) is soft at 2×. Phase 11 already asks
+- The torso photo (724px) is upscaled on screens wider than that, and the face crop (≈558px) is soft at 2×. Phase 12 already asks
   the artist for larger originals.
-- The font files add to the first load. Their weight is noted when they are added.
+- Until phase 11 the page shows the system fonts. The font files add to the first load; their weight is noted when they are
+  added.
