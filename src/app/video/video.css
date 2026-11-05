@@ -1,0 +1,51 @@
+/* The video (specs/2026-11-05-video/requirements.md, decision 8): edge to
+   edge, cropped like the design's frames, with its button over the
+   bottom-right corner. Every value is a token. */
+
+:host {
+  position: relative;
+  display: block;
+}
+
+/* Mobile: the portrait crop of frame 210:68 (390 × 488). object-fit crops the
+   poster the same way, so nothing moves when the video starts. */
+video {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  aspect-ratio: 390 / 488;
+  object-fit: cover;
+  background-color: var(--color-surface);
+}
+
+/* In the style of the Bookings button, at its insets. */
+button {
+  position: absolute;
+  inset-block-end: var(--space-20);
+  inset-inline-end: var(--space-20);
+  min-block-size: var(--touch-target);
+  padding: var(--space-14) var(--space-28);
+  border: 0;
+  background-color: var(--color-accent);
+  color: var(--color-on-accent);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-13);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--tracking-nav);
+  line-height: var(--line-height-solid);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+@media (min-width: 40rem) {
+  /* Desktop: the whole 16:9 video, as in frame 172:107 (1440 × 810). */
+  video {
+    aspect-ratio: 16 / 9;
+  }
+
+  button {
+    inset-block-end: var(--space-40);
+    inset-inline-end: var(--space-56);
+  }
+}

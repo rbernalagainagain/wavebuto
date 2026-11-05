@@ -56,6 +56,7 @@ function startWhenSeen(video: HTMLVideoElement): IntersectionObserver | undefine
 @Component({
   selector: 'app-video',
   templateUrl: './video.html',
+  styleUrl: './video.css',
 })
 export class Video {
   private readonly video = viewChild.required<ElementRef<HTMLVideoElement>>('video');
