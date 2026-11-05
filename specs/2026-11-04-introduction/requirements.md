@@ -58,7 +58,10 @@ LIMITED SPOTS · MORE TO COME`, cities in Inter Black and phrases in Inter Light
 5. **No Instagram link.** It needs the artist's real account and is an outgoing link; it is left out until there is one.
 6. **Images.** All three live in `public/web/`, next to the video's poster, and are referenced by a path relative to the page
    (`web/…`), so `/en/` and `/es/` each load their own copy.
-   - `logo-wavebuto.svg`: the logo as Figma exports it.
+   - `logo-wavebuto.svg`: the logo exported from Figma, cleaned (decided by the developer, 2026-11-05): the same paths with
+     coordinates rounded to two decimals, Figma's drop-shadow chain as one equivalent `feDropShadow`, and without Figma's extra
+     attributes (`preserveAspectRatio="none"`, inline `style`, layer ids). Its size and viewBox are Figma's, and its rendering
+     matches the export to within anti-aliasing.
    - `intro-torso.webp`: the torso photo at its own width (724px, the size of the original in Figma); it is not upscaled
      (confirmed by the developer).
    - `intro-face.webp`: the face crop that the Figma annotation describes, exported as its own asset, at the crop's own width
