@@ -5,9 +5,9 @@ v1 is complete.
 
 The form comes first, but sending it comes last: the whole page is built and styled before a request reaches the artist's inbox, and
 email delivery and sending are the last phases before launch. Both languages are part of the structure from the first phase, so no
-text is ever written in only one. The visual design from Figma is applied in its own phase, after structure work. Every phase works
-on any screen from 320px wide (`tech-stack.md`): an unstyled phase still reflows on a phone, and phase 7 adds the look, not the
-responsiveness.
+text is ever written in only one. The visual design from Figma is applied in its own phase, after the introduction and the form.
+Every phase works on any screen from 320px wide (`tech-stack.md`): an unstyled phase still reflows on a phone, and phase 6 adds the
+look, not the responsiveness.
 
 ## v1
 
@@ -35,10 +35,11 @@ responsiveness.
    **Done** 2026-11-03 (`specs/2026-11-03-form/`).
 5. **Introduction.** The introduction section above the form.
    **Done** 2026-11-05 (`specs/2026-11-04-introduction/`).
-6. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen.
-7. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
+6. **Visual design.** Apply the Figma design to the whole page, mobile first, following page "Web — v4" (`150:2`): frame "Landing —
    Mobile 390" (`210:61`) is the base layout, and "Landing — Desktop 1440" (`150:9`) is what the `40rem` breakpoint adds. The other
    `Web — v*` pages are not the reference.
+7. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen. It comes
+   after the visual design, so it arrives already styled to match the rest of the page.
 8. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
 9. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
    This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last

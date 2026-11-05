@@ -109,7 +109,7 @@ Below the checkbox, before the button, the privacy notice:
 | Button  | Send request                                                                                                   | Enviar solicitud                                                                                   |
 | Notice  | Submitting this form does not guarantee an appointment. I will review your request and contact you personally. | Enviar este formulario no garantiza una cita. Revisaré tu solicitud y te contactaré personalmente. |
 
-The button's arrow icon is decoration, not text, and is styled in phase 7.
+The button's arrow icon is decoration, not text, and is styled in phase 6.
 
 ## Errors
 
@@ -164,7 +164,7 @@ group 01 and the three uploads of group 03 side by side. The last group's title 
   label. The "From" and "To" labels are new.
 - **A required consent checkbox and a privacy notice** are added before "Send request". They are not in the design.
 - **Spanish text** is new: the design is in English only.
-- **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 7), so the text here is in
+- **Casing.** The design shows labels, group titles and the button in capitals; that is styling (phase 6), so the text here is in
   sentence case.
 
 ## Provisional answers, pending the artist

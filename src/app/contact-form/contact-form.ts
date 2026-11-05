@@ -46,7 +46,7 @@ const EMPTY: ContactFormModel = {
   consent: false,
 };
 
-/** The appointment form of specs/form.md. Unstyled until phase 9. */
+/** The appointment form of specs/form.md. Unstyled until phase 6. */
 @Component({
   selector: 'app-contact-form',
   imports: [FormRoot, FormField],
@@ -67,7 +67,7 @@ export class ContactForm {
       // Trying to send marks every field as left, so each shows its error
       // (decision 7).
       submission: {
-        // A valid form does nothing yet and makes no request: phase 6 sends it.
+        // A valid form does nothing yet and makes no request: phase 10 sends it.
         action: async () => undefined,
         // The fields are declared in the order they appear on the page, so
         // the first field with an error is the first invalid one on screen.
