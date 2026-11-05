@@ -42,6 +42,8 @@ look, not the responsiveness.
    wait for the developer's review.
 7. **Video.** The video of the artist's work, between the introduction and the form, scaled to the width of the screen. It comes
    after the visual design, so it arrives already styled to match the rest of the page.
+   **Done** 2026-11-05 (`specs/2026-11-05-video/`). It plays muted from the first time it is in view, with a Pause/Play button;
+   the manual checks in the browser wait for the developer's review.
 8. **SEO.** A title and description for each language, `hreflang` links between `/en/` and `/es/`, and a sitemap.
 9. **Email delivery.** The Worker on `/api/contact` receives a request, validates it with the same schema, and emails it to the artist.
    This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
@@ -54,10 +56,11 @@ look, not the responsiveness.
     and the built pages load them from the same origin.
 12. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
     text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
-    (`specs/2026-11-04-introduction/requirements.md`, decision 9), and say whether the header links to their Instagram. Ask them
-    for larger originals of the introduction's torso and face photos, which Figma only has at 724px and ≈558px wide (same file,
-    Consequences). Replace the
-    placeholder privacy notice and contact address in `specs/form.md` with the artist's real ones, then publish v1.
+    (`specs/2026-11-04-introduction/requirements.md`, decision 9), and the video's label and button texts
+    (`specs/2026-11-05-video/requirements.md`, decision 5), and say whether the header links to their Instagram. Ask them for
+    larger originals of the introduction's torso and face photos, which Figma only has at 724px and ≈558px wide (same file,
+    Consequences), and of the video, which is 1280px wide. Replace the placeholder privacy notice and contact address in
+    `specs/form.md` with the artist's real ones, then publish v1.
 
 ## After v1
 
