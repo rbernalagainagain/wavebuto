@@ -8,6 +8,8 @@
 - **Signal Forms** (`@angular/forms/signals`) for the appointment form.
 - **Zod** for the form's validation rules.
 - **Plain CSS.** No CSS framework or preprocessor.
+- **Self-hosted fonts.** The design's fonts (Inter, Archivo and JetBrains Mono) are `woff2` files in the repository, served from the
+  same origin with `font-display: swap`. No font is loaded from another domain.
 - **Responsive, mobile first.** The base styles are the phone layout and work from 320px wide. Wider screens add to them with
   `min-width` media queries, never `max-width`, at one breakpoint: `40rem`. A second breakpoint is a change to this file. Text sizes
   scale fluidly, and images and the video scale to the width of their column. stylelint enforces the media-query rules.
