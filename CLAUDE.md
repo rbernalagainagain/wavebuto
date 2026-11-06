@@ -33,7 +33,7 @@ Decision provenance (why choices were made) lives in `docs/adr/`. It is backgrou
 - Signal Forms (`@angular/forms/signals`) for the contact form; do not use Reactive Forms or Template-driven Forms
 - Zod for the contact form, the only input the site has (its schema in `src/app/validation/` is the single definition of the form's rules; do not restate them elsewhere): one schema validates what the user typed and what `src/app/submit/` sends
 - Angular's built-in i18n (`@angular/localize`) for English and Spanish. Templates are written in English and every user-visible text is marked with `i18n` and a stable custom ID (`@@area.key`; `$localize` in code). The Spanish translation lives in `src/locale/messages.es.xlf` (XLIFF 2.0: `pnpm ng extract-i18n --format xlf2 --output-path src/locale`, then translate the new units). The build prerenders `/en/` and `/es/` as separate pages, and the Worker (`src/index.js`) redirects `/` to one of them. Translations are compiled into each page, so they cost no request
-- Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor or utility classes. The design's fonts are self-hosted `woff2` files, never loaded from another domain (`specs/tech-stack.md`)
+- Plain CSS: tokens and element defaults in `src/styles.css`, component styles reference tokens only. No CSS framework, preprocessor or utility classes. The design's fonts come from Google Fonts through one `<link>` in `src/index.html`, the only off-origin resource (`specs/tech-stack.md`)
 - Vitest via `ng test` (jsdom) for all tests, not Karma or Jasmine; validation specs never import `TestBed`
 - ESLint and stylelint enforce the guardrails: never disable or loosen a rule to get a change through
 - No new dependency without asking first (guardrail 4); the stack above is the whole stack
@@ -85,7 +85,7 @@ pnpm ng generate component <name>        # Scaffold a standalone component
   - When adding routes, update both `src/app/app.routes.ts` (client router) and `src/app/app.routes.server.ts` (server render mode per route) — they are separate files that must stay in sync.
 - **Styling**: `src/styles.css` holds the design tokens and element defaults of `spec.md` §9.2 and is the only file allowed to contain raw
   colour or spacing literals. Component styles live in each component's own `styles` array and reference tokens only. No CSS framework,
-  no utility classes, no off-origin font.
+  no utility classes, no font beyond the Google Fonts `<link>`.
 - **Testing**: Vitest is the configured unit test runner (via the Angular CLI's `@angular/build:unit-test` builder, not run standalone). Specs live alongside source as `*.spec.ts` and use Angular's `TestBed`.
 - **TypeScript config** is split three ways from a shared `tsconfig.json`: `tsconfig.app.json` (app build, excludes specs), `tsconfig.spec.json` (specs only, includes `vitest/globals` types). Notable strict options enabled at the root: `noImplicitOverride`, `noPropertyAccessFromIndexSignature`, `strictInjectionParameters`, `strictInputAccessModifiers`.
 - Static assets go in `public/` (mapped to app root via the `assets` glob in `angular.json`).
@@ -117,8 +117,9 @@ Treat a violation as a build failure.
    - Components import validation; validation never imports a component.
    - Enforce with a dependency-boundary lint rule that allows `zod` and nothing else. Wire it in M0.
 
-3. **Nothing off-origin.** No `<script src>`, `<link href>`, font, or embed pointing outside the repo. No analytics, no telemetry. Lint
-   fails on an off-origin URL in a template.
+3. **Nothing off-origin but the fonts.** No `<script src>`, `<link href>`, font, or embed pointing outside the repo. No analytics, no
+   telemetry. Lint fails on an off-origin URL in a template. The one exception: the Google Fonts stylesheet `<link>` in
+   `src/index.html` (`specs/tech-stack.md`), allowed by origin in `eslint.config.js` for that file only.
 
 4. **No new dependencies.** Adding to `package.json` requires asking first, every time. "It's tiny" is not an exception. The only
    pre-authorised exceptions are the ESLint setup installed in M0 and the stylelint setup installed in M5.
@@ -217,7 +218,7 @@ it into `pnpm check`, then write styles.
 - Validation rules match the pinned tests; no rule is stated twice.
 - No request exists outside `src/app/submit/`; swapping the endpoint
   would not touch a template, a field, or a validation rule.
-- Nothing off-origin loads. No dependency was added beyond M0's ESLint
+- Nothing off-origin loads but the Google Fonts. No dependency was added beyond M0's ESLint
   and M5's stylelint.
 - Every control is labelled; the form is completable by keyboard alone.
 - No submitted value reaches a log, a console, or storage.

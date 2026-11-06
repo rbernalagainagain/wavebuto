@@ -91,7 +91,7 @@ of the screen.
    - The video is `100%` wide with `object-fit: cover`, which also crops the poster: aspect ratio `390 / 488` on mobile and
      `16 / 9` from `40rem`, as in the frames.
    - The button sits over the video's bottom-right corner, in the style of the Bookings button: `--color-accent` fill,
-     `--color-on-accent` text, JetBrains Mono upper case. Its insets are the Bookings link's (`--space-20` on mobile;
+     `--color-on-accent` text, Geist Mono upper case. Its insets are the Bookings link's (`--space-20` on mobile;
      `--space-40` and `--space-56` from `40rem`).
 9. **Tests** (`video.spec.ts`, `TestBed`, jsdom). jsdom implements neither playback nor `IntersectionObserver` nor
    `matchMedia`, so the spec stubs them (`vi.stubGlobal`, and `play`/`pause` on `HTMLMediaElement.prototype`). It checks:

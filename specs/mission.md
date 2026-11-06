@@ -25,5 +25,6 @@ artist. The page shows an introduction and a video of the artist's work first, a
 
 - **No tracking.** No analytics, no telemetry, no tracking cookies.
 - **No accounts.** Nobody signs up or logs in, and the site does not recognise returning visitors.
-- **Nothing from third parties.** No script, font, stylesheet, image or embed is loaded from another domain.
+- **Nothing from third parties but the fonts.** No script, stylesheet, image or embed is loaded from another domain. The one
+  exception is the design's fonts, which come from Google Fonts (decided by the developer, 2026-11-06; `tech-stack.md`).
 - **Only what is needed.** The form asks for what the artist needs to answer a request, and nothing "just in case".

@@ -8,8 +8,11 @@
 - **Signal Forms** (`@angular/forms/signals`) for the appointment form.
 - **Zod** for the form's validation rules.
 - **Plain CSS.** No CSS framework or preprocessor.
-- **Self-hosted fonts.** The design's fonts (Inter, Archivo and JetBrains Mono) are `woff2` files in the repository, served from the
-  same origin with `font-display: swap`. No font is loaded from another domain.
+- **Fonts from Google Fonts** (decided by the developer, 2026-11-06). The design's fonts (Geist 300 and 900, Geist Mono 500,
+  Instrument Sans 400 and 700) load through one stylesheet `<link>` in `src/index.html`, with `display=swap`;
+  the production build inlines that stylesheet into each page, and the font files come from `fonts.gstatic.com`. It is the only
+  thing loaded from another domain: lint allows that one origin in that one file. Each family's stack ends in a system
+  fallback. Google receives each visitor's IP address when the fonts load, so the privacy notice has to say so.
 - **Responsive, mobile first.** The base styles are the phone layout and work from 320px wide. Wider screens add to them with
   `min-width` media queries, never `max-width`, at one breakpoint: `40rem`. A second breakpoint is a change to this file. Text sizes
   scale fluidly, and images and the video scale to the width of their column. stylelint enforces the media-query rules.

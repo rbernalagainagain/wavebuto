@@ -49,18 +49,16 @@ look, not the responsiveness.
    This replaces the old handler in `src/index.js`, whose own rules for the old fields (`nombre`, `email`, `mensaje`) are the last
    ones outside `src/app/validation/`.
 10. **Sending.** The form sends to the Worker and shows the person whether the request was sent or failed.
-11. **Fonts.** Self-host the design's fonts, as decided in phase 6 (`specs/2026-11-05-visual-design/requirements.md`,
-    decision 2), which left them out: the six `woff2` files (Inter 300, 700 and 900; Archivo 400 and 900; JetBrains Mono 500) with
-    their licence texts in `src/fonts/`, and their `@font-face` rules in `src/styles.css`. The tokens already name the families;
-    until this phase every stack falls back to the system font. The files cover every character of both languages, `→` included,
-    and the built pages load them from the same origin.
+11. **Fonts.** Load the design's fonts. Not self-hosted: they come from Google Fonts (decided by the developer, 2026-11-06;
+    `specs/2026-11-05-visual-design/requirements.md`, decision 2).
+    **Done** 2026-11-06, ahead of phases 8–10, together with the design's change of families.
 12. **Launch.** Have the artist confirm the field list and the provisional answers in `specs/form.md`, and approve the Spanish
     text. Have them also approve the introduction's copy, its alternative texts and their Spanish translation
     (`specs/2026-11-04-introduction/requirements.md`, decision 9), and the video's label and button texts
     (`specs/2026-11-05-video/requirements.md`, decision 5), and say whether the header links to their Instagram. Ask them for
-    larger originals of the introduction's photos: the face crop is 558px wide and the torso's desktop crop 2232px (same file,
-    Consequences); and of the video, which is 1280px wide. Replace the placeholder privacy notice and contact address in
-    `specs/form.md` with the artist's real ones, then publish v1.
+    a larger original of the introduction's torso photo, whose desktop crop is 2232px wide (same file, Consequences); and of
+    the video, which is 1280px wide. Replace the placeholder privacy notice and contact address in `specs/form.md` with the
+    artist's real ones (the notice must say that Google Fonts receives the visitor's IP address), then publish v1.
 
 ## After v1
 

@@ -3,12 +3,13 @@
 
    The tokens are the variables of the Figma design, page "Web — v4". This is
    the only file allowed to hold a raw colour or length; stylelint enforces that
-   everywhere else. Everything is served from this repo: nothing is loaded from
-   another domain (specs/mission.md).
+   everywhere else. Everything is served from this repo except the fonts
+   (specs/mission.md).
 
-   Fonts: the families are named first in each stack, but their woff2 files
-   and @font-face rules are not in the repo yet (plan.md, group 1). Until they
-   are, every stack resolves to the system fallback at its end.
+   Fonts: Geist, Geist Mono and Instrument Sans come from Google Fonts,
+   through the one stylesheet <link> in src/index.html (specs/tech-stack.md);
+   there is no @font-face here. Each stack ends in a system fallback, used
+   while they load and if they never do.
 
    This is also the mobile stylesheet (specs/tech-stack.md, "Responsive, mobile
    first"). There is not a single width query in this file. The one media query
@@ -61,9 +62,10 @@
 
   /* Type. One token per family, size and letter-spacing (the design's
      percentages, in em). */
-  --font-display: Inter, system-ui, sans-serif;
-  --font-body: Archivo, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  /* The manifesto and the form's title. */
+  --font-display: Geist, system-ui, sans-serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   --font-size-11: 0.6875rem;
   --font-size-12: 0.75rem;
@@ -74,7 +76,7 @@
 
   /* Fluid between the mobile frame (390px) and the desktop frame (1440px),
      so the size grows with the screen and never jumps at the breakpoint. */
-  --font-size-title: clamp(2.75rem, 1.7286rem + 4.1905vw, 5.5rem);
+  --font-size-title: clamp(2.5rem, 1.3857rem + 4.5714vw, 5.5rem);
   --font-size-manifesto: clamp(1.375rem, 0.9571rem + 1.7143vw, 2.5rem);
 
   --tracking-eyebrow: 0.4em;
@@ -83,7 +85,18 @@
   --tracking-nav: 0.08em;
   --tracking-button: 0.06em;
   --tracking-label: 0.04em;
-  --tracking-tight: -0.03em;
+  --tracking-title: -0.01em;
+  --tracking-manifesto: -0.03em;
+
+  /* The manifesto's worn ink (Figma effects manifesto/ink and ink-mobile).
+     A tile of fine noise used as a mask: about 17% of it is clear, so the
+     surface shows through the letters in specks and their edges break, as
+     the design's noise does. It is an SVG image, not an SVG filter, so it
+     needs no markup and works as a mask in every browser. Plus the design's
+     slight blur, smaller on the mobile frame. */
+  --texture-ink: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -9 0 0 0 6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --blur-ink: 0.19px;
+  --blur-ink-wide: 0.3px;
 
   --line-height-title: 0.92;
   --line-height-solid: 1;

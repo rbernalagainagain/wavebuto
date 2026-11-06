@@ -45,7 +45,15 @@ module.exports = {
     docs: {
       description: 'Disallow off-origin resources (script/link/iframe/embed/etc.) in templates.',
     },
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          linkOrigins: { type: 'array', items: { type: 'string', pattern: '^https://[^/]+$' } },
+        },
+        additionalProperties: false,
+      },
+    ],
     messages: {
       offOrigin:
         'Off-origin "{{attr}}" on <{{tag}}> is not allowed (CONSTITUTION.md §2.3). Serve this resource from the repo instead.',
@@ -54,6 +62,15 @@ module.exports = {
   defaultOptions: [],
   create(context) {
     const parserServices = context.sourceCode.parserServices;
+    // The one exception (specs/tech-stack.md): origins a file's <link href> may
+    // load from, given per file in eslint.config.js. Nothing else is exempt.
+    const linkOrigins = context.options[0]?.linkOrigins ?? [];
+    const isAllowedLink = (tag, attr, value) => {
+      if (tag !== 'link' || attr !== 'href' || !URL.canParse(value.trim())) {
+        return false;
+      }
+      return linkOrigins.includes(new URL(value.trim()).origin);
+    };
     return {
       Program() {
         const text = context.sourceCode.getText();
@@ -79,7 +96,7 @@ module.exports = {
           if (!resourceAttrs.includes(attr.name) || typeof attr.value !== 'string') {
             continue;
           }
-          if (isOffOrigin(attr.value)) {
+          if (isOffOrigin(attr.value) && !isAllowedLink(tag, attr.name, attr.value)) {
             context.report({
               loc: parserServices.convertNodeSourceSpanToLoc(attr.sourceSpan),
               messageId: 'offOrigin',

@@ -75,17 +75,10 @@ header > a > span {
   white-space: pre;
 }
 
-/* Manifesto: the face photo above the text on mobile, beside it on desktop. */
+/* Manifesto: the text alone, in the page's column. */
 header + div {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-24);
   padding: var(--space-72) var(--gutter);
-}
-
-header + div > img {
-  inline-size: 100%;
 }
 
 /* The visual version. The browser breaks its lines at the <wbr> between
@@ -94,9 +87,12 @@ p[aria-hidden='true'] {
   font-family: var(--font-display);
   font-size: var(--font-size-manifesto);
   font-weight: var(--font-weight-light);
-  letter-spacing: var(--tracking-tight);
+  letter-spacing: var(--tracking-manifesto);
   line-height: var(--line-height-solid);
   hyphens: none;
+  /* Worn ink, as in the design: the noise mask and a slight blur. */
+  mask-image: var(--texture-ink);
+  filter: blur(var(--blur-ink));
 }
 
 p[aria-hidden='true'] > b {
@@ -131,21 +127,14 @@ header + div > p:not([aria-hidden]) {
     inset-inline-end: var(--space-56);
   }
 
-  /* Photo 400 and text 680 of the 1120 column, 40 apart. */
   header + div {
-    flex-direction: row;
-    align-items: flex-start;
-    gap: var(--space-40);
     padding: var(--space-160) var(--gutter-wide);
   }
 
-  header + div > img {
-    flex: 0 0 calc(400 / 1120 * 100%);
-    min-inline-size: 0;
-  }
-
+  /* 680 of the 1120 column, about as wide as the design's lines, which
+     break every 24 characters; the rest of the column stays empty. */
   p[aria-hidden='true'] {
-    flex: 1 1 0;
-    min-inline-size: 0;
+    max-inline-size: calc(680 / 1120 * 100%);
+    filter: blur(var(--blur-ink-wide));
   }
 }

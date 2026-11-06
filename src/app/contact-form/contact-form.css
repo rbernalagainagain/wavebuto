@@ -45,8 +45,8 @@ header > p:first-child {
 h2 {
   font-family: var(--font-display);
   font-size: var(--font-size-title);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--tracking-tight);
+  font-weight: var(--font-weight-black);
+  letter-spacing: var(--tracking-title);
   line-height: var(--line-height-title);
   text-transform: uppercase;
 }
@@ -57,14 +57,20 @@ form {
   gap: var(--space-20);
 }
 
-/* Groups: a top rule, the title above the fields. The legend is floated so
-   it is laid out like any other child instead of sitting on the rule. */
+/* Groups: a top rule, then the title above the fields.
+   A fieldset's legend is special: unless it floats or is positioned, the
+   browser lifts it out of the layout and lays it over the fieldset's top
+   border, hiding the border behind it. A float is no way out, since Firefox
+   and Safari ignore it on the child of a flex or grid fieldset. So on mobile
+   the legend stays the fieldset's own and carries the rule and the space
+   above the title itself; from the breakpoint it is positioned in its column
+   (below) and the fieldset draws the rule. */
 form > fieldset {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-32);
-  padding-block-start: var(--space-32);
-  border-block-start: var(--border-width) solid var(--color-border);
+  padding-block-start: var(--space-24);
 }
 
 form > fieldset:not(:first-child),
@@ -73,9 +79,9 @@ form > div {
 }
 
 form > fieldset > legend {
-  float: inline-start;
   inline-size: 100%;
-  margin-block-end: calc(var(--space-24) - var(--space-32));
+  padding-block-start: var(--space-32);
+  border-block-start: var(--border-width) solid var(--color-border);
   color: var(--color-muted);
   font-family: var(--font-mono);
   font-size: var(--font-size-12);
@@ -124,10 +130,25 @@ form > div {
     padding-block-start: var(--space-40);
   }
 
+  /* The rule across the whole group, title and fields. */
+  form > fieldset::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-start: 0;
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  /* The title in the first column (320 of 1120), level with the first
+     fields. Positioned, so it is an ordinary child, not the fieldset's
+     special legend; the fields beside it are always taller. */
   form > fieldset > legend {
-    grid-column: 1;
-    grid-row: 1;
-    margin-block-end: 0;
+    position: absolute;
+    inset-block-start: var(--space-40);
+    inset-inline-start: 0;
+    inline-size: calc(var(--fields-start) - var(--space-80));
+    padding-block-start: 0;
+    border-block-start: 0;
   }
 
   form > fieldset > :not(legend) {
@@ -321,7 +342,7 @@ button {
   background-color: var(--color-accent);
   color: var(--color-on-accent);
   font-family: var(--font-body);
-  font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-bold);
   letter-spacing: var(--tracking-button);
   text-transform: uppercase;
   cursor: pointer;

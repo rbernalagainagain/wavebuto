@@ -97,27 +97,16 @@ describe('Introduction', () => {
       if (!block) {
         throw new Error('No block follows the header');
       }
-      const [photo, visual, readable] = [...block.children] as HTMLElement[];
-      return { block, photo, visual, readable };
+      const [visual, readable] = [...block.children] as HTMLElement[];
+      return { block, visual, readable };
     }
 
-    it('follows the header with the face photo, the visual version and the readable one', async () => {
+    it('follows the header with the visual version and the readable one, and no photo', async () => {
       const root = await createIntroduction();
 
       expect([...root.children].map((child) => child.tagName)).toEqual(['HEADER', 'DIV']);
       const { block } = manifesto(root);
-      expect([...block.children].map((child) => child.tagName)).toEqual(['IMG', 'P', 'P']);
-    });
-
-    it('shows the face photo with its alternative text and size, loaded only when near', async () => {
-      const root = await createIntroduction();
-      const { photo } = manifesto(root);
-
-      expect(photo.getAttribute('alt')).toBe('Close-up of a face with black lines');
-      expect(photo.getAttribute('src')).toBe('web/intro-face.webp');
-      expect(photo.getAttribute('width')).toBe('558');
-      expect(photo.getAttribute('height')).toBe('164');
-      expect(photo.getAttribute('loading')).toBe('lazy');
+      expect([...block.children].map((child) => child.tagName)).toEqual(['P', 'P']);
     });
 
     it('hides the visual version from screen readers', async () => {

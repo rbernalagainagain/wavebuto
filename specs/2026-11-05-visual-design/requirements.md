@@ -16,10 +16,11 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
     `--color-on-accent` `#141210`, `--color-border` `#e6e0d8`, `--color-on-photo` `#ffffff`. Measured against the surface: fg
     14.25:1, muted 4.94:1, on-photo 18.69:1; on-accent against the accent 14.25:1.
   - Spacing (px): 14, 16, 20, 24, 28, 32, 40, 56, 72, 80, 96, 160, 180.
-  - Type styles: the nav, eyebrow, group, label and action texts in JetBrains Mono Medium 11–13px, upper case, letter-spacing
-    4–40%; the field values, options, helper text and notice in Archivo Regular 14–17px; the button in Archivo Black 16px, 6%; the
-    form's title in Inter Bold, 44px on mobile and 88px on desktop, line-height 0.92, −3%; the manifesto in Inter Black (cities) and
-    Inter Light (phrases), 22px on mobile and 40px on desktop, line-height 1, −3%.
+  - Type styles (as the design stands on 2026-11-06): the nav, eyebrow, group, label and action texts in Geist Mono Medium
+    11–13px, upper case, letter-spacing 4–40%; the field values, options, helper text and notice in Instrument Sans Regular
+    14–17px; the button in Instrument Sans Bold 16px, 6%; the form's title in Bodoni Moda Black (Geist Black here, decision 7), 40px
+    on mobile and 88px on desktop, line-height 0.92, −1%; the manifesto in Geist Black (cities) and Geist Light (phrases), 22px on mobile and 40px on
+    desktop, line-height 1, −3%.
   - Effects: `manifesto/ink` (grain, noise, blur). Not built (decision 6).
 - Starting point: `src/styles.css` holds a light theme, a system font stack and token names from the archived `spec.md` §9.
   `src/app/app.css` pads `<main>` into one column. `Introduction` and `ContactForm` have no styles. Phase 5's requirements
@@ -41,7 +42,6 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 - The video (phase 7), its frame and its spacing.
 - The "/ instagram" link (phase 5, decision 5): the hero's header has only Bookings.
 - Group "03 — References" and its uploads (`specs/form.md`, Differences from the design).
-- The manifesto's ink texture (decision 6).
 - The fonts' files and `@font-face` rules: moved to roadmap phase 11 (decision 2).
 - Hover or motion effects that the design does not show. The states drawn in the design's components (Form/Input, Form/Radio,
   Form/Button) are in (decision 15).
@@ -52,17 +52,15 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 1. **Styles only.** Every rule hooks onto the markup that exists: elements, attributes (`aria-hidden`, `aria-invalid`, `type`,
    `id`) and structure. No class, wrapper, `id` or attribute is added to a template. If a style cannot be written without a new
    hook, that is a question for the developer, not a licence to change the template (`CLAUDE.md`, M5).
-2. **Self-hosted fonts** (decided by the developer), **in roadmap phase 11.** Phase 6 only names the families in the tokens
-   (decision 3), so until phase 11 every stack falls back to the system font. What phase 11 adds: Inter (300, 700, 900), Archivo
-   (400, 900) and JetBrains Mono (500), as `woff2` files under the SIL Open Font License, with their licence texts next to them.
-   - The developer provides the files, or types the download URL; nothing is fetched from a URL found in a file or a tool result.
-   - They live in `src/fonts/` and are referenced from `src/styles.css` by a relative `url()`, so the build copies them next to
-     each locale's stylesheet. Nothing is loaded from another domain.
-   - Each `@font-face` uses `font-display: swap`, and each family's stack ends in a system fallback (`system-ui` or
-     `ui-monospace`).
-   - The files cover every character the page shows in both languages, including `→` (U+2192), which Google's Latin subset leaves
-     out. This is checked on the files.
-   - `specs/tech-stack.md` and `CLAUDE.md` say this in place of "no webfont".
+2. **Fonts from Google Fonts** (decided by the developer, 2026-11-06, replacing the self-hosted fonts first planned for roadmap
+   phase 11). The design changed its families, and they are not self-hosted:
+   - One stylesheet `<link>` in `src/index.html` asks for Geist 300 and 900, Geist Mono 500 and Instrument Sans 400 and 700,
+     with `display=swap`. No `@font-face` and no font file is in the repo.
+   - The tokens name the families (decision 3); each stack ends in a system fallback (`system-ui` or `ui-monospace`),
+     which also draws any character a family lacks, such as `→` if its font has none.
+   - `wavebuto/no-offorigin-template-resource` allows `https://fonts.googleapis.com` in `src/index.html`'s `<link href>` and
+     nowhere else (`eslint.config.js`).
+   - `specs/mission.md`, `specs/tech-stack.md` and `CLAUDE.md` say this.
 3. **Tokens.** `src/styles.css` takes the design's variables as its tokens and drops the archived ones (`--color-bg` becomes
    `--color-surface`, and so on). Every token is renamed in one place, and no component keeps an old name.
    - **Colours** are the design's, under the design's names. The page is dark: `--color-surface` background, `--color-fg` text.
@@ -84,30 +82,38 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
    - The fade is a `linear-gradient` from transparent to `--color-surface` over the frame's bottom third (260px mobile, 300px
      desktop), drawn as a pseudo-element of the header.
    - The logo is centred, 150px wide on mobile and 224px on desktop.
-   - The Bookings link is the design's button: top right, `--color-accent` fill, `--color-on-accent` text, JetBrains Mono upper
+   - The Bookings link is the design's button: top right, `--color-accent` fill, `--color-on-accent` text, Geist Mono upper
      case. Its arrow is already in the markup. It is at least `--touch-target` high.
 6. **Manifiesto** (texture and line breaks decided by the developer).
-   - Mobile: the face photo above the text, both the column's width. Desktop: photo on the left (400 of 1120) and text on the
-     right (680), as in `625:296`.
-   - The visual version: upper case already in the markup; cities `<b>` in Inter Black, words in Inter Light, letter-spacing
+   - The text alone (decided by the developer, 2026-11-06): the design removed the face photo, so nothing sits beside the
+     text. Mobile: the column's width. Desktop: at most 680 of the 1120 column, from its left edge. Figma's text box spans the
+     whole column, but its lines break every 24 characters and fill about 650px; 680 keeps the browser's lines close to that.
+   - The visual version: upper case already in the markup; cities `<b>` in Geist Black, words in Geist Light, letter-spacing
      −3%, line-height 1.
    - **Line breaks are the browser's**, at the `<wbr>` between words, with no hyphens; the design's fixed breaks with a hyphen
      mid-word are not copied. They hold in any width and in both languages.
-   - **No ink texture.** The text is flat `--color-fg`. A texture would need an SVG filter in the markup (decision 1).
+   - **Worn ink** (decided by the developer, 2026-11-06, replacing "no ink texture"): the design's `manifesto/ink` effects
+     without markup. A fine noise tile, an SVG image in a data URI (`--texture-ink`), is the text's `mask-image`, so about 17%
+     of the surface shows through in specks, as the design's noise does; and the design's blur, 0.19px on mobile and 0.3px from
+     `40rem`. The edge displacement of Figma's texture would need an SVG filter in the markup (decision 1) and is not copied.
    - The readable version is hidden visually but kept for screen readers (the usual clip pattern), never with `display: none` or
      `visibility: hidden`.
-7. **Form header.** Eyebrow and legend in JetBrains Mono and `--color-muted`; the title `h2` in Inter Bold, upper case, fluid from
-   44px to 88px.
+7. **Form header.** Eyebrow and legend in Geist Mono and `--color-muted`; the title `h2` in Geist Black, upper case, −1%, fluid
+   from 40px to 88px. The design draws it in Bodoni Moda Black; the developer chose the manifesto's font instead (2026-11-06),
+   so `--font-display` is Geist for both.
 8. **Groups.** Each top-level `<fieldset>` has a top rule in `--color-border` and the design's spacing.
    - Mobile: the group title (`<legend>`) above its fields, one column.
    - Desktop: the title in a column of its own (320 of 1120) and the fields in another (720), as in `566:202`. The `<legend>` is
-     floated so it takes part in the grid; this needs no markup.
+     positioned in that column, which makes it an ordinary child of the fieldset; this needs no markup.
+   - A fieldset's own legend sits over its top border and hides it, and a float does not free it in Firefox and Safari when the
+     fieldset is a flex or grid container (found by the developer, 2026-11-06). So the rule is never the fieldset's border: on
+     mobile the legend draws it above the title, and on desktop a pseudo-element of the fieldset draws it across the group.
    - Group 01 puts two fields per row on desktop; the rest stay one per row.
    - The sending part (consent, privacy notice, button, notice) sits in the fields' column on desktop, with no title, as in
      "Acciones" (`566:252`).
 9. **Controls.**
-   - Labels and nested legends in JetBrains Mono, upper case, as in `form/label`.
-   - Text, email and date inputs: no box, only a bottom border in `--color-border`; the value in Archivo 17px.
+   - Labels and nested legends in Geist Mono, upper case, as in `form/label`.
+   - Text, email and date inputs: no box, only a bottom border in `--color-border`; the value in Instrument Sans 17px.
    - Textarea: a full border, as in "Campo — Anything else".
    - Radios and the checkbox are the native inputs drawn as the design's Form/Radio (decided by the developer on 2026-11-05):
      `appearance: none`, an 18px ring with a 1.5px `--color-border` stroke, and an 8px `--color-fg` dot when chosen. The
@@ -121,7 +127,7 @@ Roadmap phase 6 (`specs/roadmap.md`): apply the Figma design to the whole page, 
 10. **Errors** (Form/Input, state Error): the message under its field in `--color-error`, in `form/helper`'s type; the field marked
     `aria-invalid="true"` gets its border in `--color-error` too. The text already says what is wrong, so colour is never the only
     signal.
-11. **Sending.** The button is the design's ("Send request"): `--color-accent` fill, `--color-on-accent` text, Archivo Black upper
+11. **Sending.** The button is the design's ("Send request"): `--color-accent` fill, `--color-on-accent` text, Instrument Sans Bold upper
     case, at least 248×56 like the design. Its arrow (`specs/form.md`) is CSS generated content with empty alternative text
     (`content: '→' / ''`), so screen readers read only "Send request". The privacy notice and the notice use `form/notice` in
     `--color-muted`.

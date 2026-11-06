@@ -55,7 +55,7 @@ function readableText(segments: readonly Segment[]): string {
 /**
  * The introduction above the form (specs/2026-11-04-introduction/): the Hero,
  * with the Bookings link, the logo as the page's heading and the torso photo,
- * then the Manifiesto, with the face photo and the manifesto. Styled after
+ * then the Manifiesto, with the manifesto's text alone. Styled after
  * the Figma design (specs/2026-11-05-visual-design/).
  */
 @Component({

@@ -56,4 +56,16 @@ module.exports = tseslint.config(
       'wavebuto/no-inline-style': 'error',
     },
   },
+  {
+    // The design's fonts come from Google Fonts (specs/tech-stack.md): the
+    // page's shell may link that one stylesheet origin, and nothing else may.
+    files: ['src/index.html'],
+    plugins: { wavebuto },
+    rules: {
+      'wavebuto/no-offorigin-template-resource': [
+        'error',
+        { linkOrigins: ['https://fonts.googleapis.com'] },
+      ],
+    },
+  },
 );

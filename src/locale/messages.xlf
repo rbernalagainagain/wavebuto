@@ -355,18 +355,10 @@
     </unit>
     <unit id="intro.torso.alt">
       <notes>
-        <note category="location">src/app/introduction/introduction.html:19,20</note>
+        <note category="location">src/app/introduction/introduction.html:28,29</note>
       </notes>
       <segment>
         <source>Black line tattoo across a torso</source>
-      </segment>
-    </unit>
-    <unit id="intro.face.alt">
-      <notes>
-        <note category="location">src/app/introduction/introduction.html:30,31</note>
-      </notes>
-      <segment>
-        <source>Close-up of a face with black lines</source>
       </segment>
     </unit>
     <unit id="intro.manifesto.1">
